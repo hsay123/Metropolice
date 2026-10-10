@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-label="Synthetic demo video poster: a hand writing on paper">
+  <defs>
+    <linearGradient id="desk" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#d7cbb6"/>
+      <stop offset="100%" stop-color="#b9aa8d"/>
+    </linearGradient>
+    <filter id="vsoft"><feGaussianBlur stdDeviation="12"/></filter>
+    <filter id="vgrain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="3"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.05"/></feComponentTransfer>
+    </filter>
+  </defs>
+  <rect width="1280" height="720" fill="url(#desk)"/>
+  <!-- paper -->
+  <g transform="translate(300 120) rotate(-2)">
+    <ellipse cx="350" cy="470" rx="360" ry="30" fill="#000" opacity="0.12" filter="url(#vsoft)"/>
+    <rect width="700" height="440" rx="6" fill="#fbfaf7" stroke="#d8d3c8" stroke-width="3"/>
+    <g stroke="#2b3138" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.85">
+      <path d="M70 110 q20 -34 40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0"/>
+      <path d="M70 180 q24 -30 48 0 t48 0 t48 0 t48 0 t48 0 t48 0 t48 0 t48 0 t48 0"/>
+      <path d="M70 250 q20 -30 40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0"/>
+      <path d="M70 320 q26 -28 52 0 t52 0 t52 0 t52 0 t52 0 t52 0"/>
+    </g>
+  </g>
+  <!-- hand + pen, roughly at 4.0s in the sequence -->
+  <g transform="translate(760 300)">
+    <ellipse cx="160" cy="250" rx="180" ry="70" fill="#000" opacity="0.1" filter="url(#vsoft)"/>
+    <g transform="rotate(38)">
+      <rect x="-8" y="-30" width="360" height="26" rx="13" fill="#1f2933"/>
+      <rect x="300" y="0" width="120" height="26" rx="13" fill="#38424d"/>
+      <polygon points="-30,0 -46,4 -30,8" fill="#c9ccd1"/>
+      <polygon points="-42,2 -54,4 -42,6" fill="#2b3138"/>
+    </g>
+    <path d="M-10 -40 q120 -20 200 30 q40 30 10 70 q-60 60 -180 20 q-60 -30 -30 -120 Z" fill="#e0b48d" stroke="#c99a72" stroke-width="3"/>
+  </g>
+  <rect width="1280" height="720" fill="url(#vgrain)"/>
+</svg>

@@ -1,0 +1,234 @@
+@import "tailwindcss";
+@import "../styles/tokens.css";
+
+@theme inline {
+  /* surfaces */
+  --color-bench: var(--bench);
+  --color-sheet: var(--sheet);
+  --color-wash: var(--wash);
+  --color-stage: var(--stage);
+  --color-stage-raised: var(--stage-raised);
+
+  /* text */
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-stage-ink: var(--stage-ink);
+
+  /* structure */
+  --color-rule: var(--rule);
+  --color-field-edge: var(--field-edge);
+
+  /* brand */
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-tint: var(--brand-tint);
+  --color-brand-on-stage: var(--brand-on-stage);
+
+  /* status */
+  --color-pending-ink: var(--pending-ink);
+  --color-pending-bg: var(--pending-bg);
+  --color-revision-ink: var(--revision-ink);
+  --color-revision-bg: var(--revision-bg);
+  --color-accepted-ink: var(--accepted-ink);
+  --color-accepted-bg: var(--accepted-bg);
+  --color-rejected-ink: var(--rejected-ink);
+  --color-rejected-bg: var(--rejected-bg);
+  --color-paid-ink: var(--paid-ink);
+  --color-paid-bg: var(--paid-bg);
+
+  /* video labels */
+  --color-label-reach: var(--label-reach);
+  --color-label-grasp: var(--label-grasp);
+  --color-label-lift: var(--label-lift);
+  --color-label-place: var(--label-place);
+  --color-label-inspect: var(--label-inspect);
+  --color-label-recover: var(--label-recover);
+  --color-label-write: var(--label-write);
+  --color-label-other: var(--label-other);
+
+  /* shadcn semantic colours (used by components/ui, mapped to our tokens in :root) */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* one chart palette, reused by every chart (AGENTS.md A3: one chart style) */
+  --color-chart-1: #1f4fe0;
+  --color-chart-2: #56b4e9;
+  --color-chart-3: #8a94a3;
+  --color-chart-4: #9a6200;
+  --color-chart-5: #17754a;
+
+  /* type */
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono",
+    monospace;
+
+  --text-xs: var(--text-xs);
+  --text-sm: var(--text-sm);
+  --text-base: var(--text-md);
+  --text-lg: var(--text-lg);
+  --text-xl: var(--text-xl);
+  --text-2xl: var(--text-2xl);
+
+  /* shape — radius is a hierarchy: controls 2px, panels/menus 6px, pills full */
+  --radius-xs: var(--radius-control);
+  --radius-sm: var(--radius-control);
+  --radius-md: var(--radius-panel);
+  --radius-lg: var(--radius-panel);
+  --radius-xl: var(--radius-panel);
+  --radius-2xl: 8px;
+  --radius-3xl: 12px;
+  --radius-4xl: var(--radius-pill);
+  --radius-pill: var(--radius-pill);
+
+  /* elevation */
+  --shadow-popover: var(--shadow-popover);
+  --shadow-dialog: var(--shadow-dialog);
+}
+
+/* shadcn/ui semantic variables, mapped onto our tokens.
+   Careful: shadcn `--accent` = subtle hover surface, NOT the brand colour. */
+:root {
+  --background: var(--bench);
+  --foreground: var(--ink);
+
+  --card: var(--sheet);
+  --card-foreground: var(--ink);
+
+  --popover: var(--sheet);
+  --popover-foreground: var(--ink);
+
+  --primary: var(--brand);
+  --primary-foreground: #ffffff;
+
+  --secondary: var(--wash);
+  --secondary-foreground: var(--ink);
+
+  --muted: var(--wash);
+  --muted-foreground: var(--ink-muted);
+
+  --accent: var(--brand-tint);
+  --accent-foreground: var(--brand-hover);
+
+  --destructive: var(--rejected-ink);
+  --destructive-foreground: #ffffff;
+
+  --border: var(--rule);
+  --input: var(--field-edge);
+  --ring: var(--brand);
+
+  --radius: 6px;
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background: var(--bench);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  /* Machine values: hashes, tx links, timecodes, IDs */
+  .machine {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+
+  /* Numbers in tables */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* On the dark media stage, cobalt is too dark — use the stage variant */
+  .on-stage :focus-visible {
+    outline-color: var(--brand-on-stage);
+  }
+
+  ::selection {
+    background: var(--brand-tint);
+    color: var(--brand-hover);
+  }
+}
+
+/* Diagonal hatch for failure segments — applied over any label colour */
+.hatch-failure {
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(179, 38, 30, 0.55) 0,
+    rgba(179, 38, 30, 0.55) 2px,
+    transparent 2px,
+    transparent 6px
+  );
+}
+
+/* Notched top and bottom edges for the receipt. */
+.receipt-notches {
+  --notch: 16px;
+  --notch-r: 6px;
+  -webkit-mask:
+    radial-gradient(var(--notch-r) at 50% var(--notch), #0000 98%, #000) top / var(--notch) 51%
+      repeat-x,
+    radial-gradient(var(--notch-r) at 50% calc(100% - var(--notch)), #0000 98%, #000) bottom /
+      var(--notch) 51% repeat-x;
+  mask:
+    radial-gradient(var(--notch-r) at 50% var(--notch), #0000 98%, #000) top / var(--notch) 51%
+      repeat-x,
+    radial-gradient(var(--notch-r) at 50% calc(100% - var(--notch)), #0000 98%, #000) bottom /
+      var(--notch) 51% repeat-x;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

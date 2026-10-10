@@ -1,0 +1,89 @@
+/*
+ * PhysicalData Network — design tokens.
+ * Single source of truth for colour, type scale, shape and motion.
+ * Mirrored into the Tailwind theme and shadcn variables in app/globals.css.
+ *
+ * Naming note: the brand cobalt is `--brand`, NOT `--accent`, because shadcn
+ * redefines `--accent` to mean its subtle hover surface. See docs/DESIGN.md §2.4.
+ */
+
+:root {
+  /* surfaces */
+  --bench: #edf0f3; /* app background */
+  --sheet: #ffffff; /* panels, forms */
+  --wash: #e3e8ed; /* muted fills, table header, hover rows */
+  --stage: #161b22; /* dark surround for media only */
+  --stage-raised: #202733; /* controls sitting on the stage */
+
+  /* text */
+  --ink: #18202b;
+  --ink-muted: #5b6676;
+  --stage-ink: #e6eaf0;
+
+  /* structure */
+  --rule: #d5dbe2; /* decorative separators only, never a control border */
+  --field-edge: #7a8493; /* borders of inputs and controls (>= 3:1) */
+
+  /* the one accent */
+  --brand: #1f4fe0;
+  --brand-hover: #173fc0;
+  --brand-tint: #e8eeff;
+  --brand-on-stage: #6f8cff; /* cobalt is too dark on the stage */
+
+  /* status — always paired with an icon and a text label */
+  --pending-ink: #5b6676;
+  --pending-bg: #eef0f3;
+  --revision-ink: #9a6200;
+  --revision-bg: #fff1d6;
+  --accepted-ink: #17754a;
+  --accepted-bg: #e2f4ea;
+  --rejected-ink: #b3261e;
+  --rejected-bg: #fce6e4;
+  --paid-ink: #7a35c8;
+  --paid-bg: #f1e7fb;
+  /* appealed: ink on white with a dashed --ink border, no colour of its own */
+
+  /* video label colours — Okabe-Ito, colour-blind safe.
+     Every segment also carries its text label. */
+  --label-reach: #0072b2;
+  --label-grasp: #e69f00;
+  --label-lift: #56b4e9;
+  --label-place: #009e73;
+  --label-inspect: #cc79a7;
+  --label-recover: #d55e00;
+  --label-write: #5f4bb6;
+  --label-other: #8a94a3;
+
+  /* type scale: 12 / 14 / 16 / 20 / 28 / 40 */
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-md: 16px;
+  --text-lg: 20px;
+  --text-xl: 28px;
+  --text-2xl: 40px;
+
+  /* space: 4px base */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+
+  /* shape: radius is a hierarchy, not one value */
+  --radius-control: 2px; /* timeline segments, boxes, inputs, small buttons */
+  --radius-panel: 6px; /* panels, dialogs, menus */
+  --radius-pill: 9999px; /* status pills only */
+
+  /* motion */
+  --motion-toggle: 120ms;
+  --motion-panel: 200ms;
+  --motion-receipt: 400ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* elevation — floating layers only */
+  --shadow-popover: 0 1px 2px rgba(24, 32, 43, 0.06), 0 8px 24px rgba(24, 32, 43, 0.12);
+  --shadow-dialog: 0 2px 4px rgba(24, 32, 43, 0.08), 0 24px 48px rgba(24, 32, 43, 0.18);
+}
