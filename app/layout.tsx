@@ -19,6 +19,20 @@ export const metadata: Metadata = {
   title: "PhysicalData Network — quality-assured data operations",
   description:
     "Post image and video labelling jobs, pay only for work that passes review, and get a verifiable receipt for every payout on Monad.",
+  applicationName: "PhysicalData Network",
+  openGraph: {
+    title: "PhysicalData Network — quality-assured data operations",
+    description:
+      "Post image and video labelling jobs, pay only for work that passes review, and get a verifiable receipt for every payout on Monad.",
+    siteName: "PhysicalData Network",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "PhysicalData Network",
+    description:
+      "Human-in-the-loop data operations for robotics: reviewed labels, accepted-only exports, verifiable settlement.",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

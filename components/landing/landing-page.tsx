@@ -51,10 +51,17 @@ const EXAMPLE_RECEIPT: ReceiptData = {
 export function LandingPage() {
   return (
     <div className="min-h-dvh bg-bench">
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-3 focus:z-50 focus:rounded-[2px] focus:border focus:border-field-edge focus:bg-sheet focus:px-3 focus:py-1.5 focus:text-sm focus:text-ink"
+      >
+        Skip to content
+      </a>
       <LandingHeader />
-      <main className="mx-auto w-full max-w-[1280px] px-6">
+      <main id="main" className="mx-auto w-full max-w-[1280px] px-6">
         <Hero />
         <PaidRail />
+        <ExportSection />
         <ChecksSection />
         <DoesNotProve />
       </main>
@@ -245,6 +252,42 @@ function PaidRail() {
           </li>
         ))}
       </ol>
+    </section>
+  );
+}
+
+/* --------------------------------------------------------------- what you get */
+
+const DELIVERABLES = [
+  {
+    title: "Accepted work only",
+    copy: "An export contains the tasks that passed review at their current version. Rejected and superseded labels are never included.",
+  },
+  {
+    title: "A manifest with provenance",
+    copy: "Every export lists each task, the policy version it was judged against, and whether AI or a person made the decision.",
+  },
+  {
+    title: "Receipts you can verify",
+    copy: "Each payout carries a receipt with its hash, the contributor and the amount, verifiable on the Monad explorer.",
+  },
+];
+
+function ExportSection() {
+  return (
+    <section className="border-t border-rule py-12">
+      <h2 className="font-display text-xl text-ink">What you take away</h2>
+      <p className="mt-1 max-w-[60ch] text-sm text-ink-muted">
+        The point of the checks is a dataset you can defend. Anything that did not pass stays out.
+      </p>
+      <ul className="mt-6 grid grid-cols-1 gap-px overflow-hidden rounded-[6px] border border-rule bg-rule md:grid-cols-3">
+        {DELIVERABLES.map((d) => (
+          <li key={d.title} className="flex flex-col gap-2 bg-sheet px-4 py-4">
+            <span className="font-display text-base text-ink">{d.title}</span>
+            <span className="text-sm text-ink-muted">{d.copy}</span>
+          </li>
+        ))}
+      </ul>
     </section>
   );
 }

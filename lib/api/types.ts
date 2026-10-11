@@ -154,6 +154,9 @@ export type Job = z.infer<typeof Job>;
 export const BuyerOverview = z.object({
   tasksAccepted: z.number(),
   tasksInReview: z.number(),
+  /** Optional so the screen still renders against a backend that omits them. */
+  tasksSubmitted: z.number().optional(),
+  tasksPaid: z.number().optional(),
   acceptanceRate: z.number(),
   spend: z.number(),
   budget: z.number(),

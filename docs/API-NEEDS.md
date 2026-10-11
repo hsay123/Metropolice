@@ -70,7 +70,7 @@ These are marked in `lib/api/real.ts`. Shapes are in `lib/api/types.ts`.
 
 | Method | Path | Returns | Why the UI needs it |
 |---|---|---|---|
-| `GET` | `/api/buyer/overview` | `BuyerOverview` | Dashboard header: accepted, in review, acceptance rate, spend, budget left, AI vs human share |
+| `GET` | `/api/buyer/overview` | `BuyerOverview` | Dashboard: pipeline counts (submitted, in review, accepted, paid), acceptance rate, spend, budget left, AI vs human share |
 | `GET` | `/api/jobs/{id}/stats` | `JobStats` | Buyer job detail progress (same shape, scoped to one job) |
 | `GET` | `/api/jobs/{id}/audit` | `AuditSample` | Job detail: VRF request, public seed, selected task ids |
 | `GET` | `/api/tasks/{id}` | `AvailableTask` | Workbench: load one task (schema, classes, rubric, asset) |
@@ -94,6 +94,8 @@ These are marked in `lib/api/real.ts`. Shapes are in `lib/api/types.ts`.
 ```ts
 {
   tasksAccepted: number; tasksInReview: number; acceptanceRate: number; // 0..1
+  tasksSubmitted?: number; tasksPaid?: number; // pipeline totals; the UI falls back
+                                               // to accepted + in review when omitted
   spend: number; budget: number; budgetLeft: number;
   aiReviewed: number; humanReviewed: number; adjudicated: number;
 }

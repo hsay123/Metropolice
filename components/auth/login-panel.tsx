@@ -25,7 +25,7 @@ const PrivySignIn = dynamic(
 
 export function LoginPanel() {
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-[440px] flex-col justify-center px-6 py-12">
+    <main className="mx-auto flex min-h-dvh w-full max-w-[560px] flex-col justify-center px-6 py-12">
       <Link
         href="/"
         className="mb-8 inline-flex w-fit items-center gap-1.5 text-sm text-ink-muted hover:text-ink"

@@ -21,12 +21,12 @@ export function MediaStage({
   return (
     <div
       className={cn(
-        "flex min-h-0 flex-col overflow-hidden rounded-[6px] bg-stage text-stage-ink",
+        "flex min-h-0 min-w-0 flex-col overflow-hidden rounded-[6px] bg-stage text-stage-ink",
         className,
       )}
     >
       {toolbar && (
-        <div className="flex h-10 shrink-0 items-center gap-3 border-b border-white/10 px-3">
+        <div className="flex h-10 shrink-0 items-center gap-3 overflow-x-auto border-b border-white/10 px-3">
           {toolbar}
         </div>
       )}

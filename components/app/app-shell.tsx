@@ -72,6 +72,12 @@ export function AppShell({ role, children }: { role: Role; children: React.React
 
   return (
     <div className="flex min-h-dvh flex-col bg-bench text-ink">
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-3 focus:z-50 focus:rounded-[2px] focus:border focus:border-field-edge focus:bg-sheet focus:px-3 focus:py-1.5 focus:text-sm focus:text-ink"
+      >
+        Skip to content
+      </a>
       <header className="sticky top-0 z-40 h-12 border-b border-rule bg-sheet">
         <div className="mx-auto flex h-full max-w-[1280px] items-center gap-3 px-4 sm:gap-6 sm:px-6">
           <Link
@@ -128,7 +134,9 @@ export function AppShell({ role, children }: { role: Role; children: React.React
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-[1280px] flex-1 px-6 py-6">{children}</main>
+      <main id="main" className="mx-auto w-full max-w-[1280px] flex-1 px-6 py-6">
+        {children}
+      </main>
     </div>
   );
 }

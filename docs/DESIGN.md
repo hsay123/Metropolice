@@ -516,6 +516,7 @@ Refund, close, pause, and policy change always show the approvers so far and who
 | `DiffOverlay` | submitted vs reference, mismatch highlight |
 | `ConfidenceMeter` | bar plus number, "Sent to human review" below the threshold |
 | `PipelineLedger`, `BudgetBar` | buyer dashboard, proportional bars |
+| `TableToolbar`, `SortHeader`, `TablePagination` | search, status filter, sortable columns, paging for data tables |
 | `QuorumRow` | approvers so far, approve and reject |
 | `DevToolbar` | mock badge, role switcher, reset demo |
 

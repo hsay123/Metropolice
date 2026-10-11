@@ -103,7 +103,7 @@ export function VideoReviewStage({
   );
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex min-w-0 flex-col gap-3">
       <MediaStage
         className="h-[clamp(320px,46dvh,460px)]"
         toolbar={
@@ -136,7 +136,7 @@ export function VideoReviewStage({
               {formatTimecode(currentMs, frame)}
               <span className="text-stage-ink/40"> / {formatTimecode(durationMs, frame)}</span>
             </span>
-            <span className="ml-auto flex items-center gap-3 text-xs text-stage-ink/70">
+            <span className="ml-auto hidden items-center gap-3 text-xs text-stage-ink/70 sm:flex">
               <span>{submitted.length} submitted</span>
               <span>{reference.length} reference</span>
             </span>
@@ -286,21 +286,27 @@ function CompareTimeline({
                       onPointerDown={(e) => e.stopPropagation()}
                       onClick={() => onSeek(s.start_ms)}
                       title={`Submitted ${s.action_label} ${formatSeconds(s.start_ms)} to ${formatSeconds(s.end_ms)}`}
-                      className="absolute top-0.5 h-2.5 rounded-[2px]"
+                      className="absolute top-0 h-6"
                       style={{
                         left: `${(s.start_ms / duration) * 100}%`,
                         width: `${Math.max(0, ((s.end_ms - s.start_ms) / duration) * 100)}%`,
                         minWidth: 4,
-                        background: labelColor(label, 0),
-                        boxShadow: flag ? "0 0 0 1.5px var(--rejected-ink)" : undefined,
                       }}
-                    />
+                    >
+                      <span
+                        className="absolute inset-x-0 top-[7px] h-2.5 rounded-[2px]"
+                        style={{
+                          background: labelColor(label, 0),
+                          boxShadow: flag ? "0 0 0 1.5px var(--rejected-ink)" : undefined,
+                        }}
+                      />
+                    </button>
                   );
                 })}
             </div>
           ))}
 
-          <div className="relative h-5 border-t border-rule">
+          <div className="relative h-5 overflow-hidden border-t border-rule">
             {[0, 0.25, 0.5, 0.75, 1].map((f, i) => (
               <span
                 key={i}

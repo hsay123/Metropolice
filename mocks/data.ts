@@ -401,8 +401,10 @@ export const RECEIPTS: Receipt[] = [
 
 /** Buyer dashboard aggregates. Added for the UI (docs/API-NEEDS.md). */
 export const BUYER_OVERVIEW: BuyerOverview = {
-  tasksAccepted: 214,
+  tasksSubmitted: 286,
   tasksInReview: 37,
+  tasksAccepted: 214,
+  tasksPaid: 198,
   acceptanceRate: 0.86,
   spend: 70,
   budget: 160,

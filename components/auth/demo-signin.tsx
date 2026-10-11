@@ -2,17 +2,33 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { ArrowRight, Check } from "lucide-react";
+import { Briefcase, Check, Loader2, ScanSearch, ShieldCheck, Tag, type LucideIcon } from "lucide-react";
 import { useDevStore } from "@/lib/store/dev";
 import { ROLE_HOME, ROLE_LABEL } from "@/lib/roles";
 import type { Role } from "@/lib/api/types";
 import { cn } from "@/lib/utils";
 
-const ROLES: { role: Role; blurb: string }[] = [
-  { role: "buyer", blurb: "Post a job, fund it, and export accepted work." },
-  { role: "contributor", blurb: "Claim a task, label the media, get paid when it passes review." },
-  { role: "reviewer", blurb: "Compare a submission with the reference and decide with a reason." },
-  { role: "admin", blurb: "Guard the money: roles, the signer policy, and approvals." },
+const ROLES: { role: Role; icon: LucideIcon; blurb: string }[] = [
+  {
+    role: "buyer",
+    icon: Briefcase,
+    blurb: "Post a job, fund it, and export accepted work.",
+  },
+  {
+    role: "contributor",
+    icon: Tag,
+    blurb: "Claim a task, label the media, get paid when it passes review.",
+  },
+  {
+    role: "reviewer",
+    icon: ScanSearch,
+    blurb: "Compare a submission with the reference and decide with a reason.",
+  },
+  {
+    role: "admin",
+    icon: ShieldCheck,
+    blurb: "Guard the money: roles, the signer policy, and quorum approvals.",
+  },
 ];
 
 /**
@@ -34,39 +50,46 @@ export function DemoSignIn() {
   }
 
   return (
-    <div className="flex flex-col gap-3">
-      <ul className="overflow-hidden rounded-[6px] border border-rule bg-sheet">
-        {ROLES.map(({ role, blurb }, i) => (
-          <li key={role} className={cn(i > 0 && "border-t border-rule")}>
+    <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+      {ROLES.map(({ role, icon: Icon, blurb }) => {
+        const isCurrent = role === current;
+        return (
+          <li key={role} className="flex">
             <button
               type="button"
               onClick={() => choose(role)}
               disabled={pending !== null}
+              aria-current={isCurrent ? "true" : undefined}
               className={cn(
-                "group flex w-full items-center gap-3 px-4 py-3 text-left transition-colors",
-                "hover:bg-wash focus-visible:bg-wash focus-visible:outline-none",
-                "disabled:opacity-60",
+                "group flex h-full w-full flex-col gap-2 rounded-[6px] border p-3.5 text-left transition-colors",
+                "outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40",
+                isCurrent
+                  ? "border-brand bg-brand-tint"
+                  : "border-field-edge bg-sheet hover:bg-wash",
+                "disabled:cursor-not-allowed disabled:opacity-60",
               )}
             >
-              <span className="flex min-w-0 flex-1 flex-col">
+              <span className="flex w-full items-center gap-2">
+                <Icon className="size-4 shrink-0 text-ink-muted" aria-hidden />
                 <span className="font-display text-base text-ink">{ROLE_LABEL[role]}</span>
-                <span className="text-sm text-ink-muted">{blurb}</span>
+                {pending === role ? (
+                  <Loader2 className="ml-auto size-4 animate-spin text-ink-muted" aria-hidden />
+                ) : role === current ? (
+                  <span className="ml-auto inline-flex items-center gap-1 text-xs text-[var(--accepted-ink)]">
+                    <Check className="size-3.5" aria-hidden />
+                    Current
+                  </span>
+                ) : (
+                  <span className="ml-auto text-xs text-ink-muted opacity-0 transition-opacity group-hover:opacity-100">
+                    Continue
+                  </span>
+                )}
               </span>
-              {role === current ? (
-                <span className="inline-flex items-center gap-1 text-xs text-[var(--accepted-ink)]">
-                  <Check className="size-3.5" aria-hidden />
-                  Current
-                </span>
-              ) : (
-                <ArrowRight
-                  className="size-4 shrink-0 text-ink-muted transition-transform group-hover:translate-x-0.5"
-                  aria-hidden
-                />
-              )}
+              <span className="text-sm text-ink-muted">{blurb}</span>
             </button>
           </li>
-        ))}
-      </ul>
-    </div>
+        );
+      })}
+    </ul>
   );
 }

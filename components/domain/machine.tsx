@@ -48,7 +48,7 @@ export function HashChip({
         tabIndex={0}
         title={value}
         aria-label={label ? `${label}: ${value}` : value}
-        className="machine rounded-[2px] bg-wash px-1.5 py-0.5 text-xs text-ink"
+        className="machine inline-flex min-h-6 items-center rounded-[2px] bg-wash px-1.5 text-xs text-ink"
       >
         {shortHash(value)}
       </span>
@@ -118,7 +118,7 @@ export function TxLink({
       target="_blank"
       rel="noreferrer"
       title={`${EXPLORER_LABEL}: ${txHash}`}
-      className={cn("machine inline-flex items-center gap-1 text-xs text-primary hover:underline", className)}
+      className={cn("machine inline-flex min-h-6 -my-0.5 items-center gap-1 text-xs text-primary hover:underline", className)}
     >
       {shortHash(txHash)}
       <ExternalLink className="size-3" aria-hidden />

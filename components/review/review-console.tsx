@@ -47,11 +47,14 @@ export function ReviewConsole({ submissionId }: { submissionId: string }) {
   if (isPending) return <ConsoleSkeleton />;
   if (isError || !data) {
     return (
-      <ErrorState
-        title="Submission not available"
-        message="This submission is not in the queue. It may have been decided already. Return to the queue to pick another."
-        onRetry={() => refetch()}
-      />
+      <div className="flex flex-col gap-3">
+        <h1 className="sr-only">Review submission</h1>
+        <ErrorState
+          title="Submission not available"
+          message="This submission is not in the queue. It may have been decided already. Return to the queue to pick another."
+          onRetry={() => refetch()}
+        />
+      </div>
     );
   }
   return <Console item={data} />;
@@ -222,7 +225,7 @@ function Console({ item }: { item: ReviewItem }) {
           />
         )}
 
-        <div className="flex flex-col gap-4 overflow-y-auto">
+        <div className="flex min-w-0 flex-col gap-4 overflow-y-auto">
           {item.ai && (
             <Panel>
               <PanelHeader title="AI suggestion" actions={<DecisionSource source="ai" />} />
@@ -538,6 +541,7 @@ function CompareRow({ tone, label }: { tone: "ok" | "bad" | "warn"; label: strin
 function ConsoleSkeleton() {
   return (
     <div className="flex flex-col gap-4" aria-busy>
+      <h1 className="sr-only">Review submission</h1>
       <div className="h-14 animate-pulse rounded-[6px] border border-rule bg-sheet" />
       <div className="grid gap-4 lg:grid-cols-[1fr_360px]">
         <div className="h-[560px] animate-pulse rounded-[6px] bg-stage/90" />
