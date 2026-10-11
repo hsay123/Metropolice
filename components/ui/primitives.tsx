@@ -150,16 +150,33 @@ export function PhotoSlot({
   style?: React.CSSProperties;
   children?: React.ReactNode;
 }) {
+  const [failed, setFailed] = React.useState(false);
   const label = caption ?? "Illustrative image";
-  if (src) {
+
+  /*
+   * A named file that has not been delivered yet falls back to the slot. The ref
+   * check matters: a 404 can resolve before React hydrates, so onError alone never
+   * fires and the browser paints a broken image with its alt text.
+   */
+  const probe = React.useCallback((el: HTMLImageElement | null) => {
+    if (el && el.complete && el.naturalWidth === 0) setFailed(true);
+  }, []);
+
+  if (src && !failed) {
     return (
-      <figure className={cn("relative overflow-hidden rounded-[12px]", className)} style={style}>
+      <div className={cn("relative overflow-hidden rounded-[12px]", className)} style={style}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={src} alt={alt} className="size-full object-cover" />
+        <img
+          ref={probe}
+          src={src}
+          alt={alt}
+          onError={() => setFailed(true)}
+          className="size-full object-cover"
+        />
         <figcaption className="absolute bottom-2 left-2 rounded-[6px] bg-black/55 px-2 py-0.5 text-[11px] font-medium text-white">
           {label}
         </figcaption>
-      </figure>
+      </div>
     );
   }
   return (

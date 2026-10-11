@@ -38,11 +38,15 @@ async function open(path, role, width = 1440) {
 /* ---------------------------------------------------------------- 1. sign-in */
 {
   const page = await open("/login", "buyer");
-  const choices = await page.getByRole("button", { name: /Buyer|Contributor|Reviewer|Admin/ }).count();
-  check("sign-in lists four roles", choices >= 4, `count=${choices}`);
-  await page.getByRole("button", { name: /Reviewer/ }).click();
-  await page.waitForTimeout(1200);
-  check("choosing a role routes to its home", page.url().endsWith("/review"), page.url());
+  // The chooser offers the two self-serve roles only. Reviewer and admin are
+  // assigned, not self-selected, so offering them would overstate access.
+  const choices = await page.getByRole("button", { name: /company|contributor/i }).count();
+  check("sign-in offers company and contributor", choices === 2, `count=${choices}`);
+  const noStaff = await page.getByRole("button", { name: /Reviewer|Admin/i }).count();
+  check("sign-in does not offer reviewer or admin", noStaff === 0, `count=${noStaff}`);
+  await page.getByRole("button", { name: /contributor/i }).click();
+  await page.waitForTimeout(1400);
+  check("choosing a role routes to its home", page.url().endsWith("/work"), page.url());
   check("sign-in had no console errors", page.__errs.length === 0, page.__errs[0] || "");
   await page.close();
 }

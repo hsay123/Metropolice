@@ -2,40 +2,32 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { Briefcase, Check, Loader2, ScanSearch, ShieldCheck, Tag, type LucideIcon } from "lucide-react";
+import { ArrowRight, Building2, User, type LucideIcon } from "lucide-react";
 import { useDevStore } from "@/lib/store/dev";
 import { ROLE_HOME, ROLE_LABEL } from "@/lib/roles";
 import type { Role } from "@/lib/api/types";
 import { cn } from "@/lib/utils";
 
-const ROLES: { role: Role; icon: LucideIcon; blurb: string }[] = [
+const OPTIONS: { role: Role; icon: LucideIcon; tint: string; blurb: string }[] = [
   {
     role: "buyer",
-    icon: Briefcase,
-    blurb: "Post a job, fund it, and export accepted work.",
+    icon: Building2,
+    tint: "var(--s-progress-bg)",
+    blurb: "Upload data, manage annotation projects, and receive only the labels that pass review.",
   },
   {
     role: "contributor",
-    icon: Tag,
-    blurb: "Claim a task, label the media, get paid when it passes review.",
-  },
-  {
-    role: "reviewer",
-    icon: ScanSearch,
-    blurb: "Compare a submission with the reference and decide with a reason.",
-  },
-  {
-    role: "admin",
-    icon: ShieldCheck,
-    blurb: "Guard the money: roles, the signer policy, and quorum approvals.",
+    icon: User,
+    tint: "var(--primary-tint)",
+    blurb: "Annotate real-world data, build your profile, and earn for accepted work.",
   },
 ];
 
 /**
- * DemoSignIn — the mock sign-in. It is a role landing, not a fake auth system, and
- * it says so. Choosing a role sets the dev role and opens that role's home
- * (AGENTS.md A5, A6). Real email and wallet sign-in is Privy and is used when
- * NEXT_PUBLIC_PRIVY_APP_ID is set.
+ * DemoSignIn — the mock chooser. It is a role landing, not a fake auth system, and
+ * it says so. Reviewer and admin sign-in is deliberately not offered here: those
+ * roles are assigned, not self-selected, and pretending otherwise would overstate
+ * who can reach the money controls (AGENTS.md A5, A6).
  */
 export function DemoSignIn() {
   const router = useRouter();
@@ -50,46 +42,60 @@ export function DemoSignIn() {
   }
 
   return (
-    <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-      {ROLES.map(({ role, icon: Icon, blurb }) => {
+    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+      {OPTIONS.map(({ role, icon: Icon, tint, blurb }) => {
         const isCurrent = role === current;
+        const isPending = pending === role;
         return (
-          <li key={role} className="flex">
-            <button
-              type="button"
-              onClick={() => choose(role)}
-              disabled={pending !== null}
-              aria-current={isCurrent ? "true" : undefined}
-              className={cn(
-                "group flex h-full w-full flex-col gap-2 rounded-[12px] border p-3.5 text-left transition-colors",
-                "outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40",
-                isCurrent
-                  ? "border-brand bg-brand-tint"
-                  : "border-field-edge bg-sheet hover:bg-wash",
-                "disabled:cursor-not-allowed disabled:opacity-60",
-              )}
+          <button
+            key={role}
+            type="button"
+            onClick={() => choose(role)}
+            disabled={pending !== null}
+            aria-current={isCurrent ? "true" : undefined}
+            className={cn(
+              "group flex h-full flex-col items-start rounded-[16px] border border-[var(--border)] bg-white p-6 text-left shadow-[var(--elev-card)]",
+              "transition-[box-shadow,transform] duration-150 ease-out hover:-translate-y-px hover:shadow-[var(--elev-float)]",
+              "outline-none focus-visible:ring-[3px] focus-visible:ring-[var(--primary-ring)]",
+              isCurrent && "border-[var(--primary)] ring-1 ring-[var(--primary)]",
+              pending !== null && "cursor-not-allowed opacity-70",
+            )}
+          >
+            <span
+              className="grid size-12 place-items-center rounded-[12px]"
+              style={{ background: tint }}
             >
-              <span className="flex w-full items-center gap-2">
-                <Icon className="size-4 shrink-0 text-ink-muted" aria-hidden />
-                <span className="font-display text-base text-ink">{ROLE_LABEL[role]}</span>
-                {pending === role ? (
-                  <Loader2 className="ml-auto size-4 animate-spin text-ink-muted" aria-hidden />
-                ) : role === current ? (
-                  <span className="ml-auto inline-flex items-center gap-1 text-xs text-[var(--accepted-ink)]">
-                    <Check className="size-3.5" aria-hidden />
-                    Current
-                  </span>
-                ) : (
-                  <span className="ml-auto text-xs text-ink-muted opacity-0 transition-opacity group-hover:opacity-100">
-                    Continue
-                  </span>
+              <Icon className="size-5 text-[var(--primary-hover)]" aria-hidden />
+            </span>
+
+            <span className="mt-5 font-display text-[18px] font-bold">
+              {role === "buyer" ? "I'm from a company" : "I'm a contributor"}
+            </span>
+            <span className="mt-2 text-[14px] text-[var(--fg-muted)]">{blurb}</span>
+
+            <span className="mt-6 flex items-center gap-3">
+              <span
+                className={cn(
+                  "grid size-11 place-items-center rounded-full border border-[var(--border-field)]",
+                  "transition-colors group-hover:border-[var(--primary)] group-hover:bg-[var(--primary-tint)]",
                 )}
+                aria-hidden
+              >
+                <ArrowRight className="size-4" />
               </span>
-              <span className="text-sm text-ink-muted">{blurb}</span>
-            </button>
-          </li>
+              <span className="text-[13px] font-medium text-[var(--primary-hover)]">
+                {isPending
+                  ? "Opening…"
+                  : isCurrent
+                    ? `Continue as ${ROLE_LABEL[role]}`
+                    : role === "buyer"
+                      ? "Continue as a company"
+                      : "Continue as a contributor"}
+              </span>
+            </span>
+          </button>
         );
       })}
-    </ul>
+    </div>
   );
 }
