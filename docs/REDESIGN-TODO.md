@@ -55,3 +55,10 @@ pairs), `scripts/shots.mjs` (screenshots into `.shots/`), `npx impeccable detect
   gain. This is the one outstanding detector finding, accepted in writing.
 - **Sidebar collapse persistence.** Collapse state is per-session. Persisting it needs a
   localStorage read that is easy to get wrong at hydration; not worth it now.
+- **Review console keyboard shortcuts (A / R / X).** The brief asks for one-key decisions
+  once a reason is chosen. Not added: a bare letter that fires an irreversible decision is
+  dangerous without an undo, and the reason code has to be chosen first. The buttons stay
+  explicit.
+- **"Layered checks" as a size-varied bento.** The landing still uses a quiet numbered list
+  for the six check layers. That list is on-system and avoids the equal-card grid the brief
+  warns about; a bento is a bigger change and would need the same human eye as the rest.

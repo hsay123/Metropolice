@@ -15,6 +15,10 @@ import { LeaseTimer } from "@/components/domain/lease-timer";
 import { ReasonCode } from "@/components/domain/reason-code";
 import { EmptyState, ErrorState, TableSkeleton } from "@/components/domain/states";
 import { ReceiptCard } from "@/components/domain/receipt";
+import { PipelineLedger } from "@/components/domain/pipeline-ledger";
+import { KeyHint, KeyHintList } from "@/components/domain/key-hint";
+import { TablePagination, TableToolbar } from "@/components/domain/table-toolbar";
+import { DataTable, TBody, TD, TH, THead, TR } from "@/components/domain/table";
 import type { Receipt, TaskState } from "@/lib/api/types";
 
 const STATES: TaskState[] = [
@@ -89,7 +93,7 @@ export default function ComponentGalleryPage() {
         </p>
       </header>
 
-      <Section title="Buttons" note="Primary, outline, secondary, ghost, destructive. 2px radius.">
+      <Section title="Buttons" note="Primary, outline, secondary, ghost, destructive. 8px radius.">
         <div className="flex flex-wrap items-center gap-3">
           <Button>Fund job</Button>
           <Button variant="outline">Request revision</Button>
@@ -101,7 +105,7 @@ export default function ComponentGalleryPage() {
         </div>
       </Section>
 
-      <Section title="Form controls" note="Labels above, helper below, 2px controls, stronger edge.">
+      <Section title="Form controls" note="Labels above, helper below, 8px controls, stronger edge.">
         <div className="grid max-w-[520px] gap-4">
           <div className="grid gap-1.5">
             <Label htmlFor="g-title">Job title</Label>
@@ -219,6 +223,79 @@ export default function ComponentGalleryPage() {
             icon={TriangleAlert}
             title="Not enough data yet"
             description="We do not show a rate until there are at least 20 audited samples."
+          />
+        </div>
+      </Section>
+
+      <Section
+        title="Pipeline ledger"
+        note="Four stations, each sized against the number that entered the funnel."
+      >
+        <PipelineLedger
+          stages={[
+            { key: "submitted", label: "Submitted", count: 286, color: "var(--ink-muted)" },
+            { key: "review", label: "In review", count: 37, color: "var(--revision-ink)" },
+            { key: "accepted", label: "Accepted", count: 214, color: "var(--accepted-ink)" },
+            { key: "paid", label: "Paid", count: 198, color: "var(--paid-ink)" },
+          ]}
+          reference={286}
+          note="Accepted work is only paid once the contributor claims the reward."
+        />
+      </Section>
+
+      <Section title="Table toolbar" note="Search, filters, sorting and paging.">
+        <div className="overflow-hidden rounded-[12px] border border-rule bg-sheet">
+          <TableToolbar>
+            <Input
+              type="search"
+              placeholder="Search jobs"
+              aria-label="Search jobs"
+              className="w-full sm:w-56"
+            />
+            <span className="text-xs text-ink-muted">2 of 9 jobs</span>
+          </TableToolbar>
+          <DataTable>
+            <THead>
+              <TR className="border-rule">
+                <TH>Job</TH>
+                <TH>Status</TH>
+                <TH numeric>Budget</TH>
+              </TR>
+            </THead>
+            <TBody>
+              <TR className="hover:bg-wash">
+                <TD>Pick and place, kitchen set</TD>
+                <TD>Active</TD>
+                <TD numeric>48.00 / 100.00</TD>
+              </TR>
+              <TR className="hover:bg-wash">
+                <TD>Pen writing, kitchen set</TD>
+                <TD>Active</TD>
+                <TD numeric>22.00 / 60.00</TD>
+              </TR>
+            </TBody>
+          </DataTable>
+          <div className="flex justify-end border-t border-rule px-4 py-3">
+            <TablePagination page={2} pageCount={5} onPage={() => {}} />
+          </div>
+        </div>
+      </Section>
+
+      <Section
+        title="Key hints"
+        note="Work tools teach shortcuts where the action lives, not in a manual."
+      >
+        <div className="flex flex-col gap-3">
+          <p className="flex items-center gap-2 text-sm text-ink">
+            Draw a box <KeyHint keys="B" /> then press <KeyHint keys={["⌘", "Z"]} /> to undo.
+          </p>
+          <KeyHintList
+            hints={[
+              { keys: "1–9", label: "class" },
+              { keys: "Esc", label: "deselect" },
+              { keys: "Del", label: "delete box" },
+              { keys: ["⇧", "⌘", "Z"], label: "redo" },
+            ]}
           />
         </div>
       </Section>
