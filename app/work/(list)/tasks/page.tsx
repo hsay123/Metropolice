@@ -1,6 +1,5 @@
 "use client";
 
-import { AppShell } from "@/components/app/app-shell";
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
@@ -32,7 +31,7 @@ import { cn } from "@/lib/utils";
  * in a table; the rubric and reward are shown before a claim (AGENTS.md A2). The
  * claim is idempotent on the client (see lib/api/client.ts).
  */
-function TaskQueue() {
+export default function TaskQueue() {
   const router = useRouter();
   const { data, isPending, isError, refetch } = useAvailableTasks();
   const claim = useClaimTask();
@@ -278,12 +277,4 @@ function formatDeadline(iso: string): string {
     hour: "2-digit",
     minute: "2-digit",
   });
-}
-
-export default function TaskQueuePage() {
-  return (
-    <AppShell role="contributor">
-      <TaskQueue />
-    </AppShell>
-  );
 }

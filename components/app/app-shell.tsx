@@ -183,15 +183,18 @@ export function AppShell({
   const [collapsed, setCollapsed] = React.useState(false);
 
   if (bare) {
+    /* Focus surface: no sidebar, no content padding, and its own landmark id.
+       The id is deliberately not "main" so a shell left over from a client-side
+       navigation can never become the skip-link target. */
     return (
       <div className="flex min-h-dvh flex-col bg-bench text-ink">
         <a
-          href="#main"
+          href="#workbench"
           className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-3 focus:z-50 focus:rounded-[8px] focus:border focus:border-field-edge focus:bg-sheet focus:px-3 focus:py-1.5 focus:text-sm focus:text-ink"
         >
           Skip to content
         </a>
-        <main id="main" className="flex-1">
+        <main id="workbench" className="flex-1">
           {children}
         </main>
       </div>

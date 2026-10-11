@@ -1,6 +1,5 @@
 "use client";
 
-import { AppShell } from "@/components/app/app-shell";
 
 import * as React from "react";
 import Link from "next/link";
@@ -62,7 +61,7 @@ const QUESTIONS: Question[] = [
   },
 ];
 
-function Qualify() {
+export default function Qualify() {
   const [answers, setAnswers] = React.useState<Record<string, string>>({});
   const [submitted, setSubmitted] = React.useState(false);
 
@@ -193,13 +192,5 @@ function Qualify() {
         </div>
       )}
     </div>
-  );
-}
-
-export default function QualifyPage() {
-  return (
-    <AppShell role="contributor">
-      <Qualify />
-    </AppShell>
   );
 }

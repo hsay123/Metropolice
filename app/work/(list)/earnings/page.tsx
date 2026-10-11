@@ -1,6 +1,5 @@
 "use client";
 
-import { AppShell } from "@/components/app/app-shell";
 
 import * as React from "react";
 import Link from "next/link";
@@ -46,7 +45,7 @@ import { cn } from "@/lib/utils";
  * slides out once (AGENTS.md A3). Accepted and Paid are always shown as different
  * states. Demo rewards are test tokens.
  */
-function Earnings() {
+export default function Earnings() {
   const { data, isPending, isError, refetch } = useEarnings();
   const claim = useClaimReward();
   const appeal = useAppeal();
@@ -425,12 +424,4 @@ function PaidReceipt({ receipt, receiptId }: { receipt?: Receipt; receiptId?: st
     );
   }
   return <ReceiptCard receipt={value} animate={Boolean(receipt)} />;
-}
-
-export default function EarningsPage() {
-  return (
-    <AppShell role="contributor">
-      <Earnings />
-    </AppShell>
-  );
 }

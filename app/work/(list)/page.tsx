@@ -1,4 +1,3 @@
-import { AppShell } from "@/components/app/app-shell";
 import Link from "next/link";
 import { Boxes, Clock, ShieldCheck, Wallet } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -39,7 +38,7 @@ const STEPS = [
   },
 ];
 
-function Onboarding() {
+export default function Onboarding() {
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
@@ -163,13 +162,5 @@ function Onboarding() {
         </div>
       </div>
     </div>
-  );
-}
-
-export default function OnboardingPage() {
-  return (
-    <AppShell role="contributor">
-      <Onboarding />
-    </AppShell>
   );
 }
