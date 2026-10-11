@@ -59,3 +59,50 @@ correct — the served stylesheet, not the file on disk, was the truth. Worth re
 - Screenshot: `.shots/gallery-dev-components-1440x900.png`
 - `tsc`, `eslint`, `build` (18 routes) clean.
 - `node scripts/contrast.mjs` → **36/36 pairs pass**.
+
+## Elapsed (continued — timestamps after checkpoint 1 are order-accurate, clock times approximate)
+
+| Time | Phase | Note |
+|---|---|---|
+| 16:05 | P2 | `AppShell` rebuilt: 240/68 sidebar, 64px top bar, `bare` focus mode, mock badge, Cmd-K palette. |
+| 16:20 | P2 | Buyer dashboard `/buyer`: four plain KPI cards, active-projects table, review-mix + budget panels. `5a90000`. |
+| 16:40 | P2 | Landing `/` + `/login` role chooser. Checkpoint 2. `3c617a2`. |
+| 17:00 | P2 | Job wizard `/buyer/jobs/new` + 28px Satoshi `PageHeader`. |
+| 17:25 | P2 | Job detail `/buyer/jobs/[id]` + export dialog; `Stat` rebuilt (28px value, flat `StatGrid`). `99b0e3e`. |
+| 17:55 | P2 | Contributor onboarding, qualification, task queue. Legacy raw-var aliases added (35 call sites). `spec-check` now sets the owning role per route. `4584c39`. |
+| 18:40 | P2 | Workbench: single-bar timeline, filmstrip, Annotation/Instructions tabs; marketplace thumbs to 120x84. `8f6f782`. |
+| 19:05 | P3 | `scripts/contrast.mjs` written; 18 failures found and fixed (photo-slot caption, chip labels). `6b82034`. |
+
+## Bugs hit and fixed during phase 2–3
+
+| Bug | Cause | Fix |
+|---|---|---|
+| 35 raw `var(--rejected-ink)`-style call sites painted nothing | The token rename removed the old names but the raw `var()` uses were not aliased | Legacy **raw** var aliases added to `tokens.css` (not just the Tailwind utilities) |
+| `.photo-slot` caption failed AA (4.09:1) | `--fg-subtle` on `--primary-tint` at 12px | Caption uses `--fg`; chip labels on the tint use `--fg-muted` |
+| Chip labels on `--primary-tint` failed AA (4.09:1) | `--fg-subtle` at 12px | Switched to `--fg-muted` (4.72:1) |
+| **CSS edits stopped applying** (photo-slot still old after edit *and* after restart) | Turbopack's file watcher stopped invalidating `app/globals.css`; the chunk on disk kept a pre-edit mtime | Deleted `.next/dev` and `.next/cache`, restarted `pnpm dev`. Verified by grepping the **served** chunk, not the source |
+
+The contrast script itself needed a fix: the primary button's background is a gradient, so
+`backgroundColor` is transparent and the first version reported white-on-white (1.05:1). It now
+collects gradient colour stops and tests the text against every stop, taking the worst case.
+
+## Checkpoint 2
+
+- Routes: `/`, `/login`, `/buyer`, `/buyer/jobs/new`, `/buyer/jobs/job_pickplace`.
+- `spec-check` and `shots` pass at 1440/1280/390; no console errors, no horizontal overflow.
+
+## Checkpoint 3
+
+- Workbench rebuilt to `MOODBOARD-SPEC.md` §3–4: one 12px multi-colour bar with a violet
+  playhead and a 10px handle, 5s ruler ticks, label chips under the bar; a filmstrip of real
+  decoded frames (72x56) with a dark-stage fallback; Annotation/Instructions tabs.
+- `spec-check` now asserts `timeline-bar`, `thumb-row` and `video-frame` on the workbench.
+
+## Phase 3 gates (all green)
+
+- `npx tsc --noEmit` clean; `npx eslint .` 0 errors (warnings only, all in `backend/` or scripts).
+- `node scripts/shots.mjs` → 18 routes at 1440x900, no console errors, no overflow.
+- `node scripts/shots.mjs --w 390 --h 844` → 18 routes at 390, no console errors, no overflow.
+- `node scripts/spec-check.mjs` → 16 routes x 3 widths, all assertions pass.
+- `node scripts/contrast.mjs` → **all text pairs meet WCAG AA** (was 18 failures before the fix).
+- `npx impeccable detect app components` → **0 findings**; no taste waivers were needed.
