@@ -3,8 +3,9 @@ import { cn } from "@/lib/utils";
 
 /**
  * PageHeader — the title block for a screen. A quiet context line (the role in
- * sentence case, never a tracked-out eyebrow), the page title, an optional
- * one-line description and right-aligned actions.
+ * sentence case, never a tracked-out eyebrow), a 28px display title, an optional
+ * one-line description and right-aligned actions. Sits at the top of every screen
+ * inside the shell's 1280px column.
  */
 export function PageHeader({
   context,
@@ -22,10 +23,12 @@ export function PageHeader({
   return (
     <div className={cn("flex flex-wrap items-end justify-between gap-4", className)}>
       <div className="min-w-0">
-        {context && <p className="text-xs text-ink-muted">{context}</p>}
-        <h1 className="mt-0.5 font-display text-xl leading-tight text-ink">{title}</h1>
+        {context && <p className="text-[13px] font-medium text-[var(--fg-muted)]">{context}</p>}
+        <h1 className="mt-1 font-display text-[28px] leading-tight font-bold tracking-[-0.02em] text-[var(--fg)]">
+          {title}
+        </h1>
         {description && (
-          <p className="mt-1 max-w-[80ch] text-sm text-ink-muted">{description}</p>
+          <p className="mt-2 max-w-[68ch] text-[14px] text-[var(--fg-muted)]">{description}</p>
         )}
       </div>
       {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}
