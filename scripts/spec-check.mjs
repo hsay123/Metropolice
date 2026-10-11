@@ -22,7 +22,14 @@ const WIDTHS = arg("w", null) ? [Number(arg("w"))] : [1440, 1280, 390];
 const ONLY = arg("only", null);
 
 /** Screens migrated to the mood board so far; the rest are still pre-migration. */
-const MIGRATED = ["/dev/components", "/", "/login", "/buyer"];
+const MIGRATED = [
+  "/dev/components",
+  "/",
+  "/login",
+  "/buyer",
+  "/buyer/jobs/new",
+  "/buyer/jobs/job_pickplace",
+];
 
 const ALL_ROUTES = [
   "/",

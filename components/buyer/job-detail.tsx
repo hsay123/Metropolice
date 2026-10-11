@@ -131,7 +131,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
             <PanelHeader title="Progress" description="Every accepted task is one paid label." />
             <PanelBody>
               {stats.isPending ? (
-                <div className="h-20 animate-pulse rounded-[8px] bg-wash" aria-busy />
+                <div className="h-20 animate-pulse rounded-[8px] bg-[var(--surface-2)]" aria-busy />
               ) : stats.isError || !stats.data ? (
                 <ErrorState
                   message="We could not load the job progress. Try again."
@@ -143,7 +143,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
                   title="Waiting for first submissions"
                   description="This job is funded and published, but no contributor has claimed a task yet. Progress appears here as soon as the first submission lands."
                   action={
-                    <p className="text-xs text-ink-muted">
+                    <p className="text-xs text-[var(--fg-muted)]">
                       Next step: check the reward and rubric still match the work you need.
                     </p>
                   }
@@ -192,7 +192,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
                   adjudicated={stats.data.adjudicated}
                 />
               ) : (
-                <div className="h-16 animate-pulse rounded-[8px] bg-wash" aria-busy />
+                <div className="h-16 animate-pulse rounded-[8px] bg-[var(--surface-2)]" aria-busy />
               )}
             </PanelBody>
           </Panel>
@@ -204,9 +204,9 @@ export function JobDetail({ jobId }: { jobId: string }) {
             />
             <PanelBody className="flex flex-col gap-4">
               {audit.isPending ? (
-                <div className="h-24 animate-pulse rounded-[8px] bg-wash" aria-busy />
+                <div className="h-24 animate-pulse rounded-[8px] bg-[var(--surface-2)]" aria-busy />
               ) : audit.isError || !audit.data ? (
-                <p className="text-sm text-ink-muted">No audit sample has been drawn for this job yet.</p>
+                <p className="text-sm text-[var(--fg-muted)]">No audit sample has been drawn for this job yet.</p>
               ) : (
                 <>
                   <div className="flex flex-col">
@@ -221,20 +221,20 @@ export function JobDetail({ jobId }: { jobId: string }) {
                     </DetailRow>
                   </div>
                   <div>
-                    <p className="text-xs text-ink-muted">
+                    <p className="text-xs text-[var(--fg-muted)]">
                       Selected tasks ({audit.data.selectedTaskIds.length})
                     </p>
                     <ul className="mt-2 flex flex-wrap gap-1.5">
                       {audit.data.selectedTaskIds.map((id) => (
                         <li key={id}>
-                          <span className="machine rounded-[8px] bg-wash px-1.5 py-0.5 text-xs text-ink">
+                          <span className="machine rounded-[8px] bg-[var(--surface-2)] px-1.5 py-0.5 text-xs text-[var(--fg)]">
                             {id}
                           </span>
                         </li>
                       ))}
                     </ul>
                   </div>
-                  <p className="flex items-start gap-2 text-xs text-ink-muted">
+                  <p className="flex items-start gap-2 text-xs text-[var(--fg-muted)]">
                     <ShieldCheck className="mt-0.5 size-3.5 shrink-0" aria-hidden />
                     The seed is published before the draw, so anyone can replay it and confirm the
                     same tasks were picked.
@@ -248,9 +248,9 @@ export function JobDetail({ jobId }: { jobId: string }) {
             <PanelHeader title="Activity" description="Every event links to its transaction." />
             <PanelBody>
               {chain.isPending ? (
-                <div className="h-24 animate-pulse rounded-[8px] bg-wash" aria-busy />
+                <div className="h-24 animate-pulse rounded-[8px] bg-[var(--surface-2)]" aria-busy />
               ) : chain.isError || !chain.data ? (
-                <p className="text-sm text-ink-muted">We could not load on-chain activity.</p>
+                <p className="text-sm text-[var(--fg-muted)]">We could not load on-chain activity.</p>
               ) : (
                 <ChainFeed events={chain.data} />
               )}
@@ -265,13 +265,13 @@ export function JobDetail({ jobId }: { jobId: string }) {
               {data ? (
                 <>
                   <div className="flex items-baseline justify-between">
-                    <span className="text-xs text-ink-muted">Reward per task</span>
-                    <span className="font-display text-base font-semibold tabular-nums text-ink">
+                    <span className="text-xs text-[var(--fg-muted)]">Reward per task</span>
+                    <span className="font-display text-base font-semibold tabular-nums text-[var(--fg)]">
                       {formatAmount(data.rewardPerTask)}
                     </span>
                   </div>
                   <BudgetBar spent={data.spent} budget={data.budget} />
-                  <div className="flex flex-col border-t border-rule pt-3">
+                  <div className="flex flex-col border-t border-[var(--border)] pt-3">
                     <DetailRow label="Deadline">{formatDateTime(data.deadline)}</DetailRow>
                     <DetailRow label="Policy">
                       <span className="flex items-center gap-2">
@@ -288,7 +288,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
                   </div>
                 </>
               ) : (
-                <div className="h-40 animate-pulse rounded-[8px] bg-wash" aria-busy />
+                <div className="h-40 animate-pulse rounded-[8px] bg-[var(--surface-2)]" aria-busy />
               )}
             </PanelBody>
           </Panel>
@@ -312,34 +312,34 @@ export function JobDetail({ jobId }: { jobId: string }) {
                 <Field label="Policy" value={`v${manifest.policyVersion}`} />
                 <Field label="Media included" value="No" />
               </div>
-              <div className="flex flex-col gap-1 border-t border-rule pt-3">
-                <span className="text-xs text-ink-muted">Annotation hash root</span>
+              <div className="flex flex-col gap-1 border-t border-[var(--border)] pt-3">
+                <span className="text-xs text-[var(--fg-muted)]">Annotation hash root</span>
                 <HashChip value={manifest.annotationHashRoot} label="Annotation hash root" />
               </div>
-              <div className="max-h-52 overflow-y-auto rounded-[8px] border border-rule">
+              <div className="max-h-52 overflow-y-auto rounded-[8px] border border-[var(--border)]">
                 <table className="w-full border-collapse text-xs">
-                  <thead className="bg-wash text-left">
+                  <thead className="bg-[var(--surface-2)] text-left">
                     <tr>
-                      <th className="px-2.5 py-1.5 font-medium text-ink-muted">Task</th>
-                      <th className="px-2.5 py-1.5 font-medium text-ink-muted">Annotation hash</th>
-                      <th className="px-2.5 py-1.5 font-medium text-ink-muted">Contributor</th>
+                      <th className="px-2.5 py-1.5 font-medium text-[var(--fg-muted)]">Task</th>
+                      <th className="px-2.5 py-1.5 font-medium text-[var(--fg-muted)]">Annotation hash</th>
+                      <th className="px-2.5 py-1.5 font-medium text-[var(--fg-muted)]">Contributor</th>
                     </tr>
                   </thead>
                   <tbody>
                     {manifest.entries.length === 0 && (
                       <tr>
-                        <td className="px-2.5 py-3 text-ink-muted" colSpan={3}>
+                        <td className="px-2.5 py-3 text-[var(--fg-muted)]" colSpan={3}>
                           No accepted tasks have been exported yet.
                         </td>
                       </tr>
                     )}
                     {manifest.entries.map((entry) => (
-                      <tr key={entry.taskId} className="border-t border-rule">
-                        <td className="machine px-2.5 py-1.5 text-ink">{entry.taskId}</td>
-                        <td className="machine px-2.5 py-1.5 text-ink-muted">
+                      <tr key={entry.taskId} className="border-t border-[var(--border)]">
+                        <td className="machine px-2.5 py-1.5 text-[var(--fg)]">{entry.taskId}</td>
+                        <td className="machine px-2.5 py-1.5 text-[var(--fg-muted)]">
                           {entry.annotationHash.slice(0, 18)}…
                         </td>
-                        <td className="px-2.5 py-1.5 text-ink-muted">
+                        <td className="px-2.5 py-1.5 text-[var(--fg-muted)]">
                           {entry.contributorPseudonym}
                         </td>
                       </tr>
@@ -378,8 +378,8 @@ function BackLink() {
 function Field({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex flex-col gap-0.5">
-      <span className="text-xs text-ink-muted">{label}</span>
-      <span className="text-ink">{value}</span>
+      <span className="text-xs text-[var(--fg-muted)]">{label}</span>
+      <span className="text-[var(--fg)]">{value}</span>
     </div>
   );
 }
