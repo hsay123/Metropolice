@@ -17,26 +17,26 @@ export function BudgetBar({
   const pct = budget > 0 ? Math.min(100, Math.round((spent / budget) * 100)) : 0;
   const left = Math.max(0, budget - spent);
   return (
-    <div className={cn("flex flex-col gap-1.5", className)}>
+    <div className={cn("flex flex-col gap-2", className)}>
       <div className="flex items-baseline justify-between">
-        <span className="text-xs text-ink-muted">Spent</span>
-        <span className="text-sm tabular-nums text-ink">
+        <span className="text-[13px] text-[var(--fg-muted)]">Spent</span>
+        <span className="text-[14px] tabular-nums text-[var(--fg)]">
           {formatAmount(spent)}{" "}
-          <span className="text-ink-muted">of {formatAmount(budget)}</span>
+          <span className="text-[var(--fg-muted)]">of {formatAmount(budget)}</span>
         </span>
       </div>
       <div
-        className="h-2 w-full overflow-hidden rounded-[8px] bg-wash"
+        className="h-1.5 w-full overflow-hidden rounded-[6px] bg-[var(--surface-2)]"
         role="meter"
         aria-valuenow={pct}
         aria-valuemin={0}
         aria-valuemax={100}
         aria-label="Budget spent"
       >
-        <div className="h-full rounded-[8px] bg-brand" style={{ width: `${pct}%` }} />
+        <div className="h-full rounded-[6px] bg-[var(--primary)]" style={{ width: `${pct}%` }} />
       </div>
-      <p className="flex flex-wrap items-center gap-x-3 text-xs text-ink-muted">
-        <span>{formatAmount(left)} left</span>
+      <p className="flex flex-wrap items-center gap-x-3 text-[13px] text-[var(--fg-muted)]">
+        <span>{formatAmount(left)} test USDC left</span>
         <span className="tabular-nums">{pct}% spent</span>
       </p>
     </div>

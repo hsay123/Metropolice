@@ -27,6 +27,7 @@ export function KpiCard({
   hint,
   series,
   tone = "neutral",
+  loading = false,
   className,
 }: {
   label: string;
@@ -34,6 +35,8 @@ export function KpiCard({
   hint?: React.ReactNode;
   series?: KpiSeries;
   tone?: "neutral" | "primary" | "positive";
+  /** While the figure is loading, render a placeholder rather than a zero. */
+  loading?: boolean;
   className?: string;
 }) {
   const spark = series && series.points.length > 1 ? buildSparkPath(series.points) : null;
@@ -43,16 +46,24 @@ export function KpiCard({
     <Card data-ui="kpi-card" className={cn("p-5", className)}>
       <p className="text-[13px] text-[var(--fg-muted)]">{label}</p>
       <div className="mt-2 flex items-end justify-between gap-3">
-        <span
-          className={cn(
-            "font-display text-[32px] leading-none font-bold tabular-nums",
-            tone === "primary" && "text-[var(--primary)]",
-            tone === "positive" && "text-[var(--s-accepted-fg)]",
-            tone === "neutral" && "text-[var(--fg)]",
-          )}
-        >
-          {value}
-        </span>
+        {loading ? (
+          <span
+            className="h-8 w-24 animate-pulse rounded-[8px] bg-[var(--surface-2)]"
+            aria-busy
+            aria-label={`${label} is loading`}
+          />
+        ) : (
+          <span
+            className={cn(
+              "font-display text-[32px] leading-none font-bold tabular-nums",
+              tone === "primary" && "text-[var(--primary)]",
+              tone === "positive" && "text-[var(--s-accepted-fg)]",
+              tone === "neutral" && "text-[var(--fg)]",
+            )}
+          >
+            {value}
+          </span>
+        )}
 
         {series?.deltaPct != null && (
           <span

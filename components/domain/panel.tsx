@@ -2,14 +2,18 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 /**
- * Panel — the one surface for content zones. A sheet with a hairline rule, 6px
- * radius. Panels are separated by 1px `rule` lines, not by shadows (AGENTS.md A3).
- * Shadows belong to floating layers only.
+ * Panel — a white card on the lilac-grey canvas: 1px light border, 16px radius, one
+ * soft shadow, 20px padding (docs/MOODBOARD-SPEC.md §3). Panels are separated by
+ * space; a rule inside a panel only divides a header from its body.
  */
 export function Panel({ className, ...props }: React.ComponentProps<"section">) {
   return (
     <section
-      className={cn("overflow-hidden rounded-[12px] border border-rule bg-sheet", className)}
+      data-ui="panel"
+      className={cn(
+        "overflow-hidden rounded-[16px] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--elev-card)]",
+        className,
+      )}
       {...props}
     />
   );
@@ -32,13 +36,13 @@ export function PanelHeader({
   return (
     <header
       className={cn(
-        "flex flex-wrap items-start justify-between gap-3 border-b border-rule px-4 py-3",
+        "flex flex-wrap items-start justify-between gap-3 border-b border-[var(--border)] px-5 py-4",
         className,
       )}
     >
       <div className="min-w-0">
-        <h2 className="font-display text-base leading-snug text-ink">{title}</h2>
-        {description && <p className="mt-0.5 text-sm text-ink-muted">{description}</p>}
+        <h2 className="font-display text-[17px] leading-snug font-bold text-[var(--fg)]">{title}</h2>
+        {description && <p className="mt-1 text-[13px] text-[var(--fg-muted)]">{description}</p>}
         {children}
       </div>
       {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}
@@ -47,14 +51,14 @@ export function PanelHeader({
 }
 
 export function PanelBody({ className, ...props }: React.ComponentProps<"div">) {
-  return <div className={cn("px-4 py-4", className)} {...props} />;
+  return <div className={cn("p-5", className)} {...props} />;
 }
 
 export function PanelFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       className={cn(
-        "flex flex-wrap items-center justify-between gap-3 border-t border-rule px-4 py-3",
+        "flex flex-wrap items-center justify-between gap-3 border-t border-[var(--border)] px-5 py-3.5",
         className,
       )}
       {...props}
@@ -73,11 +77,9 @@ export function DetailRow({
   className?: string;
 }) {
   return (
-    <div
-      className={cn("grid grid-cols-[140px_1fr] items-baseline gap-4 py-1.5", className)}
-    >
-      <dt className="text-xs text-ink-muted">{label}</dt>
-      <dd className="min-w-0 text-sm text-ink">{children}</dd>
+    <div className={cn("grid grid-cols-[140px_1fr] items-baseline gap-4 py-1.5", className)}>
+      <dt className="text-[13px] text-[var(--fg-muted)]">{label}</dt>
+      <dd className="min-w-0 text-[14px] text-[var(--fg)]">{children}</dd>
     </div>
   );
 }

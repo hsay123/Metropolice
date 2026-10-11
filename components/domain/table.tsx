@@ -2,9 +2,9 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 /**
- * A quiet data table built on the tokens. Header is `wash`, rows are separated by
- * 1px `rule` lines, numbers are tabular. No zebra striping and no card wrapper —
- * the panel around it provides the surface (AGENTS.md A3: rules instead of cards).
+ * A quiet data table built on the tokens (docs/MOODBOARD-SPEC.md §3). A light,
+ * low-contrast header, rows separated by 1px `--border` lines, numbers tabular, no
+ * zebra striping and no card wrapper — the panel around it provides the surface.
  *
  * These are thin wrappers so every table in the app reads the same. Screens compose
  * them directly; nothing here is a third-party table library.
@@ -12,13 +12,18 @@ import { cn } from "@/lib/utils";
 export function DataTable({ className, ...props }: React.ComponentProps<"table">) {
   return (
     <div className="w-full overflow-x-auto">
-      <table className={cn("w-full border-collapse text-sm", className)} {...props} />
+      <table className={cn("w-full border-collapse text-[14px]", className)} {...props} />
     </div>
   );
 }
 
 export function THead({ className, ...props }: React.ComponentProps<"thead">) {
-  return <thead className={cn("bg-wash text-left", className)} {...props} />;
+  return (
+    <thead
+      className={cn("border-b border-[var(--border)] bg-[var(--surface-2)] text-left", className)}
+      {...props}
+    />
+  );
 }
 
 export function TBody({ className, ...props }: React.ComponentProps<"tbody">) {
@@ -28,7 +33,10 @@ export function TBody({ className, ...props }: React.ComponentProps<"tbody">) {
 export function TR({ className, ...props }: React.ComponentProps<"tr">) {
   return (
     <tr
-      className={cn("border-b border-rule last:border-0 transition-colors", className)}
+      className={cn(
+        "border-b border-[var(--border)] transition-colors last:border-0 hover:bg-[var(--surface-2)]",
+        className,
+      )}
       {...props}
     />
   );
@@ -43,7 +51,7 @@ export function TH({
     <th
       scope="col"
       className={cn(
-        "h-9 px-3 align-middle text-xs font-medium whitespace-nowrap text-ink-muted",
+        "h-11 px-4 align-middle text-[12px] font-semibold whitespace-nowrap text-[var(--fg-muted)]",
         numeric && "text-right",
         className,
       )}
@@ -60,7 +68,7 @@ export function TD({
   return (
     <td
       className={cn(
-        "px-3 py-2.5 align-middle text-sm text-ink",
+        "px-4 py-3.5 align-middle text-[14px] text-[var(--fg)]",
         numeric && "text-right tabular-nums whitespace-nowrap",
         className,
       )}

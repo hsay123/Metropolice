@@ -25,16 +25,16 @@ export function ReviewMix({
   className?: string;
 }) {
   const slices: MixSlice[] = [
-    { key: "human", label: "Human-reviewed", count: human, color: "var(--brand)" },
-    { key: "ai", label: "AI-suggested", count: ai, color: "var(--ink-muted)" },
-    { key: "adjudicated", label: "Adjudicated", count: adjudicated, color: "var(--paid-ink)" },
+    { key: "human", label: "Human-reviewed", count: human, color: "var(--primary)" },
+    { key: "ai", label: "AI-suggested", count: ai, color: "var(--fg-muted)" },
+    { key: "adjudicated", label: "Adjudicated", count: adjudicated, color: "var(--s-paid-fg)" },
   ];
   const total = slices.reduce((n, s) => n + s.count, 0);
 
   return (
     <div className={cn("flex flex-col gap-3", className)}>
       <div
-        className="flex h-2 w-full overflow-hidden rounded-[8px] bg-wash"
+        className="flex h-1.5 w-full overflow-hidden rounded-[6px] bg-[var(--surface-2)]"
         role="img"
         aria-label={slices.map((s) => `${s.label} ${s.count}`).join(", ")}
       >
@@ -51,17 +51,17 @@ export function ReviewMix({
       </div>
       <ul className="flex flex-wrap gap-x-5 gap-y-1.5">
         {slices.map((s) => (
-          <li key={s.key} className="flex items-center gap-2 text-sm">
-            <span className="size-2.5 rounded-[8px]" style={{ background: s.color }} aria-hidden />
-            <span className="text-ink">{s.label}</span>
-            <span className="flex items-center gap-1.5 tabular-nums text-ink-muted">
+          <li key={s.key} className="flex items-center gap-2 text-[14px]">
+            <span className="size-2.5 rounded-[6px]" style={{ background: s.color }} aria-hidden />
+            <span className="text-[var(--fg)]">{s.label}</span>
+            <span className="flex items-center gap-1.5 tabular-nums text-[var(--fg-muted)]">
               <span>{s.count}</span>
               {total > 0 && <span>{Math.round((s.count / total) * 100)}%</span>}
             </span>
           </li>
         ))}
       </ul>
-      {total === 0 && <p className="text-sm text-ink-muted">No decisions yet.</p>}
+      {total === 0 && <p className="text-[14px] text-[var(--fg-muted)]">No decisions yet.</p>}
     </div>
   );
 }

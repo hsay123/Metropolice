@@ -4,6 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { ImageIcon, Plus, Search, Video } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { KpiCard } from "@/components/ui/kpi-card";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -12,18 +13,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { PageHeader } from "@/components/domain/page-header";
 import { Panel, PanelBody, PanelHeader } from "@/components/domain/panel";
-import { Stat, StatGrid } from "@/components/domain/stat";
 import { DataTable, TBody, TD, TH, THead, TR } from "@/components/domain/table";
 import { SortHeader, TablePagination, TableToolbar } from "@/components/domain/table-toolbar";
-import { PipelineLedger, type PipelineStage } from "@/components/domain/pipeline-ledger";
 import { JobStatusPill } from "@/components/domain/status";
 import { ReviewMix } from "@/components/domain/review-mix";
 import { BudgetBar } from "@/components/domain/budget-bar";
 import { EmptyState, ErrorState, TableSkeleton } from "@/components/domain/states";
 import { useBuyerOverview, useJobs } from "@/lib/api/hooks";
-import { MIN_SAMPLE_FOR_RATE } from "@/lib/config";
+import { workspaceFor } from "@/lib/workspace";
+import { MIN_SAMPLE_FOR_RATE, TEST_TOKEN_NOTE } from "@/lib/config";
 import { formatAmount } from "@/lib/format";
 import { formatDateTime } from "@/lib/dates";
 import type { Job, JobStatus } from "@/lib/api/types";
@@ -34,35 +33,33 @@ const STATUS_ORDER: JobStatus[] = ["draft", "funding", "active", "paused", "clos
 
 type SortKey = "title" | "status" | "rewardPerTask" | "budget" | "deadline";
 
+/** Reward with its unit, so a figure never appears without the token name. */
+function Reward({ value }: { value: number }) {
+  return (
+    <span className="tabular-nums">
+      {formatAmount(value)} <span className="text-[12px] text-[var(--fg-subtle)]">test USDC</span>
+    </span>
+  );
+}
+
 /**
- * /buyer — the buyer dashboard. It leads with the pipeline (where the work and
- * the money are), then the trust signals, then a filterable, sortable jobs table
- * (docs/DESIGN.md §4.3; AGENTS.md A2).
+ * /buyer — the buyer dashboard, rebuilt to docs/moodboard/tiles/pd_dashboard.png:
+ * a welcome header, four KPI cards, the active projects list, then how the labels
+ * were decided and where the budget sits. Figures are computed from the API; nothing
+ * is invented, and a rate stays hidden until there is enough data to report it
+ * (AGENTS.md A2, docs/MOODBOARD-SPEC.md §5).
  */
 export default function BuyerDashboardPage() {
   const overview = useBuyerOverview();
   const jobs = useJobs();
+  const workspace = workspaceFor("buyer");
 
   const rate = overview.data ? Math.round(overview.data.acceptanceRate * 100) : 0;
   const enoughForRate = (overview.data?.tasksAccepted ?? 0) >= MIN_SAMPLE_FOR_RATE;
 
-  const stages = React.useMemo<PipelineStage[]>(() => {
-    const d = overview.data;
-    if (!d) return [];
-    const list: PipelineStage[] = [];
-    if (d.tasksSubmitted != null) {
-      list.push({ key: "submitted", label: "Submitted", count: d.tasksSubmitted, color: "var(--ink-muted)" });
-    }
-    list.push({ key: "review", label: "In review", count: d.tasksInReview, color: "var(--revision-ink)" });
-    list.push({ key: "accepted", label: "Accepted", count: d.tasksAccepted, color: "var(--accepted-ink)" });
-    if (d.tasksPaid != null) {
-      list.push({ key: "paid", label: "Paid", count: d.tasksPaid, color: "var(--paid-ink)" });
-    }
-    return list;
-  }, [overview.data]);
+  const jobsList = React.useMemo(() => jobs.data ?? [], [jobs.data]);
 
-  /* ------------------------------------------------------------- table state */
-
+  /* filter, sort and page the projects list */
   const [query, setQuery] = React.useState("");
   const [status, setStatus] = React.useState<"all" | JobStatus>("all");
   const [sort, setSort] = React.useState<{ key: SortKey; dir: "asc" | "desc" }>({
@@ -71,36 +68,32 @@ export default function BuyerDashboardPage() {
   });
   const [page, setPage] = React.useState(1);
 
-  const all = React.useMemo(() => jobs.data ?? [], [jobs.data]);
-
-  const filtered = React.useMemo(() => {
-    const q = query.trim().toLowerCase();
-    return all.filter((j) => {
-      if (status !== "all" && j.status !== status) return false;
-      if (!q) return true;
-      return j.title.toLowerCase().includes(q) || j.id.toLowerCase().includes(q);
-    });
-  }, [all, query, status]);
-
   const sorted = React.useMemo(() => {
+    const list = jobsList.filter((j) => {
+      const matchesQuery =
+        query.trim() === "" ||
+        j.title.toLowerCase().includes(query.trim().toLowerCase()) ||
+        j.id.toLowerCase().includes(query.trim().toLowerCase());
+      const matchesStatus = status === "all" || j.status === status;
+      return matchesQuery && matchesStatus;
+    });
     const dir = sort.dir === "asc" ? 1 : -1;
-    const copy = [...filtered];
-    copy.sort((a, b) => {
+    return [...list].sort((a, b) => {
       switch (sort.key) {
         case "title":
           return a.title.localeCompare(b.title) * dir;
         case "status":
           return (STATUS_ORDER.indexOf(a.status) - STATUS_ORDER.indexOf(b.status)) * dir;
-        case "deadline":
-          return (new Date(a.deadline).getTime() - new Date(b.deadline).getTime()) * dir;
         case "rewardPerTask":
           return (a.rewardPerTask - b.rewardPerTask) * dir;
         case "budget":
           return (a.budget - b.budget) * dir;
+        case "deadline":
+        default:
+          return (new Date(a.deadline).getTime() - new Date(b.deadline).getTime()) * dir;
       }
     });
-    return copy;
-  }, [filtered, sort]);
+  }, [jobsList, query, status, sort]);
 
   const pageCount = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));
   const safePage = Math.min(page, pageCount);
@@ -108,137 +101,100 @@ export default function BuyerDashboardPage() {
 
   function toggleSort(key: SortKey) {
     setPage(1);
-    setSort((s) =>
-      s.key === key ? { key, dir: s.dir === "asc" ? "desc" : "asc" } : { key, dir: "asc" },
-    );
+    setSort((s) => (s.key === key ? { key, dir: s.dir === "asc" ? "desc" : "asc" } : { key, dir: "asc" }));
   }
 
-  function changeQuery(v: string) {
-    setQuery(v);
-    setPage(1);
-  }
-
-  function changeStatus(v: "all" | JobStatus) {
-    setStatus(v);
-    setPage(1);
-  }
-
-  const hasFilters = query.trim() !== "" || status !== "all";
+  const data = overview.data;
 
   return (
     <div className="flex flex-col gap-6">
-      <PageHeader
-        context="Buyer"
-        title="Jobs"
-        description="What you are buying, what it cost, and how every accepted label was decided."
-        actions={
-          <Button asChild>
-            <Link href="/buyer/jobs/new">
-              <Plus aria-hidden />
-              Post a labelling job
-            </Link>
-          </Button>
-        }
-      />
+      {/* welcome header */}
+      <header className="flex flex-wrap items-end justify-between gap-4">
+        <div className="min-w-0">
+          <p className="text-[13px] font-medium text-[var(--fg-muted)]">Buyer</p>
+          <h1 className="mt-1 font-display text-[28px] leading-tight font-bold tracking-[-0.02em]">
+            Welcome back, {workspace.name}
+          </h1>
+          <p className="mt-2 max-w-[62ch] text-[14px] text-[var(--fg-muted)]">
+            What you are buying, what it cost, and how every accepted label was decided.
+          </p>
+        </div>
+        <Button asChild>
+          <Link href="/buyer/jobs/new">
+            <Plus aria-hidden />
+            Post a labelling job
+          </Link>
+        </Button>
+      </header>
 
-      <Panel>
-        <PanelHeader title="Overview" description="Across all your jobs" />
-        <PanelBody>
-          {overview.isPending ? (
-            <div className="h-24 animate-pulse rounded-[8px] bg-wash" aria-busy />
-          ) : overview.isError || !overview.data ? (
-            <ErrorState
-              message="We could not load your overview. Check your connection and try again."
-              onRetry={() => overview.refetch()}
-            />
-          ) : (
-            <div className="flex flex-col gap-5">
-              <PipelineLedger
-                stages={stages}
-                reference={overview.data.tasksSubmitted}
-                note="Accepted work is only paid once the contributor claims the reward. Payouts settle on Monad testnet."
-              />
-              <div className="border-t border-rule pt-5">
-                <StatGrid>
-                  <Stat
-                    label="Acceptance rate"
-                    value={enoughForRate ? `${rate}%` : "Not enough data yet"}
-                    hint={enoughForRate ? "Accepted of decided" : `Needs ${MIN_SAMPLE_FOR_RATE} decided tasks`}
-                  />
-                  <Stat label="Confirmed spend" value={formatAmount(overview.data.spend)} />
-                  <Stat
-                    label="Budget left"
-                    value={formatAmount(overview.data.budgetLeft)}
-                    hint={`of ${formatAmount(overview.data.budget)} funded`}
-                  />
-                </StatGrid>
-              </div>
-            </div>
-          )}
-        </PanelBody>
-      </Panel>
-
-      <div className="grid gap-6 lg:grid-cols-2">
-        <Panel>
-          <PanelHeader title="How checks work" description="How accepted labels were decided." />
-          <PanelBody>
-            {overview.data ? (
-              <ReviewMix
-                ai={overview.data.aiReviewed}
-                human={overview.data.humanReviewed}
-                adjudicated={overview.data.adjudicated}
-              />
-            ) : (
-              <div className="h-16 animate-pulse rounded-[8px] bg-wash" aria-busy />
-            )}
-          </PanelBody>
-        </Panel>
-
-        <Panel>
-          <PanelHeader title="Budget" description="Funds sit in escrow on Monad." />
-          <PanelBody>
-            {overview.data ? (
-              <BudgetBar spent={overview.data.spend} budget={overview.data.budget} />
-            ) : (
-              <div className="h-16 animate-pulse rounded-[8px] bg-wash" aria-busy />
-            )}
-          </PanelBody>
-        </Panel>
+      {/* four KPI cards — plain figures, no sparkline or delta without a real series */}
+      <div data-ui="kpi-row" className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        <KpiCard
+          label="Tasks accepted"
+          value={data ? data.tasksAccepted.toLocaleString() : "—"}
+          hint="Passed review"
+          loading={overview.isPending}
+        />
+        <KpiCard
+          label="Acceptance rate"
+          value={data && enoughForRate ? `${rate}%` : "Not enough data yet"}
+          hint={data && enoughForRate ? undefined : `Needs ${MIN_SAMPLE_FOR_RATE} decided tasks`}
+          tone={data && enoughForRate ? "positive" : "neutral"}
+          loading={overview.isPending}
+        />
+        <KpiCard
+          label="Confirmed spend"
+          value={data ? formatAmount(data.spend) : "—"}
+          hint="test USDC"
+          loading={overview.isPending}
+        />
+        <KpiCard
+          label="In review"
+          value={data ? data.tasksInReview.toLocaleString() : "—"}
+          hint="Awaiting a decision"
+          loading={overview.isPending}
+        />
       </div>
 
+      {/* active projects */}
       <Panel>
         <PanelHeader
-          title="Your jobs"
+          title="Active projects"
           description={
-            all.length > 0
-              ? hasFilters
-                ? `${sorted.length} of ${all.length} jobs`
-                : `${all.length} jobs`
-              : "Loading jobs"
+            jobsList.length > 0 ? `${sorted.length} of ${jobsList.length} jobs` : "Your labelling jobs"
           }
         />
 
-        {!jobs.isPending && !jobs.isError && all.length > 0 && (
+        {!jobs.isPending && !jobs.isError && jobsList.length > 0 && (
           <TableToolbar>
             <div className="relative w-full sm:w-64">
               <Search
-                className="pointer-events-none absolute top-1/2 left-2 size-3.5 -translate-y-1/2 text-ink-muted"
+                className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-[var(--fg-subtle)]"
                 aria-hidden
               />
               <Input
                 type="search"
                 value={query}
-                onChange={(e) => changeQuery(e.target.value)}
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                  setPage(1);
+                }}
                 aria-label="Search jobs by name or id"
                 placeholder="Search jobs"
-                className="w-full pl-7"
+                className="w-full pl-9"
               />
             </div>
             <div className="flex items-center gap-2">
-              <label htmlFor="jobs-status" className="text-xs text-ink-muted">
+              <label htmlFor="jobs-status" className="text-[13px] text-[var(--fg-muted)]">
                 Status
               </label>
-              <Select value={status} onValueChange={(v) => changeStatus(v as "all" | JobStatus)}>
+              <Select
+                value={status}
+                onValueChange={(v) => {
+                  setStatus(v as "all" | JobStatus);
+                  setPage(1);
+                }}
+              >
                 <SelectTrigger id="jobs-status" size="sm" className="w-[150px]">
                   <SelectValue />
                 </SelectTrigger>
@@ -252,7 +208,7 @@ export default function BuyerDashboardPage() {
                 </SelectContent>
               </Select>
             </div>
-            {hasFilters && (
+            {(query.trim() !== "" || status !== "all") && (
               <Button
                 type="button"
                 variant="ghost"
@@ -271,19 +227,19 @@ export default function BuyerDashboardPage() {
         )}
 
         {jobs.isPending ? (
-          <div className="p-4">
+          <div className="p-5">
             <TableSkeleton rows={4} cols={6} />
           </div>
         ) : jobs.isError ? (
-          <div className="p-4">
+          <div className="p-5">
             <ErrorState
               message="We could not load your jobs. Check your connection and try again."
               onRetry={() => jobs.refetch()}
             />
           </div>
-        ) : all.length === 0 ? (
+        ) : jobsList.length === 0 ? (
           <EmptyState
-            className="m-4"
+            className="m-5"
             title="No jobs yet"
             description="Post your first labelling job to start collecting trustworthy labels."
             action={
@@ -297,12 +253,12 @@ export default function BuyerDashboardPage() {
           />
         ) : sorted.length === 0 ? (
           <EmptyState
-            className="m-4"
+            className="m-5"
             title="No jobs match your filters"
             description="Clear the search and status filter to see all your jobs."
             action={
               <Button
-                variant="outline"
+                variant="secondary"
                 size="sm"
                 onClick={() => {
                   setQuery("");
@@ -317,7 +273,7 @@ export default function BuyerDashboardPage() {
         ) : (
           <DataTable>
             <THead>
-              <TR className="border-rule">
+              <TR className="hover:bg-transparent">
                 <SortHeader
                   label="Job"
                   active={sort.key === "title"}
@@ -361,8 +317,8 @@ export default function BuyerDashboardPage() {
           </DataTable>
         )}
 
-        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-rule px-4 py-3">
-          <p className="text-xs text-ink-muted">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[var(--border)] px-5 py-3.5">
+          <p className="text-[13px] text-[var(--fg-muted)]">
             Accepted work only is exported, with a manifest of hashes and pseudonyms.
           </p>
           {sorted.length > PAGE_SIZE && (
@@ -370,23 +326,51 @@ export default function BuyerDashboardPage() {
           )}
         </div>
       </Panel>
+
+      {/* how labels were decided, and where the budget sits */}
+      <div className="grid gap-6 lg:grid-cols-2">
+        <Panel>
+          <PanelHeader title="How labels were decided" description="AI first pass against the rubric, then people." />
+          <PanelBody>
+            {data ? (
+              <ReviewMix ai={data.aiReviewed} human={data.humanReviewed} adjudicated={data.adjudicated} />
+            ) : (
+              <div className="h-16 animate-pulse rounded-[8px] bg-[var(--surface-2)]" aria-busy />
+            )}
+          </PanelBody>
+        </Panel>
+
+        <Panel>
+          <PanelHeader title="Budget" description="Funds sit in escrow on Monad." />
+          <PanelBody className="flex flex-col gap-4">
+            {data ? (
+              <>
+                <BudgetBar spent={data.spend} budget={data.budget} />
+                <p className="text-[13px] text-[var(--fg-muted)]">{TEST_TOKEN_NOTE}</p>
+              </>
+            ) : (
+              <div className="h-16 animate-pulse rounded-[8px] bg-[var(--surface-2)]" aria-busy />
+            )}
+          </PanelBody>
+        </Panel>
+      </div>
     </div>
   );
 }
 
 function JobRow({ job }: { job: Job }) {
   return (
-    <TR className="hover:bg-wash">
+    <TR>
       <TD>
-        <span className="flex items-center gap-2 font-medium text-ink">
+        <span className="flex items-center gap-2 font-semibold text-[var(--fg)]">
           {job.modality === "image" ? (
-            <ImageIcon className="size-3.5 text-ink-muted" aria-hidden />
+            <ImageIcon className="size-4 text-[var(--fg-subtle)]" aria-hidden />
           ) : (
-            <Video className="size-3.5 text-ink-muted" aria-hidden />
+            <Video className="size-4 text-[var(--fg-subtle)]" aria-hidden />
           )}
           {job.title}
         </span>
-        <span className="machine inline-flex items-center gap-2 text-xs text-ink-muted">
+        <span className="machine mt-0.5 flex items-center gap-2 text-[12px] text-[var(--fg-muted)]">
           <span>{job.id}</span>
           <span>policy v{job.policyVersion}</span>
         </span>
@@ -394,16 +378,16 @@ function JobRow({ job }: { job: Job }) {
       <TD>
         <JobStatusPill status={job.status} />
       </TD>
-      <TD numeric>{formatAmount(job.rewardPerTask)}</TD>
-      <TD numeric className="text-ink-muted">
+      <TD numeric>
+        <Reward value={job.rewardPerTask} />
+      </TD>
+      <TD numeric className="text-[var(--fg-muted)]">
         {formatAmount(job.spent)} / {formatAmount(job.budget)}
       </TD>
-      <TD className="text-ink-muted">{formatDateTime(job.deadline)}</TD>
+      <TD className="text-[var(--fg-muted)]">{formatDateTime(job.deadline)}</TD>
       <TD numeric>
-        <Button asChild variant="outline" size="sm">
-          <Link href={`/buyer/jobs/${job.id}`}>
-            Open
-          </Link>
+        <Button asChild variant="secondary" size="sm">
+          <Link href={`/buyer/jobs/${job.id}`}>Open</Link>
         </Button>
       </TD>
     </TR>
