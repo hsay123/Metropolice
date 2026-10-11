@@ -1,304 +1,266 @@
 "use client";
 
 import * as React from "react";
-import { Inbox, TriangleAlert } from "lucide-react";
+import {
+  Bell,
+  Boxes,
+  Check,
+  Clock,
+  Folder,
+  Grid,
+  PlayCircle,
+  Settings,
+  Users,
+  Wallet,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
-import { StatusPill, StatusRail } from "@/components/domain/status";
-import { DecisionSource } from "@/components/domain/decision-source";
-import { HashChip, RewardAmount, TxLink } from "@/components/domain/machine";
-import { ConfidenceMeter } from "@/components/domain/confidence-meter";
-import { LeaseTimer } from "@/components/domain/lease-timer";
-import { ReasonCode } from "@/components/domain/reason-code";
-import { EmptyState, ErrorState, TableSkeleton } from "@/components/domain/states";
-import { ReceiptCard } from "@/components/domain/receipt";
-import { PipelineLedger } from "@/components/domain/pipeline-ledger";
-import { KeyHint, KeyHintList } from "@/components/domain/key-hint";
-import { TablePagination, TableToolbar } from "@/components/domain/table-toolbar";
-import { DataTable, TBody, TD, TH, THead, TR } from "@/components/domain/table";
-import type { Receipt, TaskState } from "@/lib/api/types";
+import { Card, CardBody, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { StatusChip, Tag } from "@/components/ui/status-chip";
+import { KpiCard } from "@/components/ui/kpi-card";
+import {
+  Avatar,
+  FilterChip,
+  PhotoSlot,
+  ProgressBar,
+  SegmentedControl,
+} from "@/components/ui/primitives";
 
-const STATES: TaskState[] = [
-  "submitted",
-  "needs_revision",
-  "accepted",
-  "rejected",
-  "appealed",
-  "paid",
-];
+/**
+ * The design-system tile from the mood board, built entirely from styles/tokens.css.
+ * Every element here carries a data-ui attribute, so scripts/spec-check.mjs can
+ * verify the rendered values rather than trusting this file.
+ */
 
-const HASH =
-  "0x2bc8a1f30d9e4b7c6a2f5d8b1e4c7a0f3d6b9e2c5a8f1b4d7e0a3c6f9b2d5e8a";
-const POLICY =
-  "0x7d41b0e9c2a4f83d5a1e6b90c7f2d4a8e3b1c6f0a9d2e5b8c1f4a7d0e3b6c9f2";
-const TX = "0x9c2e5b8d1f4a7c0e3b6d9f2a5c8e1b4d6f8a0c2e4b7d9f1a3c5e7b0d2f4a6c8e";
+const PALETTE = [
+  ["Primary", "var(--primary)"],
+  ["Primary tint", "var(--primary-tint)"],
+  ["CTA black", "var(--cta-black)"],
+  ["Foreground", "var(--fg)"],
+  ["Muted", "var(--fg-muted)"],
+  ["Background", "var(--bg)"],
+  ["Surface", "var(--surface)"],
+  ["Surface 2", "var(--surface-2)"],
+  ["Border", "var(--border)"],
+  ["Dark", "var(--dark)"],
+] as const;
 
-const MOCK_RECEIPT: Receipt = {
-  id: "rcpt_demo",
-  taskId: "task_01Hd9",
-  jobTitle: "Pen writing, kitchen set",
-  contributorPseudonym: "Contributor 4F2A",
-  annotationHash: HASH,
-  policyHash: POLICY,
-  policyVersion: 3,
-  reviewerType: "human",
-  amount: 2,
-  token: "test USDC",
-  txHash: TX,
-  txState: "confirmed",
-  issuedAt: "2026-10-11T09:30:00.000Z",
-  mock: true,
-};
-
-function Section({
-  title,
-  note,
-  children,
-}: {
-  title: string;
-  note?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <section className="border-t border-rule pt-6">
-      <div className="flex flex-col gap-1">
-        <h2 className="font-display text-lg">{title}</h2>
-        {note && <p className="max-w-[70ch] text-sm text-ink-muted">{note}</p>}
-      </div>
-      <div className="mt-4">{children}</div>
-    </section>
-  );
-}
-
-/** Gallery-only demo lease times. Fixed on purpose: render-time Date.now() is
- * rejected by Next as an unstable value, and the real product receives
- * expiresAt from the server. LEASE_LONG ≈ 90 minutes from the demo build
- * clock; LEASE_SHORT sits inside the "announces the last minute" window (and
- * will read "Lease ended" once that window passes — both are real states). */
-const LEASE_LONG = "2026-10-11T02:26:00.000Z";
-const LEASE_SHORT = "2026-10-11T00:57:10.000Z";
+const CHIPS = [
+  ["progress", "In Progress"],
+  ["review", "In Review"],
+  ["accepted", "Accepted"],
+  ["rejected", "Rejected"],
+  ["paid", "Paid"],
+  ["pending", "Not started"],
+  ["appealed", "Appealed"],
+] as const;
 
 export default function ComponentGalleryPage() {
+  const [chip, setChip] = React.useState("All");
+
   return (
-    <main className="mx-auto flex max-w-[1080px] flex-col gap-8 px-6 py-10">
-      <header className="flex flex-col gap-2">
-        <span className="text-xs text-ink-muted">Development only</span>
-        <h1 className="font-display text-2xl">Component gallery</h1>
-        <p className="max-w-[70ch] text-sm text-ink-muted">
-          Shared components from AGENTS.md A7, rendered against the real tokens. This page
-          is not part of the product and is not linked from the app.
+    <main className="mx-auto w-full max-w-[1280px] px-8 py-8">
+      <header className="mb-8">
+        <h1 className="text-[40px] leading-[1.1]">Design system</h1>
+        <p className="mt-2 text-[16px] text-[var(--fg-muted)]">
+          Every value below comes from <code className="machine">styles/tokens.css</code>. Nothing is
+          hard-coded here.
         </p>
       </header>
 
-      <Section title="Buttons" note="Primary, outline, secondary, ghost, destructive. 8px radius.">
-        <div className="flex flex-wrap items-center gap-3">
-          <Button>Fund job</Button>
-          <Button variant="outline">Request revision</Button>
-          <Button variant="secondary">Save draft</Button>
-          <Button variant="ghost">Cancel</Button>
-          <Button variant="destructive">Reject</Button>
-          <Button variant="link">Read the rubric</Button>
-          <Button disabled>Claim task</Button>
-        </div>
-      </Section>
+      <div className="grid min-w-0 grid-cols-1 gap-6">
+        {/* palette */}
+        <Card>
+          <CardHeader>
+            <div>
+              <CardTitle>Colour palette</CardTitle>
+              <CardDescription>One violet accent; everything else is surface and text.</CardDescription>
+            </div>
+          </CardHeader>
+          <CardBody>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+              {PALETTE.map(([name, value]) => (
+                <div key={name} className="flex flex-col gap-2">
+                  <div
+                    className="h-14 w-full rounded-[12px] border border-[var(--border)]"
+                    style={{ background: value }}
+                  />
+                  <span className="text-[13px] font-medium text-[var(--fg)]">{name}</span>
+                  <span className="machine text-[12px] text-[var(--fg-muted)]">{value}</span>
+                </div>
+              ))}
+            </div>
+          </CardBody>
+        </Card>
 
-      <Section title="Form controls" note="Labels above, helper below, 8px controls, stronger edge.">
-        <div className="grid max-w-[520px] gap-4">
-          <div className="grid gap-1.5">
-            <Label htmlFor="g-title">Job title</Label>
-            <Input id="g-title" placeholder="Pick and place, kitchen set" />
-            <p className="text-xs text-ink-muted">Shown to contributors before they claim.</p>
-          </div>
-          <div className="grid gap-1.5">
-            <Label htmlFor="g-rule">Testable rule</Label>
-            <Textarea id="g-rule" placeholder="A box contains the whole object…" />
-          </div>
-          <div className="grid gap-1.5">
-            <Label htmlFor="g-bad">Reward per task</Label>
-            <Input id="g-bad" defaultValue="0" aria-invalid />
-            <p className="text-xs text-[var(--rejected-ink)]">
-              Reward must be greater than 0. Set a reward to continue.
-            </p>
-          </div>
-          <div className="flex items-center gap-2">
-            <Checkbox id="g-attest" />
-            <Label htmlFor="g-attest">I have the right to share this data</Label>
-          </div>
-        </div>
-      </Section>
+        {/* buttons */}
+        <Card>
+          <CardHeader>
+            <div>
+              <CardTitle>Buttons</CardTitle>
+              <CardDescription>40px on app surfaces, 44px for the black marketing CTA.</CardDescription>
+            </div>
+          </CardHeader>
+          <CardBody className="flex flex-wrap items-center gap-3">
+            <Button>Primary button</Button>
+            <Button variant="black">
+              Get started
+              <PlayCircle className="size-4" />
+            </Button>
+            <Button variant="secondary">Secondary</Button>
+            <Button variant="ghost">Sign in</Button>
+            <Button variant="quiet">Quiet</Button>
+            <Button variant="destructive">Destructive</Button>
+            <Button size="sm">Small</Button>
+            <Button size="icon">
+              <Bell />
+            </Button>
+          </CardBody>
+        </Card>
 
-      <Section title="Status" note="Icon and text always; colour never carries the meaning alone.">
-        <div className="flex flex-wrap items-center gap-3">
-          {STATES.map((s) => (
-            <StatusPill key={s} state={s} />
-          ))}
-        </div>
-      </Section>
+        {/* chips and tags */}
+        <Card>
+          <CardHeader>
+            <div>
+              <CardTitle>Status chips and tags</CardTitle>
+              <CardDescription>
+                Always icon plus text, never colour alone. Paid is teal because violet is the brand.
+              </CardDescription>
+            </div>
+          </CardHeader>
+          <CardBody className="flex flex-wrap items-center gap-2.5">
+            {CHIPS.map(([tone, label]) => (
+              <StatusChip key={tone} tone={tone}>
+                {label}
+              </StatusChip>
+            ))}
+            <Tag>Video Annotation</Tag>
+            <Tag tone="neutral">Intermediate</Tag>
+          </CardBody>
+        </Card>
 
-      <Section title="StatusRail" note="Submitted, Accepted and Paid are separate stations.">
-        <div className="grid max-w-[560px] gap-6">
-          <StatusRail state="submitted" />
-          <StatusRail state="accepted" />
-          <StatusRail state="paid" />
-          <StatusRail state="needs_revision" />
-        </div>
-      </Section>
+        {/* kpi */}
+        <Card>
+          <CardHeader>
+            <div>
+              <CardTitle>KPI row</CardTitle>
+              <CardDescription>
+                Four equal columns. The sparkline and delta appear only when a real series is
+                supplied — compare the two cards below.
+              </CardDescription>
+            </div>
+          </CardHeader>
+          <CardBody>
+            <div data-ui="kpi-row" className="grid grid-cols-2 gap-5 xl:grid-cols-4">
+              <KpiCard label="Accepted" value="214" tone="primary" />
+              <KpiCard label="In review" value="37" hint="Across all jobs" />
+              <KpiCard
+                label="Confirmed spend"
+                value="70.00"
+                tone="positive"
+                series={{ points: [40, 48, 52, 61, 70], deltaPct: 12.4 }}
+                hint="Only shown with a real series"
+              />
+              <KpiCard label="Budget left" value="90.00" />
+            </div>
+          </CardBody>
+        </Card>
 
-      <Section title="Decision source" note="Every decision is marked by who made it.">
-        <div className="flex flex-wrap items-center gap-6">
-          <DecisionSource source="code" />
-          <DecisionSource source="ai" />
-          <DecisionSource source="human" />
-          <DecisionSource source="adjudicated" />
-        </div>
-      </Section>
+        {/* controls */}
+        <Card>
+          <CardHeader>
+            <div>
+              <CardTitle>Controls</CardTitle>
+              <CardDescription>Inputs, filter chips, segmented control, progress.</CardDescription>
+            </div>
+          </CardHeader>
+          <CardBody className="flex flex-col gap-5">
+            <div className="grid gap-3 sm:grid-cols-2">
+              <Input placeholder="Search jobs" aria-label="Search jobs demo" />
+              <Input defaultValue="0.50 test USDC" aria-label="Amount demo" />
+            </div>
 
-      <Section title="Rewards, hashes and transactions" note="Machine values use the mono stack, tabular.">
-        <div className="grid max-w-[640px] gap-5">
-          <div className="flex flex-wrap items-center gap-6">
-            <RewardAmount amount={0.5} />
-            <RewardAmount amount={2} />
-            <RewardAmount amount={1234.5} />
-          </div>
-          <div className="flex flex-wrap items-center gap-4">
-            <HashChip value={HASH} label="annotation hash" />
-            <HashChip value={POLICY} label="policy hash" />
-          </div>
-          <div className="flex flex-col gap-3">
-            <TxLink state="confirmed" txHash={TX} />
-            <TxLink state="pending" />
-            <TxLink state="waiting_wallet" />
-            <TxLink state="failed" onRetry={() => {}} />
-          </div>
-        </div>
-      </Section>
+            <div className="flex flex-wrap items-center gap-2">
+              {["All", "Image", "Video"].map((f) => (
+                <FilterChip key={f} active={chip === f} onClick={() => setChip(f)}>
+                  {f}
+                </FilterChip>
+              ))}
+            </div>
 
-      <Section title="Lease timer" note="Announces the last minute in a live region.">
-        <div className="flex items-center gap-6">
-          <LeaseTimer expiresAt={LEASE_LONG} />
-          <LeaseTimer expiresAt={LEASE_SHORT} />
-        </div>
-      </Section>
-
-      <Section title="Confidence meter" note="Below the threshold, the item goes to a human.">
-        <div className="grid max-w-[420px] gap-6">
-          <ConfidenceMeter confidence={0.58} />
-          <ConfidenceMeter confidence={0.91} />
-        </div>
-      </Section>
-
-      <Section title="Reason code" note="Reviewers see the code; contributors read plain words.">
-        <div className="flex flex-col gap-3">
-          <ReasonCode code="BOX_LOOSE" />
-          <ReasonCode code="SEGMENT_OVERLAP" />
-        </div>
-      </Section>
-
-      <Section title="Receipt" note="The memorable moment: a chain-of-custody slip with notched edges.">
-        <div className="grid gap-6 lg:grid-cols-2">
-          <ReceiptCard receipt={MOCK_RECEIPT} />
-          <ReceiptCard
-            receipt={{ ...MOCK_RECEIPT, id: "rcpt_pending", txHash: undefined, txState: "pending" }}
-          />
-        </div>
-      </Section>
-
-      <Section title="Empty, error and loading">
-        <div className="grid gap-4">
-          <EmptyState
-            icon={Inbox}
-            title="No tasks match your filters"
-            description="Clear filters or check back after the next job is published."
-            action={<Button variant="outline" size="sm">Clear filters</Button>}
-          />
-          <ErrorState
-            message="We could not load the queue. Check your connection and try again."
-            onRetry={() => {}}
-          />
-          <TableSkeleton rows={4} cols={4} />
-          <EmptyState
-            icon={TriangleAlert}
-            title="Not enough data yet"
-            description="We do not show a rate until there are at least 20 audited samples."
-          />
-        </div>
-      </Section>
-
-      <Section
-        title="Pipeline ledger"
-        note="Four stations, each sized against the number that entered the funnel."
-      >
-        <PipelineLedger
-          stages={[
-            { key: "submitted", label: "Submitted", count: 286, color: "var(--ink-muted)" },
-            { key: "review", label: "In review", count: 37, color: "var(--revision-ink)" },
-            { key: "accepted", label: "Accepted", count: 214, color: "var(--accepted-ink)" },
-            { key: "paid", label: "Paid", count: 198, color: "var(--paid-ink)" },
-          ]}
-          reference={286}
-          note="Accepted work is only paid once the contributor claims the reward."
-        />
-      </Section>
-
-      <Section title="Table toolbar" note="Search, filters, sorting and paging.">
-        <div className="overflow-hidden rounded-[12px] border border-rule bg-sheet">
-          <TableToolbar>
-            <Input
-              type="search"
-              placeholder="Search jobs"
-              aria-label="Search jobs"
-              className="w-full sm:w-56"
+            <SegmentedControl
+              value="annotation"
+              onValueChange={setChip}
+              options={[
+                { value: "annotation", label: "Annotation" },
+                { value: "instructions", label: "Instructions" },
+              ]}
             />
-            <span className="text-xs text-ink-muted">2 of 9 jobs</span>
-          </TableToolbar>
-          <DataTable>
-            <THead>
-              <TR className="border-rule">
-                <TH>Job</TH>
-                <TH>Status</TH>
-                <TH numeric>Budget</TH>
-              </TR>
-            </THead>
-            <TBody>
-              <TR className="hover:bg-wash">
-                <TD>Pick and place, kitchen set</TD>
-                <TD>Active</TD>
-                <TD numeric>48.00 / 100.00</TD>
-              </TR>
-              <TR className="hover:bg-wash">
-                <TD>Pen writing, kitchen set</TD>
-                <TD>Active</TD>
-                <TD numeric>22.00 / 60.00</TD>
-              </TR>
-            </TBody>
-          </DataTable>
-          <div className="flex justify-end border-t border-rule px-4 py-3">
-            <TablePagination page={2} pageCount={5} onPage={() => {}} />
-          </div>
-        </div>
-      </Section>
 
-      <Section
-        title="Key hints"
-        note="Work tools teach shortcuts where the action lives, not in a manual."
-      >
-        <div className="flex flex-col gap-3">
-          <p className="flex items-center gap-2 text-sm text-ink">
-            Draw a box <KeyHint keys="B" /> then press <KeyHint keys={["⌘", "Z"]} /> to undo.
-          </p>
-          <KeyHintList
-            hints={[
-              { keys: "1–9", label: "class" },
-              { keys: "Esc", label: "deselect" },
-              { keys: "Del", label: "delete box" },
-              { keys: ["⇧", "⌘", "Z"], label: "redo" },
-            ]}
-          />
-        </div>
-      </Section>
+            <div className="flex max-w-sm flex-col gap-3">
+              <ProgressBar value={72} label="Example progress 72%" />
+              <ProgressBar value={100} complete label="Example progress complete" />
+            </div>
+
+            <div className="flex items-center gap-4">
+              <Avatar name="PhysicalData Demo" />
+              <Avatar name="Contributor 4F2A" size={28} />
+              <PhotoSlot alt="Hero robot arm" className="h-16 w-24" />
+            </div>
+          </CardBody>
+        </Card>
+
+        {/* navigation icons */}
+        <Card>
+          <CardHeader>
+            <div>
+              <CardTitle>Icons</CardTitle>
+              <CardDescription>One library, one stroke weight, near-black on light surfaces.</CardDescription>
+            </div>
+          </CardHeader>
+          <CardBody className="flex flex-wrap items-center gap-5 text-[var(--fg)]">
+            {[Grid, Folder, Boxes, Users, Wallet, Settings, Bell, Clock, Check].map((Icon, i) => (
+              <Icon key={i} className="size-6" />
+            ))}
+          </CardBody>
+        </Card>
+
+        {/* type scale */}
+        <Card>
+          <CardHeader>
+            <div>
+              <CardTitle>Typography</CardTitle>
+              <CardDescription>
+                Satoshi for headings and figures, Inter for everything else.
+              </CardDescription>
+            </div>
+          </CardHeader>
+          <CardBody className="flex flex-col gap-4">
+            {[
+              ["Hero", "var(--t-hero)", "1.05", "700"],
+              ["H2", "var(--t-h2)", "1.1", "700"],
+              ["H3", "var(--t-h3)", "1.33", "700"],
+              ["Lead", "var(--t-lead)", "1.55", "400"],
+              ["Body", "var(--t-body)", "1.5", "400"],
+              ["UI", "var(--t-ui)", "1.43", "500"],
+              ["Caption", "var(--t-caption)", "1.33", "400"],
+            ].map(([name, size, lh, weight]) => (
+              <div key={name} className="flex items-baseline gap-5 border-b border-[var(--border)] pb-4 last:border-0">
+                <span className="w-20 shrink-0 text-[13px] text-[var(--fg-muted)]">{name}</span>
+                <span
+                  className="font-display min-w-0 flex-1 truncate"
+                  style={{ fontSize: size, lineHeight: lh, fontWeight: weight }}
+                >
+                  Robot footage, labelled and checked
+                </span>
+                <span className="machine ml-auto shrink-0 text-[12px] text-[var(--fg-muted)]">
+                  {String(size).replace("var(--", "").replace(")", "")} / {String(lh)}
+                </span>
+              </div>
+            ))}
+          </CardBody>
+        </Card>
+      </div>
     </main>
   );
 }

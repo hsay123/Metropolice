@@ -1,23 +1,28 @@
-import * as React from "react"
-import { cn } from "cn"
+import * as React from "react";
+import { cn } from "@/lib/utils";
 
+/**
+ * Input — 40px, 10px radius, 1px field border, white. Placeholder uses the subtle
+ * tone, which is reserved for 14px and above.
+ */
 function Input({ className, type, ...props }: React.ComponentProps<"input">) {
   return (
     <input
       type={type}
+      data-ui="input"
       data-slot="input"
       className={cn(
-        "h-8 w-full min-w-0 rounded-[8px] border border-input bg-sheet px-2.5 py-1 text-sm transition-colors outline-none",
-        "file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground",
-        "placeholder:text-muted-foreground",
-        "focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40",
-        "disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-wash disabled:opacity-60",
-        "aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20",
+        "h-10 w-full min-w-0 rounded-[10px] border border-[var(--border-field)] bg-white px-3 text-[14px] text-[var(--fg)] transition-colors outline-none",
+        "placeholder:text-[var(--fg-subtle)]",
+        "focus-visible:border-[var(--primary)] focus-visible:ring-[3px] focus-visible:ring-[var(--primary-ring)]",
+        "disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-[var(--surface-2)] disabled:opacity-60",
+        "file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-[14px] file:font-medium file:text-[var(--fg)]",
+        "aria-invalid:border-[var(--s-rejected-fg)] aria-invalid:ring-[3px] aria-invalid:ring-[var(--s-rejected-fg)]/25",
         className,
       )}
       {...props}
     />
-  )
+  );
 }
 
-export { Input }
+export { Input };

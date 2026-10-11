@@ -101,6 +101,29 @@ These are marked in `lib/api/real.ts`. Shapes are in `lib/api/types.ts`.
 }
 ```
 
+### `BuyerOverview.series` (optional, for the dashboard KPI cards)
+
+The four KPI cards render a plain label and number. They only add a sparkline and
+a delta chip when the backend supplies a real time series — a trend implies
+history, so an invented one would be a fabricated statistic.
+
+```ts
+{
+  // Per KPI key. Omit a key and its card renders without a trend.
+  series?: Partial<Record<
+    "tasksAccepted" | "tasksInReview" | "acceptanceRate" | "spend",
+    {
+      points: number[];     // oldest to newest, at least 2 points
+      deltaPct?: number;    // change across the window, e.g. 12.4 for +12.4%
+      windowDays?: number;  // how far back `points` reaches, for the tooltip
+    }
+  >>;
+}
+```
+
+Mock mode omits `series` entirely, so every card is plain. Provide it once real
+history exists.
+
 ### `JobStats`
 
 Same fields as `BuyerOverview`, plus `jobId`, `tasksTotal`, `tasksSubmitted`,

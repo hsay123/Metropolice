@@ -2,140 +2,173 @@
 @import "../styles/tokens.css";
 
 @theme inline {
-  /* surfaces */
-  --color-bench: var(--bench);
-  --color-sheet: var(--sheet);
+  /* canvas and surfaces */
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
-  --color-wash: var(--wash);
-  --color-stage: var(--stage);
-  --color-stage-raised: var(--stage-raised);
+  --color-border: var(--border);
+  --color-border-field: var(--border-field);
 
   /* text */
-  --color-ink: var(--ink);
-  --color-ink-muted: var(--ink-muted);
-  --color-stage-ink: var(--stage-ink);
-
-  /* structure */
-  --color-rule: var(--rule);
-  --color-field-edge: var(--field-edge);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
 
   /* brand */
-  --color-brand: var(--brand);
-  --color-brand-hover: var(--brand-hover);
-  --color-brand-tint: var(--brand-tint);
-  --color-brand-on-stage: var(--brand-on-stage);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-active: var(--primary-active);
+  --color-primary-tint: var(--primary-tint);
+  --color-primary-tint-2: var(--primary-tint-2);
+  --color-cta-black: var(--cta-black);
+
+  /* dark sections */
+  --color-dark: var(--dark);
+  --color-dark-surface: var(--dark-surface);
+  --color-dark-fg: var(--dark-fg);
+  --color-dark-muted: var(--dark-muted);
+  --color-primary-on-dark: var(--primary-on-dark);
 
   /* status */
-  --color-pending-ink: var(--pending-ink);
-  --color-pending-bg: var(--pending-bg);
-  --color-revision-ink: var(--revision-ink);
-  --color-revision-bg: var(--revision-bg);
-  --color-accepted-ink: var(--accepted-ink);
-  --color-accepted-bg: var(--accepted-bg);
-  --color-rejected-ink: var(--rejected-ink);
-  --color-rejected-bg: var(--rejected-bg);
-  --color-paid-ink: var(--paid-ink);
-  --color-paid-bg: var(--paid-bg);
+  --color-progress-bg: var(--s-progress-bg);
+  --color-progress-fg: var(--s-progress-fg);
+  --color-review-bg: var(--s-review-bg);
+  --color-review-fg: var(--s-review-fg);
+  --color-accepted-bg: var(--s-accepted-bg);
+  --color-accepted-fg: var(--s-accepted-fg);
+  --color-rejected-bg: var(--s-rejected-bg);
+  --color-rejected-fg: var(--s-rejected-fg);
+  --color-paid-bg: var(--s-paid-bg);
+  --color-paid-fg: var(--s-paid-fg);
+  --color-pending-bg: var(--s-pending-bg);
+  --color-pending-fg: var(--s-pending-fg);
 
-  /* video labels */
-  --color-label-reach: var(--label-reach);
-  --color-label-grasp: var(--label-grasp);
-  --color-label-lift: var(--label-lift);
-  --color-label-place: var(--label-place);
-  --color-label-inspect: var(--label-inspect);
-  --color-label-recover: var(--label-recover);
-  --color-label-write: var(--label-write);
-  --color-label-other: var(--label-other);
+  /* timeline / label colours */
+  --color-l-reach: var(--l-reach);
+  --color-l-grasp: var(--l-grasp);
+  --color-l-lift: var(--l-lift);
+  --color-l-move: var(--l-move);
+  --color-l-place: var(--l-place);
+  --color-l-inspect: var(--l-inspect);
+  --color-l-recover: var(--l-recover);
+  --color-l-write: var(--l-write);
+  --color-l-other: var(--l-other);
 
-  /* shadcn semantic colours (used by components/ui, mapped to our tokens in :root) */
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
+  /* shadcn semantic variables */
+  --color-background: var(--bg);
+  --color-foreground: var(--fg);
+  --color-card: var(--surface);
+  --color-card-foreground: var(--fg);
+  --color-popover: var(--surface);
+  --color-popover-foreground: var(--fg);
+  --color-primary-fg: #ffffff;
+  --color-secondary: var(--surface-2);
+  --color-secondary-foreground: var(--fg);
+  --color-muted: var(--surface-2);
+  --color-muted-foreground: var(--fg-muted);
+  --color-accent: var(--primary-tint);
+  --color-accent-foreground: var(--primary-hover);
+  --color-destructive: var(--s-rejected-fg);
+  --color-destructive-foreground: #ffffff;
+  --color-ring: var(--primary-ring);
 
-  /* one chart palette, reused by every chart (AGENTS.md A3: one chart style) */
-  --color-chart-1: #1f4fe0;
-  --color-chart-2: #56b4e9;
-  --color-chart-3: #8a94a3;
-  --color-chart-4: #9a6200;
-  --color-chart-5: #17754a;
+  /*
+   * Legacy aliases. The ui-moodboard pass replaces these names screen by screen;
+   * keeping them mapped means the app stays readable while primitives are rebuilt.
+   * Remove an alias as soon as its last consumer is gone.
+   */
+  --color-bench: var(--bg);
+  --color-sheet: var(--surface);
+  --color-wash: var(--surface-2);
+  --color-ink: var(--fg);
+  --color-ink-muted: var(--fg-muted);
+  --color-rule: var(--border);
+  --color-field-edge: var(--border-field);
+  --color-brand: var(--primary);
+  --color-brand-hover: var(--primary-hover);
+  --color-brand-tint: var(--primary-tint);
+  --color-brand-on-stage: var(--primary-on-dark);
+  --color-stage: var(--dark);
+  --color-stage-raised: var(--dark-surface);
+  --color-stage-ink: var(--dark-fg);
+  --color-pending-ink: var(--s-pending-fg);
+  --color-pending-bg: var(--s-pending-bg);
+  --color-revision-ink: var(--s-review-fg);
+  --color-revision-bg: var(--s-review-bg);
+  --color-accepted-ink: var(--s-accepted-fg);
+  --color-accepted-bg: var(--s-accepted-bg);
+  --color-rejected-ink: var(--s-rejected-fg);
+  --color-rejected-bg: var(--s-rejected-bg);
+  --color-paid-ink: var(--s-paid-fg);
+  --color-paid-bg: var(--s-paid-bg);
+  --color-label-reach: var(--l-reach);
+  --color-label-grasp: var(--l-grasp);
+  --color-label-lift: var(--l-lift);
+  --color-label-place: var(--l-place);
+  --color-label-inspect: var(--l-inspect);
+  --color-label-recover: var(--l-recover);
+  --color-label-write: var(--l-write);
+  --color-label-other: var(--l-other);
 
   /* type */
-  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
-  --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono",
-    monospace;
+  --font-display: var(--font-satoshi), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
 
-  --text-xs: var(--text-xs);
-  --text-sm: var(--text-sm);
-  --text-base: var(--text-md);
-  --text-lg: var(--text-lg);
-  --text-xl: var(--text-xl);
-  --text-2xl: var(--text-2xl);
+  /* type scale */
+  --text-caption: 12px;
+  --text-caption--line-height: 16px;
+  --text-ui: 14px;
+  --text-ui--line-height: 20px;
+  --text-body: 16px;
+  --text-body--line-height: 24px;
+  --text-lead: 18px;
+  --text-lead--line-height: 28px;
+  --text-h3: 24px;
+  --text-h3--line-height: 32px;
+  --text-h2: 40px;
+  --text-h2--line-height: 44px;
+  --text-hero: clamp(40px, 4.2vw, 60px);
+  --text-hero--line-height: 1.05;
 
-  /* shape — radius is a hierarchy: controls 8px, panels/menus 12px, pills full */
-  --radius-xs: var(--radius-control);
-  --radius-sm: var(--radius-control);
-  --radius-md: var(--radius-panel);
-  --radius-lg: var(--radius-panel);
-  --radius-xl: var(--radius-panel);
-  --radius-2xl: var(--radius-panel);
-  --radius-3xl: 16px;
-  --radius-4xl: var(--radius-pill);
-  --radius-pill: var(--radius-pill);
+  /* shape */
+  --radius-chip: var(--r-chip);
+  --radius-btn: var(--r-btn);
+  --radius-input: var(--r-input);
+  --radius-card: var(--r-card);
+  --radius-panel: var(--r-panel);
+  --radius-media: var(--r-media);
 
   /* elevation */
-  --shadow-popover: var(--shadow-popover);
-  --shadow-dialog: var(--shadow-dialog);
+  --shadow-card: var(--elev-card);
+  --shadow-float: var(--elev-float);
+  --shadow-btn: var(--elev-btn);
+  --shadow-popover: var(--elev-float);
+  --shadow-dialog: var(--elev-float);
 }
 
-/* shadcn/ui semantic variables, mapped onto our tokens.
-   Careful: shadcn `--accent` = subtle hover surface, NOT the brand colour. */
+/* shadcn/ui semantic variables, mapped onto the mood-board tokens.
+   `--primary` and `--border` are NOT re-declared here: tokens.css already defines
+   those exact names, and writing `--primary: var(--primary)` would be circular. */
 :root {
-  --background: var(--bench);
-  --foreground: var(--ink);
-
-  --card: var(--sheet);
-  --card-foreground: var(--ink);
-
-  --popover: var(--sheet);
-  --popover-foreground: var(--ink);
-
-  --primary: var(--brand);
+  --background: var(--bg);
+  --foreground: var(--fg);
+  --card: var(--surface);
+  --card-foreground: var(--fg);
+  --popover: var(--surface);
+  --popover-foreground: var(--fg);
   --primary-foreground: #ffffff;
-
-  --secondary: var(--wash);
-  --secondary-foreground: var(--ink);
-
-  --muted: var(--wash);
-  --muted-foreground: var(--ink-muted);
-
-  --accent: var(--brand-tint);
-  --accent-foreground: var(--brand-hover);
-
-  --destructive: var(--rejected-ink);
+  --secondary: var(--surface-2);
+  --secondary-foreground: var(--fg);
+  --muted: var(--surface-2);
+  --muted-foreground: var(--fg-muted);
+  --accent: var(--primary-tint);
+  --accent-foreground: var(--primary-hover);
+  --destructive: var(--s-rejected-fg);
   --destructive-foreground: #ffffff;
-
-  --border: var(--rule);
-  --input: var(--field-edge);
-  --ring: var(--brand);
-
-  --radius: 12px;
+  --input: var(--border-field);
+  --ring: var(--primary-ring);
+  --radius: var(--r-btn);
 }
 
 @layer base {
@@ -145,14 +178,15 @@
 
   html {
     -webkit-text-size-adjust: 100%;
+    background: var(--bg);
   }
 
   body {
-    background: var(--bench);
-    color: var(--ink);
+    background: var(--bg);
+    color: var(--fg);
     font-family: var(--font-sans);
-    font-size: var(--text-sm);
-    line-height: 1.45;
+    font-size: 16px;
+    line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
@@ -162,80 +196,86 @@
   h3,
   h4 {
     font-family: var(--font-display);
-    font-weight: 600;
-    letter-spacing: -0.01em;
+    font-weight: 700;
+    letter-spacing: -0.025em;
     text-wrap: balance;
+    color: var(--fg);
   }
 
-  /* Machine values: hashes, tx links, timecodes, IDs */
+  h1 {
+    font-size: var(--t-hero);
+    line-height: 1.05;
+  }
+  h2 {
+    font-size: var(--t-h2);
+    line-height: 1.1;
+  }
+  h3 {
+    font-size: var(--t-h3);
+    line-height: 1.33;
+  }
+
+  /* Machine values: hashes, tx links, timecodes, ids */
   .machine {
     font-family: var(--font-mono);
     font-variant-numeric: tabular-nums;
     letter-spacing: -0.01em;
   }
 
-  /* Numbers in tables */
   .tnum {
     font-variant-numeric: tabular-nums;
   }
 
   :focus-visible {
-    outline: 2px solid var(--brand);
+    outline: 3px solid var(--primary-ring);
     outline-offset: 2px;
-    border-radius: var(--radius-control);
-  }
-
-  /* On the dark media stage, cobalt is too dark — use the stage variant */
-  .on-stage :focus-visible {
-    outline-color: var(--brand-on-stage);
+    border-radius: var(--r-btn);
   }
 
   ::selection {
-    background: var(--brand-tint);
-    color: var(--brand-hover);
+    background: var(--primary-tint);
+    color: var(--primary-hover);
   }
 }
 
-/* Diagonal hatch for failure segments — applied over any label colour */
+/* A labelled slot for imagery that has not been supplied yet. When the real file
+   lands in public/images/ the component swaps to an <img> and this never shows. */
+.photo-slot {
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 120% at 30% 20%, var(--primary-tint) 0%, transparent 60%),
+    linear-gradient(135deg, var(--surface-2) 0%, var(--primary-tint-2) 100%);
+  color: var(--fg-muted);
+}
+
+.photo-slot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(var(--border-field) 1px, transparent 1px);
+  background-size: 14px 14px;
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+/* Dot matrix used behind the dark network section. */
+.dot-matrix {
+  background-image: radial-gradient(var(--dark-border) 1.5px, transparent 1.5px);
+  background-size: 22px 22px;
+}
+
+/* Diagonal hatch for failure segments — applied over any label colour. */
 .hatch-failure {
   background-image: repeating-linear-gradient(
     45deg,
-    rgba(179, 38, 30, 0.55) 0,
-    rgba(179, 38, 30, 0.55) 2px,
+    rgba(185, 56, 21, 0.55) 0,
+    rgba(185, 56, 21, 0.55) 2px,
     transparent 2px,
     transparent 6px
   );
-}
-
-/* Honour reduced-motion: state changes appear instantly, no slide, no spin. */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-
-/* The one authored moment: the receipt prints out once, like a slip from a printer.
-   The reduced-motion block above collapses this to an instant appearance. */
-@keyframes receipt-print {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-    clip-path: inset(0 0 88% 0);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-    clip-path: inset(0 0 0 0);
-  }
-}
-
-.receipt-print {
-  animation: receipt-print 400ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 /* Notched top and bottom edges for the receipt. */
@@ -252,4 +292,22 @@
       repeat-x,
     radial-gradient(var(--notch-r) at 50% calc(100% - var(--notch)), #0000 98%, #000) bottom /
       var(--notch) 51% repeat-x;
+}
+
+/* Motion: 150 to 200ms ease-out, CSS only. Reduced motion removes transforms. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hover-lift:hover {
+    transform: none !important;
+  }
 }

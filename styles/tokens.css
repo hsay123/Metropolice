@@ -1,91 +1,106 @@
 /*
  * PhysicalData Network — design tokens.
- * Single source of truth for colour, type scale, shape and motion.
- * Mirrored into the Tailwind theme and shadcn variables in app/globals.css.
+ * Source: docs/moodboard + docs/MOODBOARD-SPEC.md (ui-moodboard pass).
  *
- * Naming note: the brand cobalt is `--brand`, NOT `--accent`, because shadcn
- * redefines `--accent` to mean its subtle hover surface. See docs/DESIGN.md §2.4.
+ * Token naming note: the brand violet is `--primary`, matching shadcn's own meaning
+ * for that name. shadcn uses `--accent` for a subtle hover surface, so nothing here
+ * is called `--accent`.
  */
 
 :root {
-  /* surfaces */
-  --bench: #eceff3; /* app background */
-  --sheet: #ffffff; /* panels, forms */
-  --surface-2: #f5f7fa; /* grouped regions: table stripes, sub-panels, sidebars */
-  --wash: #e2e7ed; /* muted fills, table header, hover rows */
-  --stage: #161b22; /* dark surround for media only */
-  --stage-raised: #202733; /* controls sitting on the stage */
+  /* canvas and surfaces */
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --surface-2: #f1f5f9;
+  --border: #e6ebf2; /* cards and dividers — decorative only */
+  --border-field: #7c8aa0; /* inputs and controls */
 
   /* text */
-  --ink: #18202b;
-  --ink-muted: #5b6676;
-  --stage-ink: #e6eaf0;
+  --fg: #0f172a;
+  --fg-muted: #5b6b80;
+  --fg-subtle: #64748b; /* subtle text at 14px and above only */
 
-  /* structure */
-  --rule: rgb(24 32 43 / 0.12); /* decorative separators only, never a control border */
-  --field-edge: #7a8493; /* borders of inputs and controls (>= 3:1) */
+  /* brand */
+  --primary: #6a3df8;
+  --primary-hover: #5b2de8;
+  --primary-active: #4f22d6;
+  --primary-tint: #f1ebff;
+  --primary-tint-2: #e7deff;
+  --primary-ring: rgba(106, 61, 248, 0.35);
+  --cta-black: #0b1020; /* marketing "Get started", "Download dataset" */
 
-  /* the one accent */
-  --brand: #1f4fe0;
-  --brand-hover: #173fc0;
-  --brand-tint: #e8eeff;
-  --brand-on-stage: #6f8cff; /* cobalt is too dark on the stage */
+  /* dark sections */
+  --dark: #080b14;
+  --dark-surface: #0f1424;
+  --dark-border: rgba(255, 255, 255, 0.1);
+  --dark-fg: #e6eaf5;
+  --dark-muted: #9aa4b8;
+  --primary-on-dark: #8f6bff;
 
-  /* status — always paired with an icon and a text label */
-  --pending-ink: #5b6676;
-  --pending-bg: #eef0f3;
-  --revision-ink: #9a6200;
-  --revision-bg: #fff1d6;
-  --accepted-ink: #17754a;
-  --accepted-bg: #e2f4ea;
-  --rejected-ink: #b3261e;
-  --rejected-bg: #fce6e4;
-  --paid-ink: #7a35c8;
-  --paid-bg: #f1e7fb;
-  /* appealed: ink on white with a dashed --ink border, no colour of its own */
+  /* status — always paired with an icon and a text label, never colour alone.
+     Chip text colours are the AA-checked ones, not the lighter board samples. */
+  --s-progress-bg: #e8f0ff;
+  --s-progress-fg: #2f5fd0;
+  --s-review-bg: #fff3dc;
+  --s-review-fg: #965300;
+  --s-accepted-bg: #e3f7ee;
+  --s-accepted-fg: #147a52;
+  --s-rejected-bg: #fdebe6;
+  --s-rejected-fg: #b93815;
+  --s-paid-bg: #ddf5f2;
+  --s-paid-fg: #0f766e;
+  --s-pending-bg: #eef1f5;
+  --s-pending-fg: #475569;
+  /* appealed: --surface background with a dashed --fg-muted border */
 
-  /* video label colours — Okabe-Ito, colour-blind safe.
-     Every segment also carries its text label. */
-  --label-reach: #0072b2;
-  --label-grasp: #e69f00;
-  --label-lift: #56b4e9;
-  --label-place: #009e73;
-  --label-inspect: #cc79a7;
-  --label-recover: #d55e00;
-  --label-write: #5f4bb6;
-  --label-other: #8a94a3;
+  /* timeline and label colours; every segment also carries its text label */
+  --l-reach: #6a3df8;
+  --l-grasp: #f0605d;
+  --l-lift: #f5b83d;
+  --l-move: #2dbe8d;
+  --l-place: #2fb67d;
+  --l-inspect: #3b82f6;
+  --l-recover: #0ea5e9;
+  --l-write: #ec4899;
+  --l-other: #94a3b8;
 
-  /* type scale: 12 / 14 / 16 / 20 / 28 / 40 */
-  --text-xs: 12px;
-  --text-sm: 14px;
-  --text-md: 16px;
-  --text-lg: 20px;
-  --text-xl: 28px;
-  --text-2xl: 40px;
+  /* shape */
+  --r-btn: 10px;
+  --r-input: 10px;
+  --r-chip: 8px;
+  --r-card: 16px;
+  --r-panel: 20px;
+  --r-media: 12px;
 
-  /* space: 4px base */
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-5: 20px;
-  --space-6: 24px;
-  --space-8: 32px;
-  --space-12: 48px;
+  /* elevation */
+  --elev-card: 0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 16px rgba(15, 23, 42, 0.05);
+  --elev-float: 0 12px 40px rgba(15, 23, 42, 0.12);
+  --elev-btn: 0 1px 2px rgba(15, 23, 42, 0.08);
 
-  /* shape: radius is a hierarchy, not one value */
-  --radius-control: 8px; /* inputs, buttons, selects, chips, focus rings */
-  --radius-panel: 12px; /* panels, dialogs, menus, cards */
-  --radius-pill: 9999px; /* status pills only */
-  --radius-seg: 4px; /* dense geometry: timeline segments, meter fills, handles */
+  /* type — Satoshi for headings and figures, Inter for UI */
+  --t-hero: clamp(40px, 4.2vw, 60px);
+  --t-h2: 40px;
+  --t-h3: 24px;
+  --t-lead: 18px;
+  --t-body: 16px;
+  --t-ui: 14px;
+  --t-caption: 12px;
 
-  /* motion */
-  --motion-toggle: 120ms;
-  --motion-panel: 200ms;
-  --motion-receipt: 400ms;
+  /* spacing — 4px base */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 20px;
+  --s-6: 24px;
+  --s-8: 32px;
+  --s-12: 48px;
+  --s-16: 64px;
+  --s-24: 96px;
+  --s-30: 120px;
+
+  /* motion — 150 to 200ms ease-out, CSS only */
+  --motion-fast: 150ms;
+  --motion-base: 180ms;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-
-  /* elevation — floating layers only */
-  --shadow-popover: 0 1px 2px rgba(24, 32, 43, 0.06), 0 8px 24px rgba(24, 32, 43, 0.12);
-  --shadow-dialog: 0 2px 4px rgba(24, 32, 43, 0.08), 0 24px 48px rgba(24, 32, 43, 0.18);
 }

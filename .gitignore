@@ -51,3 +51,8 @@ PRD.pdf
 # redesign pass artifacts
 .shots/
 .impeccable-baseline.txt
+
+# moodboard pass
+docs/moodboard/
+moodboard/
+public/fonts/
