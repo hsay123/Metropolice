@@ -34,7 +34,7 @@ export function TR({ className, ...props }: React.ComponentProps<"tr">) {
   return (
     <tr
       className={cn(
-        "border-b border-[var(--border)] transition-colors last:border-0 hover:bg-[var(--surface-2)]",
+        "border-b border-[var(--border)] transition-colors last:border-0 hover:bg-[var(--bg)]",
         className,
       )}
       {...props}

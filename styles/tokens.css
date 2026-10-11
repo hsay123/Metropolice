@@ -103,4 +103,36 @@
   --motion-fast: 150ms;
   --motion-base: 180ms;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /*
+   * Legacy raw CSS variable aliases. The mood-board pass renamed the status and
+   * surface tokens (--rejected-ink became --s-rejected-fg, --field-edge became
+   * --border-field, and so on). globals.css maps the Tailwind *utility* names, but
+   * screens and components that write `var(--rejected-ink)` directly in a style or
+   * arbitrary value need the raw name too, so they are aliased here. Remove each
+   * alias as soon as its last caller is gone (grep for the name).
+   */
+  --pending-ink: var(--s-pending-fg);
+  --pending-bg: var(--s-pending-bg);
+  --revision-ink: var(--s-review-fg);
+  --revision-bg: var(--s-review-bg);
+  --accepted-ink: var(--s-accepted-fg);
+  --accepted-bg: var(--s-accepted-bg);
+  --rejected-ink: var(--s-rejected-fg);
+  --rejected-bg: var(--s-rejected-bg);
+  --paid-ink: var(--s-paid-fg);
+  --paid-bg: var(--s-paid-bg);
+  --brand: var(--primary);
+  --brand-hover: var(--primary-hover);
+  --brand-tint: var(--primary-tint);
+  --ink: var(--fg);
+  --ink-muted: var(--fg-muted);
+  --rule: var(--border);
+  --wash: var(--surface-2);
+  --sheet: var(--surface);
+  --bench: var(--bg);
+  --field-edge: var(--border-field);
+  --stage: var(--dark);
+  --stage-raised: var(--dark-surface);
+  --stage-ink: var(--dark-fg);
 }

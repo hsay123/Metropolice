@@ -29,6 +29,9 @@ const MIGRATED = [
   "/buyer",
   "/buyer/jobs/new",
   "/buyer/jobs/job_pickplace",
+  "/work",
+  "/work/qualify",
+  "/work/tasks",
 ];
 
 const ALL_ROUTES = [
@@ -114,9 +117,20 @@ for (const route of ROUTES) {
       if (m.type() === "error" && !t.includes("404")) errs.push(t.slice(0, 120));
     });
     page.on("pageerror", (e) => errs.push("pageerror: " + e.message.slice(0, 120)));
-    await page.addInitScript(() => {
-      window.localStorage.setItem("pdn-dev-role", JSON.stringify({ state: { role: "buyer" }, version: 0 }));
-    });
+    // Set the mock role that owns this route so the shell shows the right nav.
+    const role = route.startsWith("/work")
+      ? "contributor"
+      : route.startsWith("/review")
+        ? "reviewer"
+        : route.startsWith("/admin")
+          ? "admin"
+          : "buyer";
+    await page.addInitScript((r) => {
+      window.localStorage.setItem(
+        "pdn-dev-role",
+        JSON.stringify({ state: { role: r }, version: 0 }),
+      );
+    }, role);
     await page.goto("http://localhost:3000" + route + "?clean=1", { waitUntil: "networkidle" }).catch(() => {});
     await page.waitForTimeout(1800);
 

@@ -65,12 +65,12 @@ export default function Onboarding() {
               <ol className="flex flex-col gap-4">
                 {STEPS.map(({ Icon, title, body }) => (
                   <li key={title} className="flex gap-3">
-                    <span className="mt-0.5 grid size-7 shrink-0 place-items-center rounded-[8px] bg-wash text-ink-muted">
+                    <span className="mt-0.5 grid size-7 shrink-0 place-items-center rounded-[8px] bg-[var(--surface-2)] text-[var(--fg-muted)]">
                       <Icon className="size-4" aria-hidden />
                     </span>
                     <div>
-                      <p className="text-sm font-medium text-ink">{title}</p>
-                      <p className="mt-0.5 max-w-[70ch] text-sm text-ink-muted">{body}</p>
+                      <p className="text-sm font-medium text-[var(--fg)]">{title}</p>
+                      <p className="mt-0.5 max-w-[70ch] text-sm text-[var(--fg-muted)]">{body}</p>
                     </div>
                   </li>
                 ))}
@@ -103,9 +103,10 @@ export default function Onboarding() {
                   />
                 </div>
               </div>
+              <p className="mt-2 text-[12px] text-[var(--fg-subtle)]">Illustrative image</p>
               <div className="mt-4">
-                <p className="text-xs text-ink-muted">Rubric</p>
-                <ul className="mt-1 flex list-disc flex-col gap-1 pl-5 text-sm text-ink">
+                <p className="text-xs text-[var(--fg-muted)]">Rubric</p>
+                <ul className="mt-1 flex list-disc flex-col gap-1 pl-5 text-sm text-[var(--fg)]">
                   <li>A box contains the whole object with at most 5 px of slack on any edge.</li>
                   <li>The class matches the object: a cup is a cup, a pen is a pen.</li>
                   <li>Boxes do not overlap each other unless the objects really overlap.</li>
@@ -118,27 +119,27 @@ export default function Onboarding() {
         <div className="flex flex-col gap-6">
           <Panel>
             <PanelHeader title="How pay works" />
-            <PanelBody className="flex flex-col gap-3 text-sm text-ink">
+            <PanelBody className="flex flex-col gap-3 text-sm text-[var(--fg)]">
               <p>
                 The reward and the rubric are shown <span className="font-medium">before</span> you
                 claim a task. You are paid for accepted work only.
               </p>
-              <p className="text-ink-muted">
+              <p className="text-[var(--fg-muted)]">
                 A rejected task gives a plain reason and a chance to appeal. A revision request says
                 exactly what to fix.
               </p>
-              <p className="border-t border-rule pt-3 text-xs text-ink-muted">{TEST_TOKEN_NOTE}</p>
+              <p className="border-t border-[var(--border)] pt-3 text-xs text-[var(--fg-muted)]">{TEST_TOKEN_NOTE}</p>
             </PanelBody>
           </Panel>
 
           <Panel>
             <PanelHeader title="Privacy" />
-            <PanelBody className="flex flex-col gap-3 text-sm text-ink">
+            <PanelBody className="flex flex-col gap-3 text-sm text-[var(--fg)]">
               <p>
                 Raw media and labels stay in private storage. Media is served through short-lived
                 signed links, never a permanent public URL.
               </p>
-              <p className="text-ink-muted">
+              <p className="text-[var(--fg-muted)]">
                 Buyers and reviewers see a pseudonym, not your email or name. Only hashes and amounts
                 go onchain.
               </p>
@@ -147,8 +148,8 @@ export default function Onboarding() {
 
           <Panel>
             <PanelHeader title="Before you start" />
-            <PanelBody className="flex flex-col gap-3 text-sm text-ink">
-              <span className="inline-flex items-center gap-1.5 text-ink-muted">
+            <PanelBody className="flex flex-col gap-3 text-sm text-[var(--fg)]">
+              <span className="inline-flex items-center gap-1.5 text-[var(--fg-muted)]">
                 <Clock className="size-3.5" aria-hidden />
                 Most image tasks take about 3 minutes.
               </span>
