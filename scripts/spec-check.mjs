@@ -32,6 +32,8 @@ const MIGRATED = [
   "/work",
   "/work/qualify",
   "/work/tasks",
+  "/work/tasks/task_01Ha2",
+  "/work/tasks/task_01Hb7",
 ];
 
 const ALL_ROUTES = [

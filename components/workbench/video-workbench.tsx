@@ -19,10 +19,12 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { SegmentedControl } from "@/components/ui/primitives";
 import { Panel, PanelBody, PanelHeader } from "@/components/domain/panel";
 import { KeyHintList } from "@/components/domain/key-hint";
 import { LeaseTimer } from "@/components/domain/lease-timer";
 import { RewardAmount } from "@/components/domain/machine";
+import { Filmstrip } from "@/components/workbench/filmstrip";
 import { VideoTimeline } from "@/components/workbench/video-timeline";
 import { SegmentForm } from "@/components/workbench/segment-form";
 import { useLeaseStore } from "@/lib/store/lease";
@@ -68,6 +70,7 @@ export function VideoWorkbench({ task }: { task: AvailableTask }) {
   const [currentMs, setCurrentMs] = React.useState(0);
   const [playing, setPlaying] = React.useState(false);
   const [broken, setBroken] = React.useState(false);
+  const [tab, setTab] = React.useState<"annotation" | "instructions">("annotation");
 
   const fps = task.asset.fps ?? DEFAULT_FPS;
   const durationMs = task.asset.durationMs ?? 12_000;
@@ -283,12 +286,12 @@ export function VideoWorkbench({ task }: { task: AvailableTask }) {
         : "Saved";
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 p-3 md:p-4">
       {/* Focus task bar: back, task, reward, lease, history, save and submit. */}
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-[12px] border border-rule bg-sheet px-4 py-2.5">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-[12px] border border-[var(--border)] bg-[var(--surface)] px-4 py-2.5">
         <Link
           href="/work/tasks"
-          className="inline-flex items-center gap-1.5 text-sm text-ink-muted hover:text-ink"
+          className="inline-flex items-center gap-1.5 text-sm text-[var(--fg-muted)] hover:text-[var(--fg)]"
         >
           <ArrowLeft className="size-4" aria-hidden />
           Back to tasks
@@ -331,10 +334,20 @@ export function VideoWorkbench({ task }: { task: AvailableTask }) {
         </div>
       </div>
 
-      <div className="grid min-h-0 gap-4 lg:grid-cols-[1fr_360px]">
+      <div className="grid min-h-0 gap-4 lg:grid-cols-[72px_minmax(0,1fr)_360px]">
+        <Filmstrip
+          src={task.asset.url}
+          durationMs={durationMs}
+          currentMs={currentMs}
+          onSeek={seek}
+        />
+
         <div className="flex min-w-0 flex-col gap-4">
           {/* Stage */}
-          <div className="relative flex flex-col overflow-hidden rounded-[12px] bg-stage">
+          <div
+            data-ui="video-frame"
+            className="relative flex flex-col overflow-hidden rounded-[12px] bg-stage"
+          >
             <div className="grid h-[clamp(300px,52dvh,460px)] place-items-center p-4">
               {broken ? (
                 <p className="max-w-[40ch] text-center text-sm text-stage-ink/70">
@@ -403,7 +416,7 @@ export function VideoWorkbench({ task }: { task: AvailableTask }) {
           <Panel>
             <PanelHeader
               title="Timeline"
-              description="One track per action. Click a segment to open it."
+              description="One bar. Each segment carries its label; click one to open it."
               actions={
                 <span className="text-xs text-ink-muted">
                   Space play, arrows step frames, I and O set in and out
@@ -442,30 +455,63 @@ export function VideoWorkbench({ task }: { task: AvailableTask }) {
         </div>
 
         <div className="flex flex-col gap-4">
-          <SegmentForm key={selectedId ?? "new"} fps={fps} durationMs={durationMs} />
+          {/* Annotation / Instructions tabs (docs/MOODBOARD-SPEC.md §4). */}
+          <SegmentedControl
+            className="self-start"
+            value={tab}
+            onValueChange={setTab}
+            options={[
+              { value: "annotation", label: "Annotation" },
+              { value: "instructions", label: "Instructions" },
+            ]}
+          />
 
-          <Panel>
-            <PanelHeader title="Rubric" />
-            <PanelBody className="pt-3">
-              <ul className="flex flex-col gap-1.5 text-sm text-ink">
-                {task.rubric.map((r) => (
-                  <li key={r.id} className="flex gap-2">
-                    <span className="mt-1.5 size-1 shrink-0 rounded-[8px] bg-ink-muted" aria-hidden />
-                    {r.text}
-                  </li>
-                ))}
-              </ul>
-            </PanelBody>
-          </Panel>
+          {tab === "annotation" ? (
+            <SegmentForm key={selectedId ?? "new"} fps={fps} durationMs={durationMs} />
+          ) : (
+            <>
+              <Panel>
+                <PanelHeader title="Rubric" />
+                <PanelBody className="pt-3">
+                  <ul className="flex flex-col gap-1.5 text-sm text-[var(--fg)]">
+                    {task.rubric.map((r) => (
+                      <li key={r.id} className="flex gap-2">
+                        <span
+                          className="mt-1.5 size-1 shrink-0 rounded-[8px] bg-[var(--fg-muted)]"
+                          aria-hidden
+                        />
+                        {r.text}
+                      </li>
+                    ))}
+                  </ul>
+                </PanelBody>
+              </Panel>
+
+              {/* Only the shortcuts this build actually binds. */}
+              <KeyHintList
+                className="px-1 pb-1"
+                hints={[
+                  { keys: "Space", label: "play or pause" },
+                  { keys: ["←", "→"], label: "step a frame" },
+                  { keys: ["⇧", "←"], label: "step 10 frames" },
+                  { keys: "I", label: "set in" },
+                  { keys: "O", label: "set out" },
+                ]}
+              />
+            </>
+          )}
 
           {showErrors && (
-            <Panel className="border-[var(--rejected-ink)]/40">
+            <Panel className="border-[var(--s-rejected-fg)]/40">
               <PanelHeader title="Before you submit" description={`${problems.length} to fix`} />
               <PanelBody className="pt-3">
-                <ul className="flex flex-col gap-1.5 text-sm text-ink">
+                <ul className="flex flex-col gap-1.5 text-sm text-[var(--fg)]">
                   {problems.map((p, i) => (
                     <li key={`${p.segmentId}-${i}`} className="flex gap-2">
-                      <X className="mt-0.5 size-3.5 shrink-0 text-rejected-ink" aria-hidden />
+                      <X
+                        className="mt-0.5 size-3.5 shrink-0 text-[var(--s-rejected-fg)]"
+                        aria-hidden
+                      />
                       {p.message}
                     </li>
                   ))}
@@ -473,18 +519,6 @@ export function VideoWorkbench({ task }: { task: AvailableTask }) {
               </PanelBody>
             </Panel>
           )}
-
-          {/* Only the shortcuts this build actually binds. */}
-          <KeyHintList
-            className="px-1 pb-1"
-            hints={[
-              { keys: "Space", label: "play or pause" },
-              { keys: ["←", "→"], label: "step a frame" },
-              { keys: ["⇧", "←"], label: "step 10 frames" },
-              { keys: "I", label: "set in" },
-              { keys: "O", label: "set out" },
-            ]}
-          />
         </div>
       </div>
     </div>

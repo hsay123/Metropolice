@@ -204,19 +204,22 @@ export default function TaskQueue() {
   );
 }
 
-/** 44x44 row thumbnail (docs/MOODBOARD-SPEC.md §3). Video carries a play mark. */
+/** 120x84 row thumbnail (docs/MOODBOARD-SPEC.md §4). Video carries a play mark. */
 function Thumb({ task }: { task: AvailableTask }) {
   const src = task.asset.thumbUrl ?? task.asset.url;
   return (
-    <span className="relative block size-11 shrink-0 overflow-hidden rounded-[10px] bg-[var(--surface-2)]">
+    <span
+      data-ui="task-thumb"
+      className="relative block h-[84px] w-[120px] shrink-0 overflow-hidden rounded-[10px] bg-[var(--surface-2)]"
+    >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={src} alt="" loading="lazy" className="size-full object-cover" />
       {task.modality === "video" && (
         <span
-          className="absolute right-0.5 bottom-0.5 grid size-4 place-items-center rounded-[6px] bg-[var(--cta-black)]/85 text-white"
+          className="absolute right-1 bottom-1 grid size-5 place-items-center rounded-[6px] bg-[var(--cta-black)]/85 text-white"
           aria-hidden
         >
-          <Play className="size-2.5 fill-current" />
+          <Play className="size-3 fill-current" />
         </span>
       )}
     </span>

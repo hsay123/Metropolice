@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { SegmentedControl } from "@/components/ui/primitives";
 import { Panel, PanelBody, PanelHeader } from "@/components/domain/panel";
 import { KeyHintList } from "@/components/domain/key-hint";
 import { LeaseTimer } from "@/components/domain/lease-timer";
@@ -67,6 +68,7 @@ function ImageWorkbench({ task }: { task: AvailableTask }) {
   const saveDraft = useSaveDraft();
   const submit = useSubmitTask();
   const [savedAt, setSavedAt] = React.useState<string | null>(null);
+  const [tab, setTab] = React.useState<"annotation" | "instructions">("annotation");
 
   // Seed the store from the task once. init is a no-op if the task id matches.
   React.useEffect(() => {
@@ -164,12 +166,12 @@ function ImageWorkbench({ task }: { task: AvailableTask }) {
         : "Saved";
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 p-3 md:p-4">
       {/* Focus task bar: back, task, reward, lease, history, save and submit. */}
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-[12px] border border-rule bg-sheet px-4 py-2.5">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-[12px] border border-[var(--border)] bg-[var(--surface)] px-4 py-2.5">
         <Link
           href="/work/tasks"
-          className="inline-flex items-center gap-1.5 text-sm text-ink-muted hover:text-ink"
+          className="inline-flex items-center gap-1.5 text-sm text-[var(--fg-muted)] hover:text-[var(--fg)]"
         >
           <ArrowLeft className="size-4" aria-hidden />
           Back to tasks
@@ -218,38 +220,68 @@ function ImageWorkbench({ task }: { task: AvailableTask }) {
         </div>
 
         <div className="flex flex-col gap-4">
-          <ClassPicker classes={task.classes ?? []} />
+          {/* Annotation / Instructions tabs (docs/MOODBOARD-SPEC.md §4). */}
+          <SegmentedControl
+            className="self-start"
+            value={tab}
+            onValueChange={setTab}
+            options={[
+              { value: "annotation", label: "Annotation" },
+              { value: "instructions", label: "Instructions" },
+            ]}
+          />
 
-          <Panel>
-            <PanelHeader
-              title="Boxes"
-              description={`${boxes.length} drawn`}
-              actions={
-                <span className="text-xs text-ink-muted">Confidence 1–5</span>
-              }
-            />
-            <BoxList classes={task.classes ?? []} />
-          </Panel>
+          {tab === "annotation" ? (
+            <>
+              <ClassPicker classes={task.classes ?? []} />
 
-          <Panel>
-            <PanelHeader title="Rubric" />
-            <PanelBody className="pt-3">
-              <ul className="flex flex-col gap-1.5 text-sm text-ink">
-                {task.rubric.map((r) => (
-                  <li key={r.id} className="flex gap-2">
-                    <span className="mt-1.5 size-1 shrink-0 rounded-[8px] bg-ink-muted" aria-hidden />
-                    {r.text}
-                  </li>
-                ))}
-              </ul>
-            </PanelBody>
-          </Panel>
+              <Panel>
+                <PanelHeader
+                  title="Boxes"
+                  description={`${boxes.length} drawn`}
+                  actions={<span className="text-xs text-[var(--fg-muted)]">Confidence 1–5</span>}
+                />
+                <BoxList classes={task.classes ?? []} />
+              </Panel>
+            </>
+          ) : (
+            <>
+              <Panel>
+                <PanelHeader title="Rubric" />
+                <PanelBody className="pt-3">
+                  <ul className="flex flex-col gap-1.5 text-sm text-[var(--fg)]">
+                    {task.rubric.map((r) => (
+                      <li key={r.id} className="flex gap-2">
+                        <span
+                          className="mt-1.5 size-1 shrink-0 rounded-[8px] bg-[var(--fg-muted)]"
+                          aria-hidden
+                        />
+                        {r.text}
+                      </li>
+                    ))}
+                  </ul>
+                </PanelBody>
+              </Panel>
+
+              {/* Only the shortcuts this build actually binds. */}
+              <KeyHintList
+                className="px-1 pb-1"
+                hints={[
+                  { keys: "1–9", label: "class" },
+                  { keys: "Esc", label: "deselect" },
+                  { keys: "Del", label: "delete box" },
+                  { keys: ["⌘", "Z"], label: "undo" },
+                  { keys: ["⇧", "⌘", "Z"], label: "redo" },
+                ]}
+              />
+            </>
+          )}
 
           {showErrors && (
-            <Panel className="border-[var(--rejected-ink)]/40">
+            <Panel className="border-[var(--s-rejected-fg)]/40">
               <PanelHeader title="Before you submit" />
               <PanelBody className="pt-3">
-                <ul className="flex flex-col gap-1.5 text-sm text-ink">
+                <ul className="flex flex-col gap-1.5 text-sm text-[var(--fg)]">
                   {errors.map((e) => (
                     <li key={e}>{e}</li>
                   ))}
@@ -257,18 +289,6 @@ function ImageWorkbench({ task }: { task: AvailableTask }) {
               </PanelBody>
             </Panel>
           )}
-
-          {/* Only the shortcuts this build actually binds. */}
-          <KeyHintList
-            className="px-1 pb-1"
-            hints={[
-              { keys: "1–9", label: "class" },
-              { keys: "Esc", label: "deselect" },
-              { keys: "Del", label: "delete box" },
-              { keys: ["⌘", "Z"], label: "undo" },
-              { keys: ["⇧", "⌘", "Z"], label: "redo" },
-            ]}
-          />
         </div>
       </div>
     </div>
