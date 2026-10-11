@@ -248,7 +248,7 @@
   background:
     radial-gradient(120% 120% at 30% 20%, var(--primary-tint) 0%, transparent 60%),
     linear-gradient(135deg, var(--surface-2) 0%, var(--primary-tint-2) 100%);
-  color: var(--fg-muted);
+  color: var(--fg);
 }
 
 .photo-slot::after {

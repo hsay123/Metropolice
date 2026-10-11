@@ -1,104 +1,176 @@
 /**
- * Token contrast audit.
+ * Contrast audit for the moodboard pass.
  *
- *   node scripts/contrast.mjs
+ *   node scripts/contrast.mjs              # every route, 1440x900
+ *   node scripts/contrast.mjs --only work  # routes whose name contains "work"
  *
- * Checks every text/background pair in styles/tokens.css against its WCAG target:
- * 4.5:1 for body text, 3:1 for large text and control boundaries. A pair that fails
- * is a token bug, so it is fixed in the token rather than overridden at the call
- * site. Values here are the mood-board tokens (docs/MOODBOARD-SPEC.md §2).
+ * AGENTS.md A3 asks that every text pair meet WCAG AA. This walks every visible
+ * text node on a route, works out the effective background behind it, and reports
+ * any pair below the threshold (4.5:1 normal text, 3:1 for large text). It is a
+ * gate, not a screenshot: it exits non-zero when a pair fails.
  */
+import pw from "@playwright/test";
 
-const hex = (h) => {
-  const c = h.replace("#", "");
-  return [0, 2, 4].map((i) => parseInt(c.slice(i, i + 2), 16) / 255);
-};
-const lum = (h) => {
-  const [r, g, b] = hex(h).map((v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4));
-  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
-};
-const ratio = (a, b) => {
-  const [l1, l2] = [lum(a), lum(b)].sort((x, y) => y - x);
-  return (l1 + 0.05) / (l2 + 0.05);
-};
+const { chromium } = pw;
 
-const T = {
-  bg: "#f8fafc",
-  surface: "#ffffff",
-  surface2: "#f1f5f9",
-  border: "#e6ebf2",
-  borderField: "#7c8aa0",
-  fg: "#0f172a",
-  fgMuted: "#5b6b80",
-  fgSubtle: "#64748b",
-  primary: "#6a3df8",
-  primaryHover: "#5b2de8",
-  primaryTint: "#f1ebff",
-  ctaBlack: "#0b1020",
-  dark: "#080b14",
-  darkFg: "#e6eaf5",
-  darkMuted: "#9aa4b8",
-  primaryOnDark: "#8f6bff",
+const argv = process.argv.slice(2);
+const arg = (name, fallback) => {
+  const i = argv.indexOf(`--${name}`);
+  return i >= 0 && argv[i + 1] ? argv[i + 1] : fallback;
 };
-
-/** [foreground, background, target, description] */
-const PAIRS = [
-  [T.fg, T.bg, 4.5, "fg on bg (body)"],
-  [T.fg, T.surface, 4.5, "fg on surface (body)"],
-  [T.fg, T.surface2, 4.5, "fg on surface-2 (body)"],
-  [T.fgMuted, T.bg, 4.5, "fg-muted on bg (secondary)"],
-  [T.fgMuted, T.surface, 4.5, "fg-muted on surface (secondary)"],
-  [T.fgMuted, T.surface2, 4.5, "fg-muted on surface-2 (secondary)"],
-  [T.fgSubtle, T.surface, 4.5, "fg-subtle on surface (14px+)"],
-  [T.fgSubtle, T.bg, 4.5, "fg-subtle on bg (14px+)"],
-  ["#ffffff", T.primary, 4.5, "white on primary (button)"],
-  ["#ffffff", T.primaryHover, 4.5, "white on primary-hover"],
-  ["#ffffff", T.ctaBlack, 4.5, "white on cta-black (marketing CTA)"],
-  [T.primaryHover, T.primaryTint, 4.5, "primary-hover on primary-tint (tag, active nav)"],
-  [T.primary, T.surface, 3, "primary on surface (3:1 graphical)"],
-  [T.borderField, T.surface, 3, "border-field on surface (control border)"],
-  [T.borderField, T.bg, 3, "border-field on bg (control border)"],
-  [T.darkFg, T.dark, 4.5, "dark-fg on dark"],
-  [T.darkMuted, T.dark, 4.5, "dark-muted on dark"],
-  [T.primaryOnDark, T.dark, 3, "primary-on-dark on dark (3:1 graphical)"],
-  // status chips
-  ["#2f5fd0", "#e8f0ff", 4.5, "status: progress"],
-  ["#965300", "#fff3dc", 4.5, "status: review"],
-  ["#147a52", "#e3f7ee", 4.5, "status: accepted"],
-  ["#b93815", "#fdebe6", 4.5, "status: rejected"],
-  ["#0f766e", "#ddf5f2", 4.5, "status: paid"],
-  ["#475569", "#eef1f5", 4.5, "status: pending"],
-  [T.fgMuted, T.surface, 4.5, "status: appealed (fg-muted on white)"],
+const ONLY = arg("only", "");
+/** [name, path, role] */
+const ROUTES = [
+  ["landing", "/", "buyer"],
+  ["login", "/login", "buyer"],
+  ["buyer", "/buyer", "buyer"],
+  ["buyer-wizard", "/buyer/jobs/new", "buyer"],
+  ["buyer-job-detail", "/buyer/jobs/job_pickplace", "buyer"],
+  ["work-onboarding", "/work", "contributor"],
+  ["work-qualify", "/work/qualify", "contributor"],
+  ["work-tasks", "/work/tasks", "contributor"],
+  ["workbench-image", "/work/tasks/task_01Ha2", "contributor"],
+  ["workbench-video", "/work/tasks/task_01Hb7", "contributor"],
+  ["earnings", "/work/earnings", "contributor"],
+  ["review-queue", "/review", "reviewer"],
+  ["review-image", "/review/sub_a2", "reviewer"],
+  ["admin", "/admin", "admin"],
+  ["receipt", "/receipts/rcpt_91", "buyer"],
+  ["gallery", "/dev/components", "buyer"],
 ];
 
-/** Timeline/label fills carry a 12px text label, so each needs 4.5:1 against it. */
-const LABELS = {
-  reach: "#6a3df8",
-  grasp: "#f0605d",
-  lift: "#f5b83d",
-  move: "#2dbe8d",
-  place: "#2fb67d",
-  inspect: "#3b82f6",
-  recover: "#0ea5e9",
-  write: "#ec4899",
-  other: "#94a3b8",
-};
+const browser = await chromium.launch();
+const failures = [];
 
-/** Picks white or near-black for text on a coloured fill, by measured luminance. */
-const inkOn = (fill) => {
-  const l = lum(fill);
-  return (1.05 / (l + 0.05)) >= ((l + 0.05) / 0.05) ? "#ffffff" : "#0b1220";
-};
+for (const [name, path, role] of ROUTES.filter(([n]) => n.includes(ONLY))) {
+  for (const width of [1440, 390]) {
+    const page = await browser.newPage({ viewport: { width, height: 900 } });
+    await page.addInitScript((r) => {
+      window.localStorage.setItem("pdn-dev-role", JSON.stringify({ state: { role: r }, version: 0 }));
+    }, role);
+    await page.goto("http://localhost:3000" + path + "?clean=1", { waitUntil: "networkidle" }).catch(() => {});
+    await page.waitForTimeout(1200);
 
-let failed = 0;
-const run = (fg, bg, target, label) => {
-  const r = ratio(fg, bg);
-  const ok = r >= target;
-  if (!ok) failed++;
-  console.log(`${ok ? "PASS" : "FAIL"} ${r.toFixed(2).padStart(6)}  (need ${target})  ${label}`);
-};
+    const bad = await page.evaluate(() => {
+      const parse = (c) => {
+        const m = c.match(/rgba?\(([^)]+)\)/);
+        if (!m) return null;
+        const p = m[1].split(",").map((x) => parseFloat(x.trim()));
+        return { r: p[0], g: p[1], b: p[2], a: p.length > 3 ? p[3] : 1 };
+      };
+      const lin = (v) => {
+        const s = v / 255;
+        return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+      };
+      const lum = ({ r, g, b }) => 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
+      const over = (fg, bg) => ({
+        r: fg.r * fg.a + bg.r * (1 - fg.a),
+        g: fg.g * fg.a + bg.g * (1 - fg.a),
+        b: fg.b * fg.a + bg.b * (1 - fg.a),
+        a: 1,
+      });
+      const contrast = (a, b) => {
+        const la = lum(a);
+        const lb = lum(b);
+        return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+      };
+      const describe = (el) =>
+        el.tagName.toLowerCase() + (el.className && typeof el.className === "string"
+          ? "." + el.className.split(/\s+/).slice(0, 3).join(".")
+          : "");
 
-for (const [fg, bg, target, label] of PAIRS) run(fg, bg, target, label);
-for (const [name, fill] of Object.entries(LABELS)) run(inkOn(fill), fill, 4.5, `label "${name}" text on its fill`);
+      const out = [];
+      const els = document.querySelectorAll("body *");
+      for (const el of els) {
+        // Only elements whose own text node is visible.
+        const own = Array.from(el.childNodes)
+          .filter((n) => n.nodeType === 3 && n.textContent.trim())
+          .map((n) => n.textContent.trim())
+          .join(" ");
+        if (!own) continue;
+        if (el.getAttribute("aria-hidden") === "true") continue;
+        const cs = getComputedStyle(el);
+        if (cs.visibility === "hidden" || cs.display === "none" || parseFloat(cs.opacity) === 0) continue;
+        const rect = el.getBoundingClientRect();
+        if (rect.width < 2 || rect.height < 2) continue;
 
-console.log(failed ? `\n${failed} pair(s) below target` : "\nAll token pairs pass their target.");
+        const fg = parse(cs.color);
+        if (!fg || fg.a === 0) continue;
+
+        /*
+         * Resolve the effective background. Walk outward collecting paint layers
+         * (a solid colour, or the colour stops of a gradient such as the primary
+         * button's sheen), then composite outermost-inward and test the text
+         * against every candidate so a gradient never reports a false pass or fail.
+         */
+        const layers = [];
+        let node = el;
+        while (node) {
+          const bcs = getComputedStyle(node);
+          const bg = parse(bcs.backgroundColor);
+          const bi = bcs.backgroundImage;
+          const stops = [];
+          if (bi && bi.includes("gradient")) {
+            const re = /rgba?\([^)]+\)/g;
+            let m;
+            while ((m = re.exec(bi))) {
+              const c = parse(m[0]);
+              if (c) stops.push(c);
+            }
+          }
+          if (bg && bg.a > 0) layers.push([bg]);
+          if (stops.length) {
+            layers.push(stops);
+            break;
+          }
+          if (bg && bg.a === 1) break;
+          node = node.parentElement;
+        }
+        let candidates = [{ r: 255, g: 255, b: 255, a: 1 }];
+        for (let i = layers.length - 1; i >= 0; i -= 1) {
+          const next = [];
+          for (const acc of candidates) {
+            for (const c of layers[i]) next.push(over(c, acc));
+          }
+          candidates = next;
+        }
+
+        let ratio = Infinity;
+        for (const bg of candidates) ratio = Math.min(ratio, contrast(fg, bg));
+        if (!Number.isFinite(ratio)) continue;
+
+        const fontSize = parseFloat(cs.fontSize);
+        const weight = parseInt(cs.fontWeight, 10) || 400;
+        const large = fontSize >= 24 || (fontSize >= 18.66 && weight >= 700);
+        const need = large ? 3 : 4.5;
+        if (ratio < need) {
+          out.push({
+            el: describe(el),
+            text: own.slice(0, 40),
+            color: cs.color,
+            ratio: Math.round(ratio * 100) / 100,
+            need,
+            fontSize,
+          });
+        }
+      }
+      return out;
+    });
+
+    for (const b of bad) {
+      failures.push(`${name} @${width}: ${b.ratio}:1 (need ${b.need}) ${b.color} ${b.fontSize}px — "${b.text}" [${b.el}]`);
+    }
+    await page.close();
+  }
+}
+
+await browser.close();
+
+const uniq = [...new Set(failures)];
+if (uniq.length) {
+  console.log(`\ncontrast: ${uniq.length} pairs below WCAG AA\n`);
+  for (const f of uniq) console.log("  " + f);
+  process.exitCode = 1;
+} else {
+  console.log("contrast: all text pairs meet WCAG AA");
+}

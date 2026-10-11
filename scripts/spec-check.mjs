@@ -34,6 +34,11 @@ const MIGRATED = [
   "/work/tasks",
   "/work/tasks/task_01Ha2",
   "/work/tasks/task_01Hb7",
+  "/work/earnings",
+  "/review",
+  "/review/sub_b7",
+  "/admin",
+  "/receipts/rcpt_91",
 ];
 
 const ALL_ROUTES = [

@@ -100,7 +100,7 @@ export function LoginPanel() {
               <li key={f.title} className="flex flex-col items-center gap-2 text-center">
                 <f.icon className="size-5 text-[var(--primary)]" aria-hidden />
                 <span className="text-[14px] font-semibold">{f.title}</span>
-                <span className="text-[12px] text-[var(--fg-subtle)]">{f.sub}</span>
+                <span className="text-[12px] text-[var(--fg-muted)]">{f.sub}</span>
               </li>
             ))}
           </ul>

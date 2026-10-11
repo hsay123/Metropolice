@@ -196,14 +196,14 @@ function Hero() {
         </dl>
 
         <div className="mt-14">
-          <p className="text-[11px] font-semibold tracking-[0.08em] text-[var(--fg-subtle)] uppercase">
+          <p className="text-[11px] font-semibold tracking-[0.08em] text-[var(--fg-muted)] uppercase">
             Built with
           </p>
           <ul className="mt-4 flex flex-wrap items-center gap-x-10 gap-y-3">
             {ENABLED_INTEGRATIONS.map((i) => (
               <li key={i.id} className="flex items-baseline gap-2">
                 <span className="text-[16px] font-semibold text-[var(--fg)]">{i.name}</span>
-                <span className="text-[12px] text-[var(--fg-subtle)]">{i.role}</span>
+                <span className="text-[12px] text-[var(--fg-muted)]">{i.role}</span>
               </li>
             ))}
           </ul>
