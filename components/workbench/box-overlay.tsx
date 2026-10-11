@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import type { Box } from "@/lib/api/types";
-import { labelColor } from "@/lib/labels";
+import { labelColor, labelInk } from "@/lib/labels";
 import { cn } from "@/lib/utils";
 
 /**
@@ -74,7 +74,7 @@ export function BoxOverlay({
                 : undefined
             }
             className={cn(
-              "absolute rounded-[2px] border",
+              "absolute rounded-[4px] border",
               interactive && "pointer-events-auto cursor-pointer",
               selected && "ring-2 ring-white/80",
             )}
@@ -94,8 +94,15 @@ export function BoxOverlay({
             }}
           >
             <span
-              className="absolute -top-px left-0 max-w-full -translate-y-full truncate rounded-t-[2px] px-1 py-0.5 text-xs leading-none font-medium text-white"
-              style={{ background: flagged ? "var(--rejected-ink)" : reference ? "#3a4350" : color }}
+              className="absolute -top-px left-0 max-w-full -translate-y-full truncate rounded-t-[4px] px-1 py-0.5 text-xs leading-none font-medium"
+              style={{
+                background: flagged ? "var(--rejected-ink)" : reference ? "#3a4350" : color,
+                color: flagged
+                  ? "#ffffff"
+                  : reference
+                    ? "#e6eaf0"
+                    : labelInk(box.class, idx),
+              }}
             >
               {reference && <span className="opacity-80">Ref </span>}
               {box.class}

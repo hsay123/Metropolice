@@ -40,9 +40,9 @@ export function PipelineLedger({
               <span className="font-display text-xl leading-none font-semibold tabular-nums text-ink">
                 {s.count.toLocaleString("en-US")}
               </span>
-              <span className="mt-0.5 h-1 w-full overflow-hidden rounded-[2px] bg-wash" aria-hidden>
+              <span className="mt-0.5 h-1 w-full overflow-hidden rounded-[8px] bg-wash" aria-hidden>
                 <span
-                  className="block h-full rounded-[2px]"
+                  className="block h-full rounded-[8px]"
                   style={{ width: `${pct}%`, background: s.color }}
                 />
               </span>

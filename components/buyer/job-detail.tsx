@@ -130,7 +130,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
             <PanelHeader title="Progress" description="Every accepted task is one paid label." />
             <PanelBody>
               {stats.isPending ? (
-                <div className="h-20 animate-pulse rounded-[2px] bg-wash" aria-busy />
+                <div className="h-20 animate-pulse rounded-[8px] bg-wash" aria-busy />
               ) : stats.isError || !stats.data ? (
                 <ErrorState
                   message="We could not load the job progress. Try again."
@@ -180,7 +180,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
                   adjudicated={stats.data.adjudicated}
                 />
               ) : (
-                <div className="h-16 animate-pulse rounded-[2px] bg-wash" aria-busy />
+                <div className="h-16 animate-pulse rounded-[8px] bg-wash" aria-busy />
               )}
             </PanelBody>
           </Panel>
@@ -192,7 +192,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
             />
             <PanelBody className="flex flex-col gap-4">
               {audit.isPending ? (
-                <div className="h-24 animate-pulse rounded-[2px] bg-wash" aria-busy />
+                <div className="h-24 animate-pulse rounded-[8px] bg-wash" aria-busy />
               ) : audit.isError || !audit.data ? (
                 <p className="text-sm text-ink-muted">No audit sample has been drawn for this job yet.</p>
               ) : (
@@ -215,7 +215,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
                     <ul className="mt-2 flex flex-wrap gap-1.5">
                       {audit.data.selectedTaskIds.map((id) => (
                         <li key={id}>
-                          <span className="machine rounded-[2px] bg-wash px-1.5 py-0.5 text-xs text-ink">
+                          <span className="machine rounded-[8px] bg-wash px-1.5 py-0.5 text-xs text-ink">
                             {id}
                           </span>
                         </li>
@@ -236,7 +236,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
             <PanelHeader title="Activity" description="Every event links to its transaction." />
             <PanelBody>
               {chain.isPending ? (
-                <div className="h-24 animate-pulse rounded-[2px] bg-wash" aria-busy />
+                <div className="h-24 animate-pulse rounded-[8px] bg-wash" aria-busy />
               ) : chain.isError || !chain.data ? (
                 <p className="text-sm text-ink-muted">We could not load on-chain activity.</p>
               ) : (
@@ -276,7 +276,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
                   </div>
                 </>
               ) : (
-                <div className="h-40 animate-pulse rounded-[2px] bg-wash" aria-busy />
+                <div className="h-40 animate-pulse rounded-[8px] bg-wash" aria-busy />
               )}
             </PanelBody>
           </Panel>
@@ -304,7 +304,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
                 <span className="text-xs text-ink-muted">Annotation hash root</span>
                 <HashChip value={manifest.annotationHashRoot} label="Annotation hash root" />
               </div>
-              <div className="max-h-52 overflow-y-auto rounded-[2px] border border-rule">
+              <div className="max-h-52 overflow-y-auto rounded-[8px] border border-rule">
                 <table className="w-full border-collapse text-xs">
                   <thead className="bg-wash text-left">
                     <tr>

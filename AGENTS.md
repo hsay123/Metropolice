@@ -43,11 +43,12 @@ Colour (verify every text pair meets WCAG AA with a quick script):
 
 | Token | Hex | Use |
 |---|---|---|
-| bench | #EDF0F3 | App background |
+| bench | #ECEEF3 | App background |
 | sheet | #FFFFFF | Panels and forms |
+| surface-2 | #F5F7FA | Second surface tint: sidebar, grouped regions |
 | ink | #18202B | Text (not pure black) |
 | ink-muted | #5B6676 | Secondary text |
-| rule | #D5DBE2 | Decorative separators between zones only. **Never** a control border (1.2:1 fails 3:1). |
+| rule | ink at 12% | Decorative separators between zones only. **Never** a control border. |
 | field-edge | #7A8493 | Borders of inputs and controls (3.8:1 on sheet, passes 3:1 for boundaries). |
 | accent (cobalt) | #1F4FE0, hover #173FC0, tint #E8EEFF | The single accent: primary actions, selection, focus ring |
 | stage | #161B22 (text #E6EAF0) | Dark surround for media only (images, video), because media is judged best on a dark neutral |
@@ -72,7 +73,9 @@ Type (load with `next/font/google`, two families only):
 - Machine values (hashes, tx links, timecodes) use the system monospace stack with `font-variant-numeric: tabular-nums`. Do not load a third family.
 - Scale: 12 / 14 / 16 / 20 / 28 / 40. Body 14 in tools, 16 in reading text. Line length under 80 characters. Sentence case everywhere.
 
-Shape: radius is a hierarchy, not one value. 2px for timeline segments, input fields, and boxes. 6px for panels. Full radius only for status pills. Shadow only on floating layers (menus, dialogs). Panels are separated by 1px `rule` lines.
+Shape: radius is a hierarchy, not one value. 8px for controls, inputs, chips and focus rings. 12px for panels, dialogs and cards. 4px for dense geometry only (timeline segments, meter fills, annotation boxes). Full radius only for status pills. Shadow only on floating layers (menus, dialogs). Panels are separated by 1px `rule` lines.
+
+Shell: a 232px left sidebar (collapsible to a 68px icon rail) carries the workspace, role nav, network state and wallet. Content is capped at 1200px on every screen. Workbenches use `AppShell bare`: full-bleed focus canvas, no sidebar, no content padding. Below the sidebar breakpoint the shell collapses to a compact top bar.
 
 Motion: respect `prefers-reduced-motion`. Motion only answers an action. One orchestrated moment: when a claim confirms, the status rail advances Accepted to Paid and the receipt slides out like a printed slip (about 400 ms, once). No fade-and-slide on every section, no hover animations on every card.
 

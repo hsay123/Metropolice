@@ -78,7 +78,7 @@ export function ReceiptView({ receiptId }: { receiptId: string }) {
 
 function ReceiptSkeleton() {
   return (
-    <div className="w-full max-w-[420px] rounded-[6px] border border-rule bg-sheet p-5" aria-busy>
+    <div className="w-full max-w-[420px] rounded-[12px] border border-rule bg-sheet p-5" aria-busy>
       <div className="flex items-start justify-between">
         <Skeleton className="h-6 w-24" />
         <Skeleton className="h-6 w-20" />

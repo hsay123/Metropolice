@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 export function Panel({ className, ...props }: React.ComponentProps<"section">) {
   return (
     <section
-      className={cn("overflow-hidden rounded-[6px] border border-rule bg-sheet", className)}
+      className={cn("overflow-hidden rounded-[12px] border border-rule bg-sheet", className)}
       {...props}
     />
   );

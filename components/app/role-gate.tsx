@@ -29,7 +29,7 @@ export function RoleGate({ role, children }: { role: Role; children: React.React
         {children}
       </div>
       <div className="absolute inset-0 z-10 grid place-items-center bg-bench/90 p-6">
-        <div className="w-full max-w-[520px] rounded-[6px] border border-rule bg-sheet p-6 shadow-popover">
+        <div className="w-full max-w-[520px] rounded-[12px] border border-rule bg-sheet p-6 shadow-popover">
           <h1 className="font-display text-lg">
             This screen is for {ROLE_LABEL[role].toLowerCase()}s
           </h1>

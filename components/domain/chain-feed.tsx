@@ -40,7 +40,7 @@ export function ChainFeed({ events, className }: { events: ChainEvent[]; classNa
             key={ev.id}
             className="flex items-start gap-3 border-t border-rule py-3 first:border-t-0 first:pt-0"
           >
-            <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-[2px] bg-wash">
+            <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-[8px] bg-wash">
               <Icon className="size-3.5 text-ink-muted" aria-hidden />
             </span>
             <div className="min-w-0 flex-1">

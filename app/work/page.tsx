@@ -1,5 +1,6 @@
+import { AppShell } from "@/components/app/app-shell";
 import Link from "next/link";
-import { ArrowRight, Boxes, Clock, ShieldCheck, Wallet } from "lucide-react";
+import { Boxes, Clock, ShieldCheck, Wallet } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/domain/page-header";
 import { Panel, PanelBody, PanelHeader } from "@/components/domain/panel";
@@ -38,7 +39,7 @@ const STEPS = [
   },
 ];
 
-export default function OnboardingPage() {
+function Onboarding() {
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
@@ -49,7 +50,6 @@ export default function OnboardingPage() {
           <Button asChild>
             <Link href="/work/qualify">
               Start qualification
-              <ArrowRight aria-hidden />
             </Link>
           </Button>
         }
@@ -66,7 +66,7 @@ export default function OnboardingPage() {
               <ol className="flex flex-col gap-4">
                 {STEPS.map(({ Icon, title, body }) => (
                   <li key={title} className="flex gap-3">
-                    <span className="mt-0.5 grid size-7 shrink-0 place-items-center rounded-[2px] bg-wash text-ink-muted">
+                    <span className="mt-0.5 grid size-7 shrink-0 place-items-center rounded-[8px] bg-wash text-ink-muted">
                       <Icon className="size-4" aria-hidden />
                     </span>
                     <div>
@@ -85,7 +85,7 @@ export default function OnboardingPage() {
               description="This is an image task. The cup and the pen are boxed; each box carries a class and a confidence from 1 to 5."
             />
             <PanelBody className="pb-5">
-              <div className="mx-auto w-full max-w-[560px] overflow-hidden rounded-[6px] bg-stage p-3">
+              <div className="mx-auto w-full max-w-[560px] overflow-hidden rounded-[12px] bg-stage p-3">
                 <div
                   className="relative w-full"
                   style={{ aspectRatio: `${1280} / ${960}` }}
@@ -94,7 +94,7 @@ export default function OnboardingPage() {
                   <img
                     src="/media/table-scene.svg"
                     alt="A table with a cup and a pen. Two boxes show the expected labels."
-                    className="absolute inset-0 size-full rounded-[2px] object-cover"
+                    className="absolute inset-0 size-full rounded-[8px] object-cover"
                   />
                   <BoxOverlay
                     boxes={SAMPLE_BOXES}
@@ -156,7 +156,6 @@ export default function OnboardingPage() {
               <Button asChild className="w-fit">
                 <Link href="/work/qualify">
                   Start qualification
-                  <ArrowRight aria-hidden />
                 </Link>
               </Button>
             </PanelBody>
@@ -164,5 +163,13 @@ export default function OnboardingPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function OnboardingPage() {
+  return (
+    <AppShell role="contributor">
+      <Onboarding />
+    </AppShell>
   );
 }

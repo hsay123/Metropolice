@@ -1,10 +1,12 @@
 "use client";
 
+import { AppShell } from "@/components/app/app-shell";
+
 import * as React from "react";
 import Link from "next/link";
 import { toast } from "sonner";
 import {
-  ArrowRight,
+
   Flag,
   Pencil,
   ReceiptText,
@@ -44,7 +46,7 @@ import { cn } from "@/lib/utils";
  * slides out once (AGENTS.md A3). Accepted and Paid are always shown as different
  * states. Demo rewards are test tokens.
  */
-export default function EarningsPage() {
+function Earnings() {
   const { data, isPending, isError, refetch } = useEarnings();
   const claim = useClaimReward();
   const appeal = useAppeal();
@@ -179,7 +181,6 @@ export default function EarningsPage() {
                 <Button asChild variant="outline" size="sm">
                   <Link href="/work/tasks">
                     Go to task queue
-                    <ArrowRight aria-hidden />
                   </Link>
                 </Button>
               }
@@ -262,7 +263,7 @@ export default function EarningsPage() {
             </DialogDescription>
           </DialogHeader>
           {appealFor?.reasonCode && (
-            <p className="rounded-[2px] border border-rule bg-wash px-3 py-2 text-sm text-ink">
+            <p className="rounded-[8px] border border-rule bg-wash px-3 py-2 text-sm text-ink">
               <span className="text-ink-muted">Rejection reason: </span>
               <ReasonText code={appealFor.reasonCode} />
             </p>
@@ -365,7 +366,7 @@ function EarningsDetail({
           </div>
 
           {row.reasonCode && (
-            <div className="rounded-[2px] border border-[var(--revision-ink)]/30 bg-revision-bg px-3 py-2">
+            <div className="rounded-[8px] border border-[var(--revision-ink)]/30 bg-revision-bg px-3 py-2">
               <p className="text-xs text-revision-ink">Reviewer reason</p>
               <p className="mt-1 text-sm text-ink">
                 <ReasonText code={row.reasonCode} />
@@ -397,7 +398,7 @@ function EarningsDetail({
           )}
 
           {row.state === "appealed" && (
-            <p className="rounded-[2px] border border-dashed border-[var(--field-edge)] px-3 py-2 text-sm text-ink-muted">
+            <p className="rounded-[8px] border border-dashed border-[var(--field-edge)] px-3 py-2 text-sm text-ink-muted">
               Appeal under review. A different reviewer decides.
             </p>
           )}
@@ -420,8 +421,16 @@ function PaidReceipt({ receipt, receiptId }: { receipt?: Receipt; receiptId?: st
   const value = receipt ?? data;
   if (!value) {
     return (
-      <div className="h-64 animate-pulse rounded-[6px] border border-rule bg-sheet" aria-busy />
+      <div className="h-64 animate-pulse rounded-[12px] border border-rule bg-sheet" aria-busy />
     );
   }
   return <ReceiptCard receipt={value} animate={Boolean(receipt)} />;
+}
+
+export default function EarningsPage() {
+  return (
+    <AppShell role="contributor">
+      <Earnings />
+    </AppShell>
+  );
 }

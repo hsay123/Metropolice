@@ -45,7 +45,7 @@ function PrivyInner() {
   if (!ready) {
     return (
       <div className="flex flex-col gap-2" aria-busy>
-        <Skeleton className="h-10 w-full rounded-[2px]" />
+        <Skeleton className="h-10 w-full rounded-[8px]" />
         <Skeleton className="h-4 w-40" />
       </div>
     );
@@ -72,7 +72,7 @@ function PrivyInner() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="rounded-[6px] border border-rule bg-sheet px-4 py-3">
+      <div className="rounded-[12px] border border-rule bg-sheet px-4 py-3">
         <p className="text-xs text-ink-muted">Signed in as</p>
         <p className="machine mt-0.5 text-sm text-ink">{who}</p>
         <p className="mt-1 text-xs text-ink-muted">

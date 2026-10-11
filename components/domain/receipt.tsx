@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { motion, useReducedMotion } from "motion/react";
 import { BadgeCheck, Printer } from "lucide-react";
 import type { Receipt as ReceiptData } from "@/lib/api/types";
 import { Button } from "@/components/ui/button";
@@ -28,7 +27,7 @@ export function ReceiptCard({
   animate?: boolean;
   className?: string;
 }) {
-  const reduce = useReducedMotion();
+
   const [verify, setVerify] = React.useState<VerifyState>("idle");
 
   function onVerify() {
@@ -54,21 +53,17 @@ export function ReceiptCard({
   }
 
   return (
-    <motion.article
+    <article
       aria-label="Payout receipt"
-      initial={
-        reduce || !animate ? false : { opacity: 0, y: -10, clipPath: "inset(0 0 88% 0)" }
-      }
-      animate={{ opacity: 1, y: 0, clipPath: "inset(0 0 0% 0)" }}
-      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
       className={cn(
         "receipt-notches w-full max-w-[420px] bg-sheet px-5 py-6 text-ink",
+        animate && "receipt-print",
         className,
       )}
     >
       <header className="flex items-start justify-between gap-4">
         <div className="flex flex-col gap-1">
-          <h3 className="font-display text-xl leading-none">Receipt</h3>
+          <h2 className="font-display text-xl leading-none">Receipt</h2>
           {receipt.mock && (
             <span className="text-xs text-[var(--revision-ink)]">Mock receipt</span>
           )}
@@ -139,7 +134,7 @@ export function ReceiptCard({
             "Mock receipt. The hashes are illustrative and cannot be verified without the backend."}
         </p>
       </div>
-    </motion.article>
+    </article>
   );
 }
 

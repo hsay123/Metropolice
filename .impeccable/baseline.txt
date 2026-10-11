@@ -1,0 +1,12 @@
+
+http://localhost:3000
+  [low-contrast] 2.3:1 (need 4.5:1) — text #ffffff on #e69f00
+    → Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.
+  [low-contrast] 3.4:1 (need 4.5:1) — text #ffffff on #009e73
+    → Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.
+  [overused-font] Primary font: instrument sans (63% of text)
+    → Inter, Roboto, Fraunces, Geist, Plus Jakarta Sans, and Space Grotesk are used on so many sites they no longer feel distinctive. Each new wave of AI-generated UIs converges on the same handful of faces. Choose a face that gives your interface personality.
+  [skipped-heading] <h1> "Labelled robot footage you only pay for once it passes revie" followed by <h3> "Receipt" (missing h2)
+    → Heading levels should not skip (e.g. h1 then h3 with no h2). Screen readers use heading hierarchy for navigation. Skipping levels breaks the document outline.
+
+4 anti-patterns found.

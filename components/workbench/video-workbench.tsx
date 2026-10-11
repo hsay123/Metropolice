@@ -284,7 +284,7 @@ export function VideoWorkbench({ task }: { task: AvailableTask }) {
   return (
     <div className="flex flex-col gap-3">
       {/* Focus task bar: back, task, reward, lease, history, save and submit. */}
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-[6px] border border-rule bg-sheet px-4 py-2.5">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-[12px] border border-rule bg-sheet px-4 py-2.5">
         <Link
           href="/work/tasks"
           className="inline-flex items-center gap-1.5 text-sm text-ink-muted hover:text-ink"
@@ -333,7 +333,7 @@ export function VideoWorkbench({ task }: { task: AvailableTask }) {
       <div className="grid min-h-0 gap-4 lg:grid-cols-[1fr_360px]">
         <div className="flex min-w-0 flex-col gap-4">
           {/* Stage */}
-          <div className="relative flex flex-col overflow-hidden rounded-[6px] bg-stage">
+          <div className="relative flex flex-col overflow-hidden rounded-[12px] bg-stage">
             <div className="grid h-[clamp(300px,52dvh,460px)] place-items-center p-4">
               {broken ? (
                 <p className="max-w-[40ch] text-center text-sm text-stage-ink/70">
@@ -356,7 +356,7 @@ export function VideoWorkbench({ task }: { task: AvailableTask }) {
               <button
                 type="button"
                 onClick={() => step(-1)}
-                className="grid size-8 place-items-center rounded-[2px] text-stage-ink/80 hover:bg-white/10 hover:text-stage-ink"
+                className="grid size-8 place-items-center rounded-[8px] text-stage-ink/80 hover:bg-white/10 hover:text-stage-ink"
                 aria-label="Previous frame"
               >
                 <SkipBack className="size-4" aria-hidden />
@@ -364,7 +364,7 @@ export function VideoWorkbench({ task }: { task: AvailableTask }) {
               <button
                 type="button"
                 onClick={togglePlay}
-                className="grid size-8 place-items-center rounded-[2px] bg-white/10 text-stage-ink hover:bg-white/20"
+                className="grid size-8 place-items-center rounded-[8px] bg-white/10 text-stage-ink hover:bg-white/20"
                 aria-label={playing ? "Pause" : "Play"}
               >
                 {playing ? <Pause className="size-4" aria-hidden /> : <Play className="size-4" aria-hidden />}
@@ -372,7 +372,7 @@ export function VideoWorkbench({ task }: { task: AvailableTask }) {
               <button
                 type="button"
                 onClick={() => step(1)}
-                className="grid size-8 place-items-center rounded-[2px] text-stage-ink/80 hover:bg-white/10 hover:text-stage-ink"
+                className="grid size-8 place-items-center rounded-[8px] text-stage-ink/80 hover:bg-white/10 hover:text-stage-ink"
                 aria-label="Next frame"
               >
                 <SkipForward className="size-4" aria-hidden />
@@ -449,7 +449,7 @@ export function VideoWorkbench({ task }: { task: AvailableTask }) {
               <ul className="flex flex-col gap-1.5 text-sm text-ink">
                 {task.rubric.map((r) => (
                   <li key={r.id} className="flex gap-2">
-                    <span className="mt-1.5 size-1 shrink-0 rounded-[2px] bg-ink-muted" aria-hidden />
+                    <span className="mt-1.5 size-1 shrink-0 rounded-[8px] bg-ink-muted" aria-hidden />
                     {r.text}
                   </li>
                 ))}
@@ -516,7 +516,7 @@ function SegmentList({
             >
               <span className="w-4 shrink-0 tabular-nums text-ink-muted">{i + 1}</span>
               <span className="flex items-center gap-2">
-                <span className="size-2.5 rounded-[2px]" style={{ background: color }} aria-hidden />
+                <span className="size-2.5 rounded-[8px]" style={{ background: color }} aria-hidden />
                 <span className="font-medium text-ink">{s.action_label}</span>
               </span>
               <span className="machine text-xs text-ink-muted tabular-nums">

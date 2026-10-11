@@ -129,7 +129,7 @@ export function StatusRail({
                 <span
                   aria-hidden
                   className={cn(
-                    "grid size-5 place-items-center rounded-[2px] border text-xs tabular-nums",
+                    "grid size-5 place-items-center rounded-[8px] border text-xs tabular-nums",
                     done
                       ? "border-transparent text-white"
                       : "border-[var(--field-edge)] text-[var(--ink-muted)]",

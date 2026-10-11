@@ -22,11 +22,11 @@ export function EmptyState({
     <div
       className={cn(
         "flex flex-col items-start gap-2 border border-dashed border-[var(--field-edge)] bg-sheet/60 px-6 py-10",
-        "rounded-[6px]",
+        "rounded-[12px]",
         className,
       )}
     >
-      <span className="grid size-8 place-items-center rounded-[2px] bg-wash text-ink-muted">
+      <span className="grid size-8 place-items-center rounded-[8px] bg-wash text-ink-muted">
         <Icon className="size-4" aria-hidden />
       </span>
       <p className="font-display text-lg text-ink">{title}</p>
@@ -52,7 +52,7 @@ export function ErrorState({
     <div
       role="alert"
       className={cn(
-        "flex flex-col items-start gap-2 rounded-[6px] border border-[var(--rejected-ink)]/30 bg-[var(--rejected-bg)] px-6 py-6",
+        "flex flex-col items-start gap-2 rounded-[12px] border border-[var(--rejected-ink)]/30 bg-[var(--rejected-bg)] px-6 py-6",
         className,
       )}
     >
@@ -74,7 +74,7 @@ export function ErrorState({
 /** Skeleton shaped like the table it replaces, so there is no layout shift. */
 export function TableSkeleton({ rows = 6, cols = 4 }: { rows?: number; cols?: number }) {
   return (
-    <div className="rounded-[6px] border border-rule bg-sheet">
+    <div className="rounded-[12px] border border-rule bg-sheet">
       <div className="flex items-center gap-4 border-b border-rule px-4 py-3">
         {Array.from({ length: cols }).map((_, i) => (
           <Skeleton key={i} className="h-3 flex-1" />

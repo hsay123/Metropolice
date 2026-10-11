@@ -21,7 +21,7 @@ export function MediaStage({
   return (
     <div
       className={cn(
-        "flex min-h-0 min-w-0 flex-col overflow-hidden rounded-[6px] bg-stage text-stage-ink",
+        "flex min-h-0 min-w-0 flex-col overflow-hidden rounded-[12px] bg-stage text-stage-ink",
         className,
       )}
     >
@@ -46,7 +46,7 @@ export function StageButton({
     <button
       type="button"
       className={cn(
-        "inline-flex h-6 items-center gap-1 rounded-[2px] px-2 text-xs text-stage-ink/80 transition-colors",
+        "inline-flex h-6 items-center gap-1 rounded-[8px] px-2 text-xs text-stage-ink/80 transition-colors",
         "hover:bg-stage-raised hover:text-stage-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-on-stage)]",
         "disabled:pointer-events-none disabled:opacity-40",
         className,

@@ -1,9 +1,11 @@
 "use client";
 
+import { AppShell } from "@/components/app/app-shell";
+
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { ArrowRight, Clock, ImageIcon, Video, Wallet } from "lucide-react";
+import { Clock, ImageIcon, Video, Wallet } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
@@ -30,7 +32,7 @@ import { cn } from "@/lib/utils";
  * in a table; the rubric and reward are shown before a claim (AGENTS.md A2). The
  * claim is idempotent on the client (see lib/api/client.ts).
  */
-export default function TaskQueuePage() {
+function TaskQueue() {
   const router = useRouter();
   const { data, isPending, isError, refetch } = useAvailableTasks();
   const claim = useClaimTask();
@@ -235,7 +237,7 @@ function TaskDetail({
             {(task.classes ?? []).map((c) => (
               <span
                 key={c}
-                className="rounded-[2px] border border-field-edge px-1.5 py-0.5 text-xs text-ink"
+                className="rounded-[8px] border border-field-edge px-1.5 py-0.5 text-xs text-ink"
               >
                 {c}
               </span>
@@ -248,7 +250,7 @@ function TaskDetail({
           <ul className="mt-1.5 flex flex-col gap-1.5 text-sm text-ink">
             {task.rubric.map((r) => (
               <li key={r.id} className="flex gap-2">
-                <span className="mt-1.5 size-1 shrink-0 rounded-[2px] bg-ink-muted" aria-hidden />
+                <span className="mt-1.5 size-1 shrink-0 rounded-[8px] bg-ink-muted" aria-hidden />
                 {r.text}
               </li>
             ))}
@@ -262,7 +264,6 @@ function TaskDetail({
 
         <Button className="w-full" onClick={onClaim} disabled={claiming}>
           {claiming ? "Claiming…" : "Claim task"}
-          {!claiming && <ArrowRight aria-hidden />}
         </Button>
       </PanelBody>
     </Panel>
@@ -277,4 +278,12 @@ function formatDeadline(iso: string): string {
     hour: "2-digit",
     minute: "2-digit",
   });
+}
+
+export default function TaskQueuePage() {
+  return (
+    <AppShell role="contributor">
+      <TaskQueue />
+    </AppShell>
+  );
 }

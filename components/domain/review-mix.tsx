@@ -34,7 +34,7 @@ export function ReviewMix({
   return (
     <div className={cn("flex flex-col gap-3", className)}>
       <div
-        className="flex h-2 w-full overflow-hidden rounded-[2px] bg-wash"
+        className="flex h-2 w-full overflow-hidden rounded-[8px] bg-wash"
         role="img"
         aria-label={slices.map((s) => `${s.label} ${s.count}`).join(", ")}
       >
@@ -52,7 +52,7 @@ export function ReviewMix({
       <ul className="flex flex-wrap gap-x-5 gap-y-1.5">
         {slices.map((s) => (
           <li key={s.key} className="flex items-center gap-2 text-sm">
-            <span className="size-2.5 rounded-[2px]" style={{ background: s.color }} aria-hidden />
+            <span className="size-2.5 rounded-[8px]" style={{ background: s.color }} aria-hidden />
             <span className="text-ink">{s.label}</span>
             <span className="flex items-center gap-1.5 tabular-nums text-ink-muted">
               <span>{s.count}</span>

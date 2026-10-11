@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { ArrowRight, ImageIcon, Plus, Search, Video } from "lucide-react";
+import { ImageIcon, Plus, Search, Video } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -145,7 +145,7 @@ export default function BuyerDashboardPage() {
         <PanelHeader title="Overview" description="Across all your jobs" />
         <PanelBody>
           {overview.isPending ? (
-            <div className="h-24 animate-pulse rounded-[2px] bg-wash" aria-busy />
+            <div className="h-24 animate-pulse rounded-[8px] bg-wash" aria-busy />
           ) : overview.isError || !overview.data ? (
             <ErrorState
               message="We could not load your overview. Check your connection and try again."
@@ -189,7 +189,7 @@ export default function BuyerDashboardPage() {
                 adjudicated={overview.data.adjudicated}
               />
             ) : (
-              <div className="h-16 animate-pulse rounded-[2px] bg-wash" aria-busy />
+              <div className="h-16 animate-pulse rounded-[8px] bg-wash" aria-busy />
             )}
           </PanelBody>
         </Panel>
@@ -200,7 +200,7 @@ export default function BuyerDashboardPage() {
             {overview.data ? (
               <BudgetBar spent={overview.data.spend} budget={overview.data.budget} />
             ) : (
-              <div className="h-16 animate-pulse rounded-[2px] bg-wash" aria-busy />
+              <div className="h-16 animate-pulse rounded-[8px] bg-wash" aria-busy />
             )}
           </PanelBody>
         </Panel>
@@ -403,7 +403,6 @@ function JobRow({ job }: { job: Job }) {
         <Button asChild variant="outline" size="sm">
           <Link href={`/buyer/jobs/${job.id}`}>
             Open
-            <ArrowRight aria-hidden />
           </Link>
         </Button>
       </TD>

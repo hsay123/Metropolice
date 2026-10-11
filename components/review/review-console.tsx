@@ -161,7 +161,7 @@ function Console({ item }: { item: ReviewItem }) {
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-[6px] border border-rule bg-sheet px-4 py-2.5">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-[12px] border border-rule bg-sheet px-4 py-2.5">
         <Link
           href="/review"
           className="inline-flex items-center gap-1.5 text-sm text-ink-muted hover:text-ink"
@@ -180,12 +180,12 @@ function Console({ item }: { item: ReviewItem }) {
         </div>
         <div className="ml-auto flex items-center gap-3">
           {item.submission.isGold && (
-            <span className="rounded-[2px] border border-[var(--revision-ink)]/40 bg-revision-bg px-1.5 py-0.5 text-xs text-revision-ink">
+            <span className="rounded-[8px] border border-[var(--revision-ink)]/40 bg-revision-bg px-1.5 py-0.5 text-xs text-revision-ink">
               Gold task
             </span>
           )}
           {item.submission.isOverlapSample && (
-            <span className="rounded-[2px] border border-field-edge px-1.5 py-0.5 text-xs text-ink-muted">
+            <span className="rounded-[8px] border border-field-edge px-1.5 py-0.5 text-xs text-ink-muted">
               Overlap sample
             </span>
           )}
@@ -542,10 +542,10 @@ function ConsoleSkeleton() {
   return (
     <div className="flex flex-col gap-4" aria-busy>
       <h1 className="sr-only">Review submission</h1>
-      <div className="h-14 animate-pulse rounded-[6px] border border-rule bg-sheet" />
+      <div className="h-14 animate-pulse rounded-[12px] border border-rule bg-sheet" />
       <div className="grid gap-4 lg:grid-cols-[1fr_360px]">
-        <div className="h-[560px] animate-pulse rounded-[6px] bg-stage/90" />
-        <div className="h-[560px] animate-pulse rounded-[6px] border border-rule bg-sheet" />
+        <div className="h-[560px] animate-pulse rounded-[12px] bg-stage/90" />
+        <div className="h-[560px] animate-pulse rounded-[12px] border border-rule bg-sheet" />
       </div>
     </div>
   );

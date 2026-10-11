@@ -5,6 +5,7 @@
   /* surfaces */
   --color-bench: var(--bench);
   --color-sheet: var(--sheet);
+  --color-surface-2: var(--surface-2);
   --color-wash: var(--wash);
   --color-stage: var(--stage);
   --color-stage-raised: var(--stage-raised);
@@ -87,14 +88,14 @@
   --text-xl: var(--text-xl);
   --text-2xl: var(--text-2xl);
 
-  /* shape — radius is a hierarchy: controls 2px, panels/menus 6px, pills full */
+  /* shape — radius is a hierarchy: controls 8px, panels/menus 12px, pills full */
   --radius-xs: var(--radius-control);
   --radius-sm: var(--radius-control);
   --radius-md: var(--radius-panel);
   --radius-lg: var(--radius-panel);
   --radius-xl: var(--radius-panel);
-  --radius-2xl: 8px;
-  --radius-3xl: 12px;
+  --radius-2xl: var(--radius-panel);
+  --radius-3xl: 16px;
   --radius-4xl: var(--radius-pill);
   --radius-pill: var(--radius-pill);
 
@@ -134,7 +135,7 @@
   --input: var(--field-edge);
   --ring: var(--brand);
 
-  --radius: 6px;
+  --radius: 12px;
 }
 
 @layer base {
@@ -181,7 +182,7 @@
   :focus-visible {
     outline: 2px solid var(--brand);
     outline-offset: 2px;
-    border-radius: 2px;
+    border-radius: var(--radius-control);
   }
 
   /* On the dark media stage, cobalt is too dark — use the stage variant */
@@ -218,6 +219,25 @@
   }
 }
 
+/* The one authored moment: the receipt prints out once, like a slip from a printer.
+   The reduced-motion block above collapses this to an instant appearance. */
+@keyframes receipt-print {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+    clip-path: inset(0 0 88% 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.receipt-print {
+  animation: receipt-print 400ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
 /* Notched top and bottom edges for the receipt. */
 .receipt-notches {
   --notch: 16px;
@@ -232,15 +252,4 @@
       repeat-x,
     radial-gradient(var(--notch-r) at 50% calc(100% - var(--notch)), #0000 98%, #000) bottom /
       var(--notch) 51% repeat-x;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-    scroll-behavior: auto !important;
-  }
 }

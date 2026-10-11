@@ -239,7 +239,7 @@ export function SegmentForm({
                     aria-checked={active}
                     onClick={() => setOutcome(o)}
                     className={cn(
-                      "rounded-[2px] border px-2 py-1.5 text-sm capitalize transition-colors",
+                      "rounded-[8px] border px-2 py-1.5 text-sm capitalize transition-colors",
                       active
                         ? "border-brand bg-brand-tint text-ink"
                         : "border-field-edge text-ink hover:bg-wash",
@@ -332,14 +332,14 @@ function LabelPicker({
               aria-checked={active}
               onClick={() => onPick(l)}
               className={cn(
-                "flex flex-col items-start gap-1 rounded-[2px] border px-2 py-1.5 text-left text-xs transition-colors",
+                "flex flex-col items-start gap-1 rounded-[8px] border px-2 py-1.5 text-left text-xs transition-colors",
                 active
                   ? "border-brand bg-brand-tint text-ink"
                   : "border-field-edge text-ink-muted hover:bg-wash",
               )}
             >
               <span className="flex items-center gap-1.5">
-                <span className="size-2.5 rounded-[2px]" style={{ background: color }} aria-hidden />
+                <span className="size-2.5 rounded-[8px]" style={{ background: color }} aria-hidden />
                 <span className={cn(active && "font-medium text-ink")}>{l}</span>
               </span>
               <span className="tabular-nums text-ink-muted/70">{i + 1}</span>
@@ -385,7 +385,7 @@ function MarkerField({ label, value, hint }: { label: string; value: string; hin
   return (
     <div className="flex flex-col gap-1.5">
       <span className="text-xs text-ink-muted">{label}</span>
-      <div className="rounded-[2px] border border-rule bg-wash px-2.5 py-2">
+      <div className="rounded-[8px] border border-rule bg-wash px-2.5 py-2">
         <span className="machine text-sm text-ink">{value}</span>
       </div>
       <span className="text-xs text-ink-muted">{hint}</span>
@@ -411,7 +411,7 @@ function ConfidenceField({
             onClick={() => onChange(n)}
             aria-pressed={n === value}
             className={cn(
-              "grid size-7 place-items-center rounded-[2px] border text-xs tabular-nums transition-colors",
+              "grid size-7 place-items-center rounded-[8px] border text-xs tabular-nums transition-colors",
               n === value
                 ? "border-brand bg-brand text-white"
                 : "border-field-edge text-ink hover:bg-wash",

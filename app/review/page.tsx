@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Flag, Sparkles, UserCheck } from "lucide-react";
+import { Flag, Sparkles, UserCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/domain/page-header";
 import { Panel, PanelHeader } from "@/components/domain/panel";
@@ -81,7 +81,7 @@ export default function ReviewQueuePage() {
                         {item.flags.map((f) => (
                           <span
                             key={f}
-                            className="inline-flex items-center gap-1 rounded-[2px] border border-[var(--revision-ink)]/30 bg-revision-bg px-1.5 py-0.5 text-xs text-revision-ink"
+                            className="inline-flex items-center gap-1 rounded-[8px] border border-[var(--revision-ink)]/30 bg-revision-bg px-1.5 py-0.5 text-xs text-revision-ink"
                           >
                             <Flag className="size-3" aria-hidden />
                             {f}
@@ -107,7 +107,6 @@ export default function ReviewQueuePage() {
                     <Button asChild variant="outline" size="sm">
                       <Link href={`/review/${item.submission.id}`}>
                         Review
-                        <ArrowRight aria-hidden />
                       </Link>
                     </Button>
                   </TD>

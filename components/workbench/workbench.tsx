@@ -26,7 +26,7 @@ import { useLeaseStore } from "@/lib/store/lease";
 import { useWorkbench } from "@/lib/store/workbench";
 import { useSaveDraft, useSubmitTask, useTask } from "@/lib/api/hooks";
 import { ImagePayload, type AvailableTask, type Box } from "@/lib/api/types";
-import { labelColor } from "@/lib/labels";
+import { labelColor, labelInk } from "@/lib/labels";
 import { cn } from "@/lib/utils";
 
 /**
@@ -165,7 +165,7 @@ function ImageWorkbench({ task }: { task: AvailableTask }) {
   return (
     <div className="flex flex-col gap-3">
       {/* Focus task bar: back, task, reward, lease, history, save and submit. */}
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-[6px] border border-rule bg-sheet px-4 py-2.5">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-[12px] border border-rule bg-sheet px-4 py-2.5">
         <Link
           href="/work/tasks"
           className="inline-flex items-center gap-1.5 text-sm text-ink-muted hover:text-ink"
@@ -236,7 +236,7 @@ function ImageWorkbench({ task }: { task: AvailableTask }) {
               <ul className="flex flex-col gap-1.5 text-sm text-ink">
                 {task.rubric.map((r) => (
                   <li key={r.id} className="flex gap-2">
-                    <span className="mt-1.5 size-1 shrink-0 rounded-[2px] bg-ink-muted" aria-hidden />
+                    <span className="mt-1.5 size-1 shrink-0 rounded-[8px] bg-ink-muted" aria-hidden />
                     {r.text}
                   </li>
                 ))}
@@ -282,15 +282,17 @@ function ClassPicker({ classes }: { classes: string[] }) {
               onClick={() => setActiveClass(c)}
               aria-pressed={active}
               className={cn(
-                "inline-flex items-center gap-1.5 rounded-[2px] border px-2 py-1 text-sm transition-colors",
+                "inline-flex items-center gap-1.5 rounded-[8px] border px-2 py-1 text-sm transition-colors",
                 active
-                  ? "border-transparent text-white"
+                  ? "border-transparent"
                   : "border-field-edge text-ink hover:bg-wash",
               )}
-              style={active ? { background: color } : undefined}
+              style={
+                active ? { background: color, color: labelInk(c, i) } : undefined
+              }
             >
               <span
-                className="size-2.5 rounded-[2px]"
+                className="size-2.5 rounded-[8px]"
                 style={{ background: active ? "rgba(255,255,255,.85)" : color }}
                 aria-hidden
               />
@@ -336,7 +338,7 @@ function BoxList({ classes }: { classes: string[] }) {
                 selected ? "bg-brand-tint" : "hover:bg-wash",
               )}
             >
-              <span className="size-2.5 shrink-0 rounded-[2px]" style={{ background: color }} aria-hidden />
+              <span className="size-2.5 shrink-0 rounded-[8px]" style={{ background: color }} aria-hidden />
               <span className="text-ink-muted">Box {i + 1}</span>
               <span className="font-medium text-ink">{box.class}</span>
               <span className="ml-auto tabular-nums text-ink-muted">{box.confidence}/5</span>
@@ -408,7 +410,7 @@ function ConfidencePicker({
             onClick={() => onChange(n)}
             aria-pressed={n === value}
             className={cn(
-              "grid size-6 place-items-center rounded-[2px] border text-xs tabular-nums transition-colors",
+              "grid size-6 place-items-center rounded-[8px] border text-xs tabular-nums transition-colors",
               n === value
                 ? "border-brand bg-brand text-white"
                 : "border-field-edge text-ink hover:bg-wash",
@@ -425,10 +427,10 @@ function ConfidencePicker({
 function WorkbenchSkeleton() {
   return (
     <div className="flex flex-col gap-4" aria-busy>
-      <div className="h-14 animate-pulse rounded-[6px] border border-rule bg-sheet" />
+      <div className="h-14 animate-pulse rounded-[12px] border border-rule bg-sheet" />
       <div className="grid gap-4 lg:grid-cols-[1fr_340px]">
-        <div className="h-[560px] animate-pulse rounded-[6px] bg-stage/90" />
-        <div className="h-[560px] animate-pulse rounded-[6px] border border-rule bg-sheet" />
+        <div className="h-[560px] animate-pulse rounded-[12px] bg-stage/90" />
+        <div className="h-[560px] animate-pulse rounded-[12px] border border-rule bg-sheet" />
       </div>
     </div>
   );

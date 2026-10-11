@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { VIDEO_LABELS } from "@/lib/config";
-import { labelColor } from "@/lib/labels";
+import { labelColor, labelInk } from "@/lib/labels";
 import { formatRulerLabel, formatSeconds, formatTimecode, rulerTicks } from "@/lib/timecode";
 import type { Segment } from "@/lib/api/types";
 import { cn } from "@/lib/utils";
@@ -92,7 +92,7 @@ export function VideoTimeline({
               className="flex h-7 items-center gap-1.5 border-b border-rule pr-2"
             >
               <span
-                className="size-2.5 shrink-0 rounded-[2px]"
+                className="size-2.5 shrink-0 rounded-[4px]"
                 style={{ background: labelColor(label, i) }}
               />
               <span className="truncate text-xs text-ink-muted">{label}</span>
@@ -118,7 +118,7 @@ export function VideoTimeline({
             {/* in/out band */}
             <div
               aria-hidden
-              className="pointer-events-none absolute top-6 bottom-6 left-0 rounded-[2px] bg-brand-tint/70"
+              className="pointer-events-none absolute top-6 bottom-6 left-0 rounded-[4px] bg-brand-tint/70"
               style={{ left: `${inPct}%`, width: `${Math.max(0, outPct - inPct)}%` }}
             />
 
@@ -152,7 +152,7 @@ export function VideoTimeline({
                             onSeek(s.start_ms);
                           }}
                           className={cn(
-                            "absolute top-1 bottom-1 flex items-center overflow-hidden rounded-[2px] px-1.5 text-left text-xs text-white transition-[box-shadow,transform]",
+                            "absolute top-1 bottom-1 flex items-center overflow-hidden rounded-[4px] px-1.5 text-left text-xs transition-[box-shadow,transform]",
                             selected ? "z-10 ring-2 ring-ink" : "hover:brightness-110",
                           )}
                           style={{
@@ -160,6 +160,7 @@ export function VideoTimeline({
                             width: `${widthPct}%`,
                             minWidth: 6,
                             background: color,
+                            color: labelInk(label, VIDEO_LABELS.indexOf(label)),
                             boxShadow: failure
                               ? "inset 0 0 0 2px var(--rejected-ink)"
                               : problem

@@ -86,7 +86,7 @@ export function AdminConsole() {
           />
           <PanelBody>
             {policy.isPending ? (
-              <div className="h-24 animate-pulse rounded-[2px] bg-wash" aria-busy />
+              <div className="h-24 animate-pulse rounded-[8px] bg-wash" aria-busy />
             ) : policy.isError || !policy.data ? (
               <ErrorState
                 message="We could not load the signer policy. Check your connection and try again."
@@ -271,7 +271,7 @@ function SignerState({ status }: { status: "active" | "paused" }) {
 function ExecutedIcon({ action }: { action: QuorumRequest["action"] }) {
   const Icon = ACTION_ICON[action];
   return (
-    <span className="grid size-6 shrink-0 place-items-center rounded-[2px] bg-wash text-ink-muted">
+    <span className="grid size-6 shrink-0 place-items-center rounded-[8px] bg-wash text-ink-muted">
       <Icon className="size-3.5" aria-hidden />
     </span>
   );
@@ -315,7 +315,7 @@ function QuorumRow({ request }: { request: QuorumRequest }) {
 
   return (
     <li className="flex flex-wrap items-start gap-3 px-4 py-3">
-      <span className="mt-0.5 grid size-6 shrink-0 place-items-center rounded-[2px] bg-wash text-ink-muted">
+      <span className="mt-0.5 grid size-6 shrink-0 place-items-center rounded-[8px] bg-wash text-ink-muted">
         <Icon className="size-3.5" aria-hidden />
       </span>
       <div className="min-w-[220px] flex-1">
@@ -372,7 +372,7 @@ function ApprovalProgress({ approvals, needed }: { approvals: number; needed: nu
           key={i}
           aria-hidden
           className={cn(
-            "h-1.5 w-6 rounded-[2px]",
+            "h-1.5 w-6 rounded-[8px]",
             i < approvals ? "bg-[var(--accepted-ink)]" : "bg-[color-mix(in_srgb,var(--field-edge)_35%,transparent)]",
           )}
         />

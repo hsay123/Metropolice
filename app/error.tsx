@@ -23,7 +23,7 @@ export default function RouteError({
     >
       <div
         role="alert"
-        className="flex flex-col items-start gap-2 rounded-[6px] border border-[var(--rejected-ink)]/30 bg-[var(--rejected-bg)] px-6 py-6"
+        className="flex flex-col items-start gap-2 rounded-[12px] border border-[var(--rejected-ink)]/30 bg-[var(--rejected-bg)] px-6 py-6"
       >
         <span className="inline-flex items-center gap-2 text-[var(--rejected-ink)]">
           <TriangleAlert className="size-4" aria-hidden />

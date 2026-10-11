@@ -48,7 +48,7 @@ export function HashChip({
         tabIndex={0}
         title={value}
         aria-label={label ? `${label}: ${value}` : value}
-        className="machine inline-flex min-h-6 items-center rounded-[2px] bg-wash px-1.5 text-xs text-ink"
+        className="machine inline-flex min-h-6 items-center rounded-[8px] bg-wash px-1.5 text-xs text-ink"
       >
         {shortHash(value)}
       </span>

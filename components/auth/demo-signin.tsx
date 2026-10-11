@@ -61,7 +61,7 @@ export function DemoSignIn() {
               disabled={pending !== null}
               aria-current={isCurrent ? "true" : undefined}
               className={cn(
-                "group flex h-full w-full flex-col gap-2 rounded-[6px] border p-3.5 text-left transition-colors",
+                "group flex h-full w-full flex-col gap-2 rounded-[12px] border p-3.5 text-left transition-colors",
                 "outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40",
                 isCurrent
                   ? "border-brand bg-brand-tint"

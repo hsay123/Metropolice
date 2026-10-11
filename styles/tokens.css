@@ -9,9 +9,10 @@
 
 :root {
   /* surfaces */
-  --bench: #edf0f3; /* app background */
+  --bench: #eceff3; /* app background */
   --sheet: #ffffff; /* panels, forms */
-  --wash: #e3e8ed; /* muted fills, table header, hover rows */
+  --surface-2: #f5f7fa; /* grouped regions: table stripes, sub-panels, sidebars */
+  --wash: #e2e7ed; /* muted fills, table header, hover rows */
   --stage: #161b22; /* dark surround for media only */
   --stage-raised: #202733; /* controls sitting on the stage */
 
@@ -21,7 +22,7 @@
   --stage-ink: #e6eaf0;
 
   /* structure */
-  --rule: #d5dbe2; /* decorative separators only, never a control border */
+  --rule: rgb(24 32 43 / 0.12); /* decorative separators only, never a control border */
   --field-edge: #7a8493; /* borders of inputs and controls (>= 3:1) */
 
   /* the one accent */
@@ -73,9 +74,10 @@
   --space-12: 48px;
 
   /* shape: radius is a hierarchy, not one value */
-  --radius-control: 2px; /* timeline segments, boxes, inputs, small buttons */
-  --radius-panel: 6px; /* panels, dialogs, menus */
+  --radius-control: 8px; /* inputs, buttons, selects, chips, focus rings */
+  --radius-panel: 12px; /* panels, dialogs, menus, cards */
   --radius-pill: 9999px; /* status pills only */
+  --radius-seg: 4px; /* dense geometry: timeline segments, meter fills, handles */
 
   /* motion */
   --motion-toggle: 120ms;

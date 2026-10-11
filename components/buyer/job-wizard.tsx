@@ -6,7 +6,6 @@ import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
-import { motion, useReducedMotion } from "motion/react";
 import { Check, Plus, Trash2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -84,7 +83,7 @@ export function JobWizard() {
   const router = useRouter();
   const create = useCreateJob();
   const publish = usePublishJob();
-  const reduce = useReducedMotion();
+
 
   const [step, setStep] = React.useState(0);
   const [classDraft, setClassDraft] = React.useState("");
@@ -234,12 +233,7 @@ export function JobWizard() {
 
       <form onSubmit={onSubmit} className="grid gap-6 lg:grid-cols-[1.6fr_1fr]">
         <div className="flex flex-col gap-6">
-          <motion.div
-            key={step}
-            initial={reduce ? false : { opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.18, ease: "easeOut" }}
-          >
+          <div>
             {step === 0 && (
               <Panel>
                 <PanelHeader
@@ -316,7 +310,7 @@ export function JobWizard() {
                       {VIDEO_LABELS.map((label) => (
                         <span
                           key={label}
-                          className="rounded-[2px] bg-brand-tint px-2.5 py-1 text-sm text-brand"
+                          className="rounded-[8px] bg-brand-tint px-2.5 py-1 text-sm text-brand"
                         >
                           {label}
                         </span>
@@ -352,14 +346,14 @@ export function JobWizard() {
                         {classes.map((c) => (
                           <span
                             key={c}
-                            className="inline-flex items-center gap-1.5 rounded-[2px] bg-brand-tint py-1 pl-2.5 pr-1.5 text-sm text-brand"
+                            className="inline-flex items-center gap-1.5 rounded-[8px] bg-brand-tint py-1 pl-2.5 pr-1.5 text-sm text-brand"
                           >
                             {c}
                             <button
                               type="button"
                               onClick={() => removeClass(c)}
                               aria-label={`Remove ${c}`}
-                              className="rounded-[2px] p-0.5 hover:bg-brand/15"
+                              className="rounded-[8px] p-0.5 hover:bg-brand/15"
                             >
                               <X className="size-3.5" aria-hidden />
                             </button>
@@ -454,7 +448,7 @@ export function JobWizard() {
                       <FieldError message={errors.budget?.message} />
                     </div>
                   </div>
-                  <p className="rounded-[2px] border border-rule bg-wash px-3 py-2 text-sm text-ink">
+                  <p className="rounded-[8px] border border-rule bg-wash px-3 py-2 text-sm text-ink">
                     This budget funds about{" "}
                     <span className="font-medium tabular-nums">{tasksFunded}</span> accepted{" "}
                     {tasksFunded === 1 ? "task" : "tasks"}. Money is only paid for work that passes
@@ -483,7 +477,7 @@ export function JobWizard() {
                     <FieldError message={errors.deadline?.message} />
                   </div>
 
-                  <label className="flex items-start gap-3 rounded-[2px] border border-field-edge px-3 py-3">
+                  <label className="flex items-start gap-3 rounded-[8px] border border-field-edge px-3 py-3">
                     <Checkbox
                       checked={dataRights}
                       onCheckedChange={(v) => setValue("dataRightsAttested", v === true, { shouldValidate: true })}
@@ -508,7 +502,7 @@ export function JobWizard() {
                 />
                 <PanelBody className="flex flex-col gap-4">
                   <Summary title={title} modality={modality} classes={classes} reward={reward} budget={budget} deadline={deadline} />
-                  <div className="flex flex-col gap-2 rounded-[2px] border border-rule bg-wash px-3 py-3 text-sm text-ink">
+                  <div className="flex flex-col gap-2 rounded-[8px] border border-rule bg-wash px-3 py-3 text-sm text-ink">
                     <p className="font-medium">What happens when you fund</p>
                     <ul className="list-disc space-y-1 pl-4 text-ink-muted">
                       <li>The budget is locked in escrow on Monad. One receipt is written per payout.</li>
@@ -521,7 +515,7 @@ export function JobWizard() {
                 </PanelBody>
               </Panel>
             )}
-          </motion.div>
+          </div>
 
           <div className="flex items-center justify-between gap-3">
             <Button
@@ -584,14 +578,14 @@ function ModalityCard({
       tabIndex={selected ? 0 : -1}
       onClick={onSelect}
       className={cn(
-        "flex flex-col gap-1 rounded-[6px] border px-4 py-3 text-left transition-colors",
+        "flex flex-col gap-1 rounded-[12px] border px-4 py-3 text-left transition-colors",
         selected ? "border-brand bg-brand-tint" : "border-field-edge hover:bg-wash",
       )}
     >
       <span className="flex items-center gap-2">
         <span
           className={cn(
-            "flex size-4 items-center justify-center rounded-[2px] border",
+            "flex size-4 items-center justify-center rounded-[8px] border",
             selected ? "border-brand bg-brand text-white" : "border-field-edge",
           )}
           aria-hidden
@@ -621,7 +615,7 @@ function Stepper({
           <li key={s.key} className="flex items-center gap-2">
             <span
               className={cn(
-                "flex size-6 items-center justify-center rounded-[2px] text-xs font-medium tabular-nums",
+                "flex size-6 items-center justify-center rounded-[8px] text-xs font-medium tabular-nums",
                 done && "bg-brand text-white",
                 active && "border border-brand text-brand",
                 !done && !active && "border border-rule text-ink-muted",
@@ -679,7 +673,7 @@ function Summary({
         ) : (
           <span className="flex flex-wrap justify-end gap-1">
             {shown.map((c) => (
-              <span key={c} className="rounded-[2px] bg-brand-tint px-2 py-0.5 text-xs text-brand">
+              <span key={c} className="rounded-[8px] bg-brand-tint px-2 py-0.5 text-xs text-brand">
                 {c}
               </span>
             ))}

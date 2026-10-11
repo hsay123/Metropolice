@@ -150,7 +150,7 @@ export function ImageEditor({
   return (
     <div
       className={cn(
-        "relative flex min-h-0 flex-1 items-center justify-center overflow-hidden rounded-[6px] bg-stage p-4",
+        "relative flex min-h-0 flex-1 items-center justify-center overflow-hidden rounded-[12px] bg-stage p-4",
         className,
       )}
       ref={stageRef}
@@ -199,7 +199,7 @@ export function ImageEditor({
               {draft && (
                 <div
                   aria-hidden
-                  className="absolute rounded-[2px] border-2 border-dashed"
+                  className="absolute rounded-[4px] border-2 border-dashed"
                   style={{
                     left: `${(draft.x / imageWidth) * 100}%`,
                     top: `${(draft.y / imageHeight) * 100}%`,
@@ -212,7 +212,7 @@ export function ImageEditor({
               )}
               {boxes.length === 0 && !draft && (
                 <div className="pointer-events-none absolute inset-0 grid place-items-center">
-                  <span className="inline-flex items-center gap-2 rounded-[2px] bg-black/55 px-3 py-1.5 text-sm text-stage-ink">
+                  <span className="inline-flex items-center gap-2 rounded-[8px] bg-black/55 px-3 py-1.5 text-sm text-stage-ink">
                     <MousePointerSquareDashed className="size-4" aria-hidden />
                     Drag to draw a box. Pick a class first.
                   </span>

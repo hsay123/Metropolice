@@ -26,14 +26,14 @@ export function BudgetBar({
         </span>
       </div>
       <div
-        className="h-2 w-full overflow-hidden rounded-[2px] bg-wash"
+        className="h-2 w-full overflow-hidden rounded-[8px] bg-wash"
         role="meter"
         aria-valuenow={pct}
         aria-valuemin={0}
         aria-valuemax={100}
         aria-label="Budget spent"
       >
-        <div className="h-full rounded-[2px] bg-brand" style={{ width: `${pct}%` }} />
+        <div className="h-full rounded-[8px] bg-brand" style={{ width: `${pct}%` }} />
       </div>
       <p className="flex flex-wrap items-center gap-x-3 text-xs text-ink-muted">
         <span>{formatAmount(left)} left</span>

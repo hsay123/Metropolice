@@ -18,7 +18,7 @@ const PrivySignIn = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="h-10 animate-pulse rounded-[2px] bg-wash" aria-busy />
+      <div className="h-10 animate-pulse rounded-[8px] bg-wash" aria-busy />
     ),
   },
 );
@@ -47,7 +47,7 @@ export function LoginPanel() {
         ) : IS_MOCK ? (
           <DemoSignIn />
         ) : (
-          <div className="rounded-[6px] border border-dashed border-[var(--field-edge)] bg-sheet px-4 py-4">
+          <div className="rounded-[12px] border border-dashed border-[var(--field-edge)] bg-sheet px-4 py-4">
             <p className="text-sm text-ink">Sign-in is not configured.</p>
             <p className="mt-1 text-sm text-ink-muted">
               Set <span className="machine text-xs">NEXT_PUBLIC_PRIVY_APP_ID</span> to turn on email

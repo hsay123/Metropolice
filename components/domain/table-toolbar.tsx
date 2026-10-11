@@ -61,7 +61,7 @@ export function SortHeader({
         type="button"
         onClick={onToggle}
         className={cn(
-          "group inline-flex min-h-6 -my-1 items-center gap-1 rounded-[2px] text-xs font-medium transition-colors",
+          "group inline-flex min-h-6 -my-1 items-center gap-1 rounded-[8px] text-xs font-medium transition-colors",
           active ? "text-ink" : "text-ink-muted hover:text-ink",
         )}
       >

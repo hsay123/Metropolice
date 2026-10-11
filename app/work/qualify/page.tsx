@@ -1,8 +1,10 @@
 "use client";
 
+import { AppShell } from "@/components/app/app-shell";
+
 import * as React from "react";
 import Link from "next/link";
-import { ArrowRight, Check, RotateCcw, TriangleAlert } from "lucide-react";
+import { Check, RotateCcw, TriangleAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -60,7 +62,7 @@ const QUESTIONS: Question[] = [
   },
 ];
 
-export default function QualifyPage() {
+function Qualify() {
   const [answers, setAnswers] = React.useState<Record<string, string>>({});
   const [submitted, setSubmitted] = React.useState(false);
 
@@ -86,7 +88,7 @@ export default function QualifyPage() {
         <div
           role="status"
           className={cn(
-            "flex items-start gap-3 rounded-[6px] border px-4 py-3",
+            "flex items-start gap-3 rounded-[12px] border px-4 py-3",
             passed
               ? "border-[var(--accepted-ink)]/30 bg-accepted-bg"
               : "border-[var(--revision-ink)]/30 bg-revision-bg",
@@ -116,7 +118,6 @@ export default function QualifyPage() {
                 <Button asChild>
                   <Link href="/work/tasks">
                     Go to task queue
-                    <ArrowRight aria-hidden />
                   </Link>
                 </Button>
               ) : (
@@ -153,7 +154,7 @@ export default function QualifyPage() {
                         key={opt.id}
                         htmlFor={`${q.id}-${opt.id}`}
                         className={cn(
-                          "flex cursor-pointer items-center gap-2.5 rounded-[2px] border border-transparent px-2 py-1.5 text-sm font-normal",
+                          "flex cursor-pointer items-center gap-2.5 rounded-[8px] border border-transparent px-2 py-1.5 text-sm font-normal",
                           "hover:bg-wash has-[:focus-visible]:border-ring has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring/40",
                           isAnswer && "bg-accepted-bg",
                           isChosenWrong && "bg-rejected-bg",
@@ -192,5 +193,13 @@ export default function QualifyPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function QualifyPage() {
+  return (
+    <AppShell role="contributor">
+      <Qualify />
+    </AppShell>
   );
 }

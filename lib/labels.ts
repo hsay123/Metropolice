@@ -55,6 +55,26 @@ export function videoLabelColor(label: VideoLabel): string {
   return LABEL_HEX[label];
 }
 
+/**
+ * Readable ink for text sitting on a label fill. Computed from the fill's relative
+ * luminance rather than guessed, because the Okabe-Ito palette spans both very dark
+ * and very light hues and a fixed white label text fails WCAG AA on half of them
+ * (grasp measured 2.3:1, place 3.4:1).
+ */
+export function labelInk(name: string, index = 0): string {
+  const hex = labelColor(name, index);
+  const c = hex.replace("#", "");
+  const channel = (i: number) => {
+    const v = parseInt(c.slice(i, i + 2), 16) / 255;
+    return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+  };
+  const l =
+    0.2126 * channel(0) + 0.7152 * channel(2) + 0.0722 * channel(4);
+  const onWhite = 1.05 / (l + 0.05);
+  const onBlack = (l + 0.05) / 0.05;
+  return onWhite >= onBlack ? "#ffffff" : "#0b1220";
+}
+
 /** Action labels in canonical order, for the segment form and keyboard 1–8. */
 export const ACTION_LABELS: ActionLabel[] = [...VIDEO_LABELS] as ActionLabel[];
 

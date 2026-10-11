@@ -111,7 +111,7 @@ export function VideoReviewStage({
             <button
               type="button"
               onClick={() => seek(currentMs - frameMs)}
-              className="grid size-6 place-items-center rounded-[2px] text-stage-ink/80 hover:bg-stage-raised hover:text-stage-ink"
+              className="grid size-6 place-items-center rounded-[8px] text-stage-ink/80 hover:bg-stage-raised hover:text-stage-ink"
               aria-label="Previous frame"
             >
               <SkipBack className="size-3.5" aria-hidden />
@@ -119,7 +119,7 @@ export function VideoReviewStage({
             <button
               type="button"
               onClick={togglePlay}
-              className="grid size-6 place-items-center rounded-[2px] bg-white/10 text-stage-ink hover:bg-white/20"
+              className="grid size-6 place-items-center rounded-[8px] bg-white/10 text-stage-ink hover:bg-white/20"
               aria-label={playing ? "Pause" : "Play"}
             >
               {playing ? <Pause className="size-3.5" aria-hidden /> : <Play className="size-3.5" aria-hidden />}
@@ -127,7 +127,7 @@ export function VideoReviewStage({
             <button
               type="button"
               onClick={() => seek(currentMs + frameMs)}
-              className="grid size-6 place-items-center rounded-[2px] text-stage-ink/80 hover:bg-stage-raised hover:text-stage-ink"
+              className="grid size-6 place-items-center rounded-[8px] text-stage-ink/80 hover:bg-stage-raised hover:text-stage-ink"
               aria-label="Next frame"
             >
               <SkipForward className="size-3.5" aria-hidden />
@@ -240,7 +240,7 @@ function CompareTimeline({
       <div className="w-[72px] shrink-0" aria-hidden>
         {VIDEO_LABELS.map((label) => (
           <div key={label} className="flex h-6 items-center gap-1.5 pr-2">
-            <span className="size-2 rounded-[2px]" style={{ background: labelColor(label, 0) }} />
+            <span className="size-2 rounded-[4px]" style={{ background: labelColor(label, 0) }} />
             <span className="truncate text-xs text-ink-muted">{label}</span>
           </div>
         ))}
@@ -266,7 +266,7 @@ function CompareTimeline({
                     <span
                       key={s.id}
                       title={`Reference ${s.action_label} ${formatSeconds(s.start_ms)} to ${formatSeconds(s.end_ms)}`}
-                      className="absolute bottom-0.5 h-2.5 rounded-[2px] border border-dashed"
+                      className="absolute bottom-0.5 h-2.5 rounded-[4px] border border-dashed"
                       style={{
                         left: `${(s.start_ms / duration) * 100}%`,
                         width: `${Math.max(0, ((s.end_ms - s.start_ms) / duration) * 100)}%`,
@@ -294,7 +294,7 @@ function CompareTimeline({
                       }}
                     >
                       <span
-                        className="absolute inset-x-0 top-[7px] h-2.5 rounded-[2px]"
+                        className="absolute inset-x-0 top-[7px] h-2.5 rounded-[4px]"
                         style={{
                           background: labelColor(label, 0),
                           boxShadow: flag ? "0 0 0 1.5px var(--rejected-ink)" : undefined,

@@ -6,7 +6,7 @@ import { Database, Lock, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ReceiptCard } from "@/components/domain/receipt";
 import { DataTable, TBody, TD, TH, THead, TR } from "@/components/domain/table";
-import { labelColor, ACTION_LABELS } from "@/lib/labels";
+import { labelColor, labelInk, ACTION_LABELS } from "@/lib/labels";
 import { TEST_TOKEN_NOTE } from "@/lib/config";
 import type { ActionLabel, Receipt as ReceiptData } from "@/lib/api/types";
 
@@ -53,7 +53,7 @@ export function LandingPage() {
     <div className="min-h-dvh bg-bench">
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-3 focus:z-50 focus:rounded-[2px] focus:border focus:border-field-edge focus:bg-sheet focus:px-3 focus:py-1.5 focus:text-sm focus:text-ink"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-3 focus:z-50 focus:rounded-[8px] focus:border focus:border-field-edge focus:bg-sheet focus:px-3 focus:py-1.5 focus:text-sm focus:text-ink"
       >
         Skip to content
       </a>
@@ -149,7 +149,7 @@ function HeroClip() {
   const playheadMs = 4_400;
 
   return (
-    <figure className="overflow-hidden rounded-[6px] border border-rule bg-sheet">
+    <figure className="overflow-hidden rounded-[12px] border border-rule bg-sheet">
       <figcaption className="flex items-center justify-between gap-3 border-b border-rule px-4 py-2.5">
         <span className="machine text-xs text-ink-muted">pen_writing_012</span>
         <span className="machine text-xs tabular-nums text-ink-muted">00:00:04:12</span>
@@ -175,7 +175,7 @@ function HeroClip() {
           </div>
 
           {/* single dope-sheet track */}
-          <div className="relative h-9 rounded-[2px] bg-wash">
+          <div className="relative h-9 rounded-[8px] bg-wash">
             {HERO_SEGMENTS.map((seg) => {
               const left = (seg.start / HERO_MS) * 100;
               const width = ((seg.end - seg.start) / HERO_MS) * 100;
@@ -189,12 +189,13 @@ function HeroClip() {
                   onBlur={() => setActive(null)}
                   title={`${seg.label}: ${(seg.start / 1000).toFixed(1)}s to ${(seg.end / 1000).toFixed(1)}s`}
                   aria-label={`${seg.label} from ${(seg.start / 1000).toFixed(1)} to ${(seg.end / 1000).toFixed(1)} seconds`}
-                  className="absolute top-1 bottom-1 flex items-center overflow-hidden rounded-[2px] px-2 text-left text-xs font-medium text-white transition-[filter] hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+                  className="absolute top-1 bottom-1 flex items-center overflow-hidden rounded-[8px] px-2 text-left text-xs font-medium transition-[filter] hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
                   style={{
                     left: `${left}%`,
                     width: `${width}%`,
                     minWidth: 4,
                     background: labelColor(seg.label, ACTION_LABELS.indexOf(seg.label)),
+                    color: labelInk(seg.label, ACTION_LABELS.indexOf(seg.label)),
                   }}
                 >
                   <span className="relative truncate">{seg.label}</span>
@@ -241,7 +242,7 @@ function PaidRail() {
         A real sequence, so the stations are numbered. Rejected or revise-needed work loops back
         with a reason and is never paid.
       </p>
-      <ol className="mt-6 grid grid-cols-1 gap-px overflow-hidden rounded-[6px] border border-rule bg-rule sm:grid-cols-2 lg:grid-cols-5">
+      <ol className="mt-6 grid grid-cols-1 gap-px overflow-hidden rounded-[12px] border border-rule bg-rule sm:grid-cols-2 lg:grid-cols-5">
         {STATIONS.map((s, i) => (
           <li key={s.label} className="flex flex-col gap-2 bg-sheet px-4 py-4">
             <span className="font-display text-sm text-ink-muted tabular-nums">
@@ -280,7 +281,7 @@ function ExportSection() {
       <p className="mt-1 max-w-[60ch] text-sm text-ink-muted">
         The point of the checks is a dataset you can defend. Anything that did not pass stays out.
       </p>
-      <ul className="mt-6 grid grid-cols-1 gap-px overflow-hidden rounded-[6px] border border-rule bg-rule md:grid-cols-3">
+      <ul className="mt-6 grid grid-cols-1 gap-px overflow-hidden rounded-[12px] border border-rule bg-rule md:grid-cols-3">
         {DELIVERABLES.map((d) => (
           <li key={d.title} className="flex flex-col gap-2 bg-sheet px-4 py-4">
             <span className="font-display text-base text-ink">{d.title}</span>
@@ -366,7 +367,7 @@ function ChecksSection() {
             Money and receipts live on Monad. Media, labels and profiles never leave the private
             store.
           </p>
-          <div className="mt-6 overflow-hidden rounded-[6px] border border-rule">
+          <div className="mt-6 overflow-hidden rounded-[12px] border border-rule">
             <DataTable>
               <THead>
                 <TR className="border-rule">

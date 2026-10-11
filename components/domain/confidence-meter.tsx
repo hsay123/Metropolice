@@ -23,7 +23,7 @@ export function ConfidenceMeter({
         <span className="machine text-xs tabular-nums text-ink">{pct}%</span>
       </div>
       <div
-        className="h-1.5 w-full overflow-hidden rounded-[2px] bg-wash"
+        className="h-1.5 w-full overflow-hidden rounded-[8px] bg-wash"
         role="meter"
         aria-valuenow={pct}
         aria-valuemin={0}
@@ -31,7 +31,7 @@ export function ConfidenceMeter({
         aria-label="AI confidence"
       >
         <div
-          className="h-full rounded-[2px]"
+          className="h-full rounded-[8px]"
           style={{
             width: `${pct}%`,
             background: below ? "var(--revision-ink)" : "var(--accepted-ink)",

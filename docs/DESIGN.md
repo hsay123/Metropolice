@@ -2,7 +2,7 @@
 
 Put this file at `docs/DESIGN.md`. It is the design source of truth for the frontend. If code and this file disagree, fix one of them the same day.
 
-Version 1, Oct 11, 2026. Based on PRD v2.
+Version 2, Oct 11, 2026. Based on PRD v2. Supersedes v1: radius hierarchy, surface tints, and the app shell were reworked on branch `redesign-v2`. See docs/REDESIGN-LOG.md.
 
 ---
 
@@ -34,9 +34,10 @@ Everything else is quiet: flat panels, hairline structure, one accent, no decora
 /* styles/tokens.css */
 :root {
   /* surfaces */
-  --bench: #EDF0F3;          /* app background */
+  --bench: #ECEEF3;          /* app background */
   --sheet: #FFFFFF;          /* panels, forms */
-  --wash: #E3E8ED;           /* muted fills, table header, hover rows */
+  --surface-2: #F5F7FA;      /* second tint: sidebar, grouped regions */
+  --wash: #E2E7ED;           /* muted fills, table header, hover rows */
   --stage: #161B22;          /* dark surround for media only */
   --stage-raised: #202733;   /* controls sitting on the stage */
 
@@ -114,7 +115,8 @@ Rules: line length under 80 characters. Sentence case everywhere. Numbers in tab
 
 ### 2.3 Space, shape, elevation, motion
 
-- Spacing: 4 px base. Panel padding 16 (tools) or 20 (reading). Page gutter 24. Page max width 1280 for dashboards and forms; workbenches are full-bleed.
+- Spacing: 4 px base. Panel padding 16 (tools) or 20 (reading). Page gutter 24. Page max width 1200 for every screen, so the measure never changes between roles; workbenches are full-bleed.
+- Radius: 8 px controls, inputs, chips and focus rings; 12 px panels, dialogs and cards; 4 px only for dense geometry (timeline segments, meter fills, annotation boxes); full only on status pills.
 - Radius is a hierarchy: **2 px** timeline segments, boxes, inputs, small buttons; **6 px** panels, dialogs, menus; **full** only for status pills.
 - Elevation: none on panels (they are separated by 1 px `--rule` lines). Shadow only on floating layers: menus, popovers, dialogs, toasts.
 - Focus: 2 px `--accent` ring with 2 px offset on every interactive element (on stage surfaces use `--accent-on-stage`).
@@ -176,22 +178,25 @@ No dark theme in the MVP. The only dark surface is the media stage.
 
 ## 3. Layout system
 
-**Shell (all roles except workbenches):** a 48 px top bar, no left sidebar.
+**Shell (all roles except workbenches):** a 232 px left sidebar, collapsible to a 68 px icon rail.
 
 ```
-┌──────────────────────────────────────────────────────────────────────────────────────────────┐
-│ PhysicalData Network   Jobs  Review  Earnings                 Monad testnet  0x4f…a1  Maya ▾ │
-├──────────────────────────────────────────────────────────────────────────────────────────────┤
-│  page title                                                                  [primary action]│
-│  ────────────────────────────────────────────────────────────────────────────────────────── │
-│  content, left-aligned, max width 1280                                                      │
-└──────────────────────────────────────────────────────────────────────────────────────────────┘
+┌───────────────┬──────────────────────────────────────────────────────────────────────────────────┐
+│ ◧ PhysicalData│  page title                                            [primary action]        │
+│ ───────────── │  ────────────────────────────────────────────────────────────────────────── │
+│ ⬢ Buyer    ▾ │  content, left-aligned, max width 1200, shared by every screen                   │
+│ ───────────── │                                                                                   │
+│  ▸ Jobs       │                                                                                   │
+│ ───────────── │                                                                                   │
+│ ◉ testnet 0x… │                                                                                   │
+└───────────────┴──────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-- Nav tabs depend on the role (buyer: Jobs; contributor: Tasks, Earnings; reviewer: Queue; admin: Admin).
-- "Monad testnet" chip explains on hover: "Rewards are test tokens with no real value." The same sentence also appears inline on funding, earnings, receipt, and the landing page.
-- Dev builds add a "Mock data" badge and a role switcher in the top bar.
-- **Workbenches are focus mode:** the top bar shrinks to a 40 px task bar (back, task, reward, lease timer, autosave state, Submit). No site navigation.
+- The sidebar carries the workspace and role switcher at the top, role-based nav in the middle, and network state plus wallet at the bottom. Nav depends on the role (buyer: Jobs; contributor: Tasks, Earnings; reviewer: Queue; admin: Admin).
+- Below the sidebar breakpoint the shell collapses to a compact top bar so dense tables keep their full width.
+- "Monad testnet" explains on hover: "Rewards are test tokens with no real value." The same sentence also appears inline on funding, earnings, receipt, and the landing page.
+- Dev builds add a collapsible demo dock pinned bottom-right (mock data, role switcher, reset). It is hidden entirely when the URL carries `?clean=1` or `NEXT_PUBLIC_DEMO_CLEAN=true`, which is how demo recordings are captured; the framework dev indicator is off.
+- **Workbenches are focus mode:** they render through `AppShell` with its `bare` variant — no sidebar and no content padding — so the dark stage fills the viewport under a 40 px task bar (back, task, reward, lease timer, autosave state, Submit). No site navigation.
 
 **Alignment:** left-aligned everywhere (headings, body, hero). Numbers right-aligned in tables. No centred paragraphs. Only the receipt amount is right-aligned outside tables.
 
