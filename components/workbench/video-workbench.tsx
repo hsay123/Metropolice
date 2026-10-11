@@ -20,6 +20,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Panel, PanelBody, PanelHeader } from "@/components/domain/panel";
+import { KeyHintList } from "@/components/domain/key-hint";
 import { LeaseTimer } from "@/components/domain/lease-timer";
 import { RewardAmount } from "@/components/domain/machine";
 import { VideoTimeline } from "@/components/workbench/video-timeline";
@@ -472,6 +473,18 @@ export function VideoWorkbench({ task }: { task: AvailableTask }) {
               </PanelBody>
             </Panel>
           )}
+
+          {/* Only the shortcuts this build actually binds. */}
+          <KeyHintList
+            className="px-1 pb-1"
+            hints={[
+              { keys: "Space", label: "play or pause" },
+              { keys: ["←", "→"], label: "step a frame" },
+              { keys: ["⇧", "←"], label: "step 10 frames" },
+              { keys: "I", label: "set in" },
+              { keys: "O", label: "set out" },
+            ]}
+          />
         </div>
       </div>
     </div>

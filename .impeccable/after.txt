@@ -1,0 +1,6 @@
+
+http://localhost:3000
+  [overused-font] Primary font: instrument sans (63% of text)
+    → Inter, Roboto, Fraunces, Geist, Plus Jakarta Sans, and Space Grotesk are used on so many sites they no longer feel distinctive. Each new wave of AI-generated UIs converges on the same handful of faces. Choose a face that gives your interface personality.
+
+1 anti-pattern found.

@@ -4,7 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { ArrowLeft, Check, Eye, EyeOff, Sparkles, X } from "lucide-react";
+import { ArrowLeft, Check, ChevronLeft, ChevronRight, Eye, EyeOff, Sparkles, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -23,7 +23,7 @@ import { DecisionSource } from "@/components/domain/decision-source";
 import { ErrorState } from "@/components/domain/states";
 import { BoxOverlay } from "@/components/workbench/box-overlay";
 import { VideoReviewStage } from "@/components/review/video-review";
-import { useDecide, useReview } from "@/lib/api/hooks";
+import { useDecide, useReview, useReviewQueue } from "@/lib/api/hooks";
 import { compareBoxes, compareSegments } from "@/lib/annotations";
 import { explainReason, REASON_CODE_LABELS, REASON_CODE_LIST } from "@/lib/reasonCodes";
 import { formatDateTime } from "@/lib/dates";
@@ -179,6 +179,7 @@ function Console({ item }: { item: ReviewItem }) {
           </p>
         </div>
         <div className="ml-auto flex items-center gap-3">
+          <QueueNav currentId={item.submission.id} />
           {item.submission.isGold && (
             <span className="rounded-[8px] border border-[var(--revision-ink)]/40 bg-revision-bg px-1.5 py-0.5 text-xs text-revision-ink">
               Gold task
@@ -535,6 +536,57 @@ function CompareRow({ tone, label }: { tone: "ok" | "bad" | "warn"; label: strin
       <Icon className="mt-0.5 size-3.5 shrink-0" aria-hidden />
       {label}
     </p>
+  );
+}
+
+/**
+ * QueueNav — move through the queue without going back to the list. A reviewer
+ * works one submission at a time, so Previous/Next sit in the console header and
+ * carry the position ("3 of 7"). End of the queue disables rather than wraps, so
+ * a reviewer cannot silently skip the last item.
+ */
+function QueueNav({ currentId }: { currentId: string }) {
+  const queue = useReviewQueue();
+  const ids = (queue.data ?? []).map((q) => q.submission.id);
+  const index = ids.indexOf(currentId);
+  if (index < 0) return null;
+
+  const prevId = index > 0 ? ids[index - 1] : null;
+  const nextId = index < ids.length - 1 ? ids[index + 1] : null;
+
+  const stepClass =
+    "inline-flex size-7 items-center justify-center rounded-[8px] border border-field-edge bg-sheet text-ink transition-colors hover:bg-wash focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40";
+
+  return (
+    <span className="flex items-center gap-1.5">
+      <span className="text-xs tabular-nums text-ink-muted" aria-hidden>
+        {index + 1} of {ids.length}
+      </span>
+      {prevId ? (
+        <Link href={`/review/${prevId}`} className={stepClass} aria-label="Previous submission">
+          <ChevronLeft className="size-4" aria-hidden />
+        </Link>
+      ) : (
+        <span
+          className={cn(stepClass, "cursor-not-allowed text-ink-muted opacity-50")}
+          aria-label="Previous submission (unavailable)"
+        >
+          <ChevronLeft className="size-4" aria-hidden />
+        </span>
+      )}
+      {nextId ? (
+        <Link href={`/review/${nextId}`} className={stepClass} aria-label="Next submission">
+          <ChevronRight className="size-4" aria-hidden />
+        </Link>
+      ) : (
+        <span
+          className={cn(stepClass, "cursor-not-allowed text-ink-muted opacity-50")}
+          aria-label="Next submission (unavailable)"
+        >
+          <ChevronRight className="size-4" aria-hidden />
+        </span>
+      )}
+    </span>
   );
 }
 

@@ -17,6 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Panel, PanelBody, PanelHeader } from "@/components/domain/panel";
+import { KeyHintList } from "@/components/domain/key-hint";
 import { LeaseTimer } from "@/components/domain/lease-timer";
 import { ErrorState } from "@/components/domain/states";
 import { RewardAmount } from "@/components/domain/machine";
@@ -256,6 +257,18 @@ function ImageWorkbench({ task }: { task: AvailableTask }) {
               </PanelBody>
             </Panel>
           )}
+
+          {/* Only the shortcuts this build actually binds. */}
+          <KeyHintList
+            className="px-1 pb-1"
+            hints={[
+              { keys: "1–9", label: "class" },
+              { keys: "Esc", label: "deselect" },
+              { keys: "Del", label: "delete box" },
+              { keys: ["⌘", "Z"], label: "undo" },
+              { keys: ["⇧", "⌘", "Z"], label: "redo" },
+            ]}
+          />
         </div>
       </div>
     </div>

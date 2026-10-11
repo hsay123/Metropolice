@@ -1,20 +1,25 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
+import { ArrowLeft, UserCheck } from "lucide-react";
 import { useDevStore } from "@/lib/store/dev";
-import { ROLE_LABEL } from "@/lib/roles";
+import { ROLE_HOME, ROLE_LABEL } from "@/lib/roles";
 import { IS_MOCK } from "@/lib/config";
 import type { Role } from "@/lib/api/types";
 import { Button } from "@/components/ui/button";
 
 /**
- * RoleGate — experience only. The server checks every role; this just prevents a
- * confusing screen. In mock mode it offers a one-click role switch instead of a
- * hard redirect, so the demo can be rehearsed.
+ * RoleGate — experience only. The server checks every role; this just tells the
+ * person what happened when the mock role and the route disagree.
  *
- * Children are always rendered so the segment stays in the render tree for
- * instant-navigation validation. When the mock role does not match, the page is
- * covered by a one-click switch card instead of being unmounted.
+ * It is a banner, not a modal. An earlier version covered the page with a faded
+ * overlay and a card, which turned a one-click fix into a dead end and hid the
+ * screen entirely. The banner states the mismatch, offers one click, and leaves
+ * the content readable so the demo can rehearse a role switch without losing its
+ * place.
+ *
+ * Children always render so the segment stays mounted for instant navigation.
  */
 export function RoleGate({ role, children }: { role: Role; children: React.ReactNode }) {
   const current = useDevStore((s) => s.role);
@@ -24,23 +29,32 @@ export function RoleGate({ role, children }: { role: Role; children: React.React
   if (!IS_MOCK || current === role) return <>{children}</>;
 
   return (
-    <div className="relative">
-      <div aria-hidden inert className="pointer-events-none">
-        {children}
+    <div className="flex flex-col gap-4">
+      <div
+        role="status"
+        className="flex flex-wrap items-center gap-x-3 gap-y-2 rounded-[12px] border border-[var(--revision-ink)]/30 bg-[var(--revision-bg)] px-4 py-3"
+      >
+        <UserCheck className="size-4 shrink-0 text-[var(--revision-ink)]" aria-hidden />
+        <p className="flex-1 text-sm text-ink">
+          You are viewing as {ROLE_LABEL[current].toLowerCase()}. This is the{" "}
+          {ROLE_LABEL[role].toLowerCase()} area.
+        </p>
+        <Button
+          type="button"
+          size="sm"
+          onClick={() => setRole(role)}
+          className="shrink-0"
+        >
+          Switch to {ROLE_LABEL[role].toLowerCase()}
+        </Button>
+        <Button asChild variant="ghost" size="sm" className="shrink-0">
+          <Link href={ROLE_HOME[current]}>
+            <ArrowLeft aria-hidden />
+            Back to {ROLE_LABEL[current].toLowerCase()} home
+          </Link>
+        </Button>
       </div>
-      <div className="absolute inset-0 z-10 grid place-items-center bg-bench/90 p-6">
-        <div className="w-full max-w-[520px] rounded-[12px] border border-rule bg-sheet p-6 shadow-popover">
-          <h1 className="font-display text-lg">
-            This screen is for {ROLE_LABEL[role].toLowerCase()}s
-          </h1>
-          <p className="mt-2 text-sm text-ink-muted">
-            You are viewing as {ROLE_LABEL[current].toLowerCase()}. Switch role to open it.
-          </p>
-          <Button className="mt-4" onClick={() => setRole(role)}>
-            View as {ROLE_LABEL[role].toLowerCase()}
-          </Button>
-        </div>
-      </div>
+      {children}
     </div>
   );
 }

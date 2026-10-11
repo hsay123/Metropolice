@@ -5,6 +5,7 @@ import Link from "next/link";
 import { toast } from "sonner";
 import {
   ArrowLeft,
+  Clock,
   Download,
   FileCheck2,
   ImageIcon,
@@ -29,7 +30,7 @@ import { ReviewMix } from "@/components/domain/review-mix";
 import { JobStatusPill } from "@/components/domain/status";
 import { HashChip } from "@/components/domain/machine";
 import { ChainFeed } from "@/components/domain/chain-feed";
-import { ErrorState } from "@/components/domain/states";
+import { EmptyState, ErrorState } from "@/components/domain/states";
 import {
   useAuditSample,
   useChainEvents,
@@ -135,6 +136,17 @@ export function JobDetail({ jobId }: { jobId: string }) {
                 <ErrorState
                   message="We could not load the job progress. Try again."
                   onRetry={() => stats.refetch()}
+                />
+              ) : stats.data.tasksTotal === 0 ? (
+                <EmptyState
+                  icon={Clock}
+                  title="Waiting for first submissions"
+                  description="This job is funded and published, but no contributor has claimed a task yet. Progress appears here as soon as the first submission lands."
+                  action={
+                    <p className="text-xs text-ink-muted">
+                      Next step: check the reward and rubric still match the work you need.
+                    </p>
+                  }
                 />
               ) : (
                 <StatGrid>

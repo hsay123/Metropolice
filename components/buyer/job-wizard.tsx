@@ -229,9 +229,18 @@ export function JobWizard() {
 
   return (
     <div className="flex flex-col gap-6">
-      <Stepper steps={STEPS} current={step} />
+      {/* The stepper is a column beside the form on desktop and a compact row above it on mobile. */}
+      <div className="lg:hidden">
+        <Stepper steps={STEPS} current={step} />
+      </div>
 
-      <form onSubmit={onSubmit} className="grid gap-6 lg:grid-cols-[1.6fr_1fr]">
+      <form
+        onSubmit={onSubmit}
+        className="grid gap-6 lg:grid-cols-[184px_minmax(0,1fr)_272px]"
+      >
+        <div className="hidden lg:block">
+          <Stepper steps={STEPS} current={step} orientation="vertical" />
+        </div>
         <div className="flex flex-col gap-6">
           <div>
             {step === 0 && (
@@ -602,37 +611,52 @@ function ModalityCard({
 function Stepper({
   steps,
   current,
+  orientation = "horizontal",
 }: {
   steps: readonly { key: string; title: string }[];
   current: number;
+  orientation?: "horizontal" | "vertical";
 }) {
+  const vertical = orientation === "vertical";
+
   return (
-    <ol className="flex flex-wrap items-center gap-x-2 gap-y-2" aria-label="Funding steps">
+    <ol
+      className={cn(
+        vertical
+          ? "flex flex-col gap-1 border-l border-rule pl-3"
+          : "flex flex-wrap items-center gap-x-2 gap-y-2",
+      )}
+      aria-label="Job setup steps"
+    >
       {steps.map((s, i) => {
         const done = i < current;
         const active = i === current;
         return (
-          <li key={s.key} className="flex items-center gap-2">
+          <li
+            key={s.key}
+            className={cn(
+              vertical ? "flex items-center gap-2.5 py-1.5" : "flex items-center gap-2",
+              active && vertical && "-ml-[13px]",
+            )}
+          >
             <span
               className={cn(
-                "flex size-6 items-center justify-center rounded-[8px] text-xs font-medium tabular-nums",
+                "flex size-6 shrink-0 items-center justify-center rounded-full text-xs font-medium tabular-nums",
                 done && "bg-brand text-white",
-                active && "border border-brand text-brand",
-                !done && !active && "border border-rule text-ink-muted",
+                active && "bg-sheet text-brand ring-1 ring-brand",
+                !done && !active && "text-ink-muted",
+                vertical && (active ? "ring-1" : ""),
               )}
               aria-current={active ? "step" : undefined}
             >
               {done ? <Check className="size-3.5" aria-hidden /> : i + 1}
             </span>
-            <span
-              className={cn(
-                "text-sm",
-                active ? "font-medium text-ink" : "text-ink-muted",
-              )}
-            >
+            <span className={cn("text-sm", active ? "font-medium text-ink" : "text-ink-muted")}>
               {s.title}
             </span>
-            {i < steps.length - 1 && <span className="ml-1 h-px w-5 bg-rule" aria-hidden />}
+            {!vertical && i < steps.length - 1 && (
+              <span className="ml-1 h-px w-5 bg-rule" aria-hidden />
+            )}
           </li>
         );
       })}

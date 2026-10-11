@@ -83,6 +83,45 @@ export default function Qualify() {
         description="Three questions on the labelling rules. Score all three to open the task queue."
       />
 
+      {/* Progress. Before submit this counts answered questions; after a failed
+          attempt it counts correct ones, so the way forward is always visible. */}
+      <div className="flex items-center gap-3">
+        <div
+          role="progressbar"
+          aria-valuemin={0}
+          aria-valuemax={QUESTIONS.length}
+          aria-valuenow={submitted ? score : answered}
+          aria-label={
+            submitted ? "Questions answered correctly" : "Questions answered"
+          }
+          className="flex h-1 flex-1 gap-1 overflow-hidden rounded-[4px] bg-wash"
+        >
+          {QUESTIONS.map((q) => {
+            const state = !submitted
+              ? answers[q.id]
+                ? "done"
+                : "todo"
+              : answers[q.id] === q.correct
+                ? "done"
+                : "wrong";
+            return (
+              <span
+                key={q.id}
+                className={cn(
+                  "h-full flex-1 rounded-[4px]",
+                  state === "done" && "bg-brand",
+                  state === "todo" && "bg-transparent",
+                  state === "wrong" && "bg-[var(--rejected-ink)]",
+                )}
+              />
+            );
+          })}
+        </div>
+        <span className="shrink-0 text-xs tabular-nums text-ink-muted">
+          {submitted ? `${score} of ${QUESTIONS.length} correct` : `${answered} of ${QUESTIONS.length} answered`}
+        </span>
+      </div>
+
       {submitted && (
         <div
           role="status"

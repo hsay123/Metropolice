@@ -64,6 +64,7 @@ export function LandingPage() {
         <ExportSection />
         <ChecksSection />
         <DoesNotProve />
+        <FinalCta />
       </main>
       <LandingFooter />
     </div>
@@ -418,6 +419,38 @@ function DoesNotProve() {
           </li>
         ))}
       </ul>
+    </section>
+  );
+}
+
+/* ----------------------------------------------------------------- final CTA */
+
+/**
+ * The closing ask. One primary action and one secondary, stated plainly, with the
+ * testnet note repeated because this is the last thing read before someone leaves.
+ */
+function FinalCta() {
+  return (
+    <section className="border-t border-rule py-14">
+      <div className="flex flex-col items-start gap-6 lg:flex-row lg:items-center lg:justify-between">
+        <div className="max-w-[52ch]">
+          <h2 className="font-display text-xl text-ink">
+            Post a job, or take one and get paid
+          </h2>
+          <p className="mt-2 text-sm text-ink-muted">
+            Buyers fund a budget and only pay for labels that pass review. Contributors see the
+            reward and the rubric before they claim. Everything settles on Monad testnet.
+          </p>
+        </div>
+        <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
+          <Button asChild>
+            <Link href="/buyer/jobs/new">Post a labelling job</Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link href="/work">Join the contributor cohort</Link>
+          </Button>
+        </div>
+      </div>
     </section>
   );
 }
